@@ -1,9 +1,10 @@
 import React from "react";
 import AddTodo from "./AddTodo";
+import { IColumnProps } from "../types";
 
-const DashboardColumn = ({ title, todos, deleteTodo, addTodo }) => {
+const Column = ({ title, todos, deleteTodo, addTodo }: IColumnProps) => {
     const todoList = todos.length ? (
-        todos.map(todo => {
+        todos.map((todo: any) => {
             return (
                 <div 
                     className="card-panel hoverable" 
@@ -28,4 +29,4 @@ const DashboardColumn = ({ title, todos, deleteTodo, addTodo }) => {
     )
 }
 
-export default DashboardColumn;
+export default Column;

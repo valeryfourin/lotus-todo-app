@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const AddTodo = ({addTodo}) => {
     const [todo, setTodo] = useState({

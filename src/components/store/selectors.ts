@@ -1,0 +1,9 @@
+import { TDashboardState, TProject, TUser } from "../types";
+
+export const dashboardSelector = (state: TDashboardState): TDashboardState => state;
+
+export const dashboardDataSelector = (state: TDashboardState): Record<string, TProject> => state.projects;
+
+export const isDataLoadingSelector = (state: TDashboardState): boolean => state.isDataLoading;
+
+export const userSelector = (state: TDashboardState): TUser => state.user;

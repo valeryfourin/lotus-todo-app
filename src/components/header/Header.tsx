@@ -1,6 +1,6 @@
 import React from "react";
 
-const NavBar = () => {
+export const Header = (): JSX.Element => {
     return (
         <div className="flex-container">
             <img className="logo" src="./images/logo.png" alt="logo"/>
@@ -8,5 +8,3 @@ const NavBar = () => {
         </div> 
     );
 }
-
-export default NavBar;
