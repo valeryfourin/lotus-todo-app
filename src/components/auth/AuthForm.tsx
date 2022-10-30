@@ -1,39 +1,37 @@
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRef, useState, RefObject } from 'react';
-import { app, auth } from '../../firebase';
+import { Button } from 'react-materialize';
+import { authUser } from '../../firebase';
 
 import './AuthForm.css';
 
 export default function AuthForm({ redirectToRegComponent }: Record<string, boolean>): JSX.Element {
   const emailReference: RefObject<any> = useRef();
   const passwordReference: RefObject<any> = useRef();
+  // const nameReference: RefObject<any> = useRef();
   const [isNewUser, setIsNewUser] = useState(redirectToRegComponent);
 
-  const register = (event: any): any => {
+  const register = (event: any): void => {
     event.preventDefault();
-    const auth = getAuth(app);
     if (emailReference.current && passwordReference.current) {
       createUserWithEmailAndPassword(
-        auth,
+        authUser,
         emailReference.current.value,
         passwordReference.current.value,
       )
       .then((authInfo: any) => {
-        console.log(authInfo);
         return authInfo;
       })
       .catch((error: Error) => {
         alert(error.message);
       });
     };
-    
   };
 
   const signIn = (event: any) => {
     event.preventDefault();
-    const auth = getAuth(app);
     signInWithEmailAndPassword(
-        auth,
+        authUser,
         emailReference.current.value,
         passwordReference.current.value,
       )
@@ -57,12 +55,21 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
   return (
     <div className="signin-screen">
       <form>
-        <h1>{isNewUser ? "Registration" : "Sign In"}</h1>
-        <input ref={emailReference} placeholder="Email" type="email" />
-        <input ref={passwordReference} placeholder="Password" type="password" />
-        <button type="submit" onClick={auth}>
+        <h3>{isNewUser ? "Create new account" : "Sign In"}</h3>
+        {/* {isNewUser ? ( <>
+          <input ref={nameReference} placeholder="Name" type="text" id="name" />
+          <label htmlFor="name">Nickname</label>
+        </>) : null} */}
+
+        <input ref={emailReference} placeholder="Email" type="email" id="email" />
+        <label htmlFor="email">Email</label>
+          
+        <input ref={passwordReference} placeholder="Password" type="password" id="password" className="input-field"/>
+        <label htmlFor="password">Password</label>
+
+        <Button className="white signin-screen__button" waves="light" onClick={auth}>
           {isNewUser ? "Sign Up" : "Sign In"}
-        </button>
+        </Button>
 
         <h4>
           {isNewUser ? (
@@ -77,7 +84,7 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
             </>
             ) : (
               <>
-                <span className="signin-screen_gray">New to Netflix? </span>
+                <span className="signin-screen--gray">New to Lotus? </span>
                 <span
                   className="signin-screen__link"
                   onClick={() => setIsNewUser(true)}

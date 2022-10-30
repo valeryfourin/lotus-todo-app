@@ -1,22 +1,24 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import M from 'materialize-css';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import Login from './components/auth/Login';
 import { login, logout, userSelector } from './components/store';
-import { app } from './firebase';
-
+import { authUser } from './firebase';
 import { authRoutes } from './routes';
-
-// import './App.css';
 
 export function AppRouter(): JSX.Element {
   const user = useSelector(userSelector);
   console.log(user);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (userInfo) => {
+    M.AutoInit();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(authUser, (userInfo) => {
       if (userInfo) {
         dispatch(
           login({

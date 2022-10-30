@@ -1,15 +1,28 @@
 .login-screen {
-    background: url('https://miro.medium.com/max/1400/1*5lyavS59mazOFnb55Z6znQ.png') center no-repeat;
-    background-size: cover;
-    height: 100%;
     position: relative;
+    height: 100%;
+    background: linear-gradient(-45deg, #c3c6ff, #c8ffed, #f3b4ff, #ffd6e4, #ffffff);
+    background-size: 300% 300%;
+    animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
 }
 
 .login-screen__body {
-    color: #fff;
     left: 0;
     margin: auto;
     padding: 20px;
+    /* margin-top: 100px; */
     position: absolute;
     right: 0;
     text-align: center;
@@ -21,6 +34,9 @@
 .login-screen__body > h1 {
     font-size: 3.125rem;
     margin-bottom: 20px;
+    font-weight: 600;
+    -webkit-text-fill-color: #b388ff;
+    -webkit-text-stroke-width: 1px;
 }
 
 .login-screen__body > h2 {
@@ -35,6 +51,11 @@
 }
   
 .login-screen__button {
+    font-weight: bold;
+}
+
+.login-screen__button--fixed {
+    color: #b388ff;
     position: fixed;
     right: 20px;
     top: 20px;
@@ -53,18 +74,4 @@
     font-size: 1rem;
     font-weight: 600;
     padding: 16px 20px;
-}
-  
-.login-screen__gradient {
-    background: rgba(0, 0, 0, 0.4);
-    background-image:
-      linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.8) 0,
-        rgba(0, 0, 0, 0) 60%,
-        rgba(0, 0, 0, 0.8) 100%
-      );
-    height: 100vh;
-    width: 100%;
-    z-index: 1;
 }

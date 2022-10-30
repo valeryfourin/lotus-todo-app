@@ -1,0 +1,27 @@
+.board-navbar {
+    width: 100%;
+}
+
+.board-header {
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user-icon {
+    color: grey;
+    font-size: 2.5rem;
+    margin-right: 10px;
+}
+.project-name {
+    color: blue;
+    font-size: 40px;
+    font-weight: 500;
+}

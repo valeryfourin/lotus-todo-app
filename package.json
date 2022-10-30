@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.11",
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -11,12 +14,13 @@
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "firebase": "^9.12.1",
-    "materialize-css": "^1.0.0-rc.2",
+    "materialize-css": "^1.0.0",
     "react": "^17.0.2",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^5.0.3",
+    "react-materialize": "^3.10.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.0",
@@ -52,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@types/materialize-css": "^1.0.11",
     "firebase-tools": "^11.15.0"
   }
 }

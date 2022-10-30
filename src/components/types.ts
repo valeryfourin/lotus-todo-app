@@ -1,10 +1,18 @@
 export type TDashboardState = {
     user: TUser,
     projects: Record<string, TProject>;
+    view: ViewData;
     isDataLoading: boolean;
 };
 
 export type TUser = Record<string, string | null> | null;
+
+export enum ViewData {
+    grid = 'Grid',
+    list = 'List',
+    calendar = 'Calendar',
+    stats = 'Stats',
+};
 
 export type TProject = {
     id: string,

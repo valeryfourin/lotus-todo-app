@@ -1,5 +1,4 @@
 .signin-screen {
-    background: rgba(0, 0, 0, 0.85);
     margin: auto;
     max-width: 500px;
     padding: 50px 70px;
@@ -19,16 +18,17 @@
     padding: 5px 15px;
 }
 
-.signin-screen > form > button {
-    background-color: #e50914;
+.signin-screen > form > input::placeholder {
+    color: grey;}
+
+.signin-screen__button {
+    color: black !important;
     border: none;
     border-radius: 5px;
-    color: #fff;
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 20px;
-    margin-top: 20px;
-    padding: 16px 20px;
+    margin-top: 50px;
 }
 
 .signin-screen > form > h1 {

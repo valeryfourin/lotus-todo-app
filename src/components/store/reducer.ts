@@ -1,11 +1,12 @@
 import { getAuth, signOut } from "firebase/auth";
-import { app } from "../../firebase";
-import { TDashboardState } from "../types";
+import { app, authUser } from "../../firebase";
+import { TDashboardState, ViewData } from "../types";
 import { DashboardActions, TDashboardActions } from "./actionTypes";
 
 const initialState: TDashboardState = {
     user: null,
     projects: {},
+    view: ViewData.grid,
     isDataLoading: true,
 };
 
@@ -40,13 +41,15 @@ export const dashboardReducer = (
             };
 
         case DashboardActions.Logout: {
-            const auth = getAuth(app);
-            signOut(auth).then(() => {
-            console.log('signed out successfully');
+            if (state.user) {
+                signOut(authUser)
+                .then(() => {
+                    console.log('signed out successfully');
+                }).catch((error: Error) => {
+                    console.error('Error while signing out ', error);
+                });
+            }
             
-            }).catch((error: Error) => {
-                console.error('error while signing out');
-            });
             return {
                 ...state,
                 user: null,
