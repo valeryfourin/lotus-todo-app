@@ -55,7 +55,12 @@ export const dashboardReducer = (
                 user: null,
             };
         }
-                
+        
+        case DashboardActions.ChangeDataView:
+            return {
+                ...state,
+                view: action.payload.view,
+            };
 
         default: 
             return state;

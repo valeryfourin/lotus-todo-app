@@ -1,5 +1,4 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import M from 'materialize-css';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
@@ -12,10 +11,6 @@ export function AppRouter(): JSX.Element {
   const user = useSelector(userSelector);
   console.log(user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    M.AutoInit();
-  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(authUser, (userInfo) => {

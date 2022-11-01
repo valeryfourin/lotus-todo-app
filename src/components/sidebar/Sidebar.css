@@ -25,6 +25,6 @@
     align-items: center;
 }
 
-.sidebar__nav div:last-child {
+.sidebar__nav--last {
     margin-top: 100px;
 }

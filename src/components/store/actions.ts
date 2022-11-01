@@ -1,4 +1,4 @@
-import { TProject, TUser } from "../types";
+import { TProject, TUser, ViewData } from "../types";
 import { DashboardActions, TDashboardActions } from "./actionTypes";
 
 export const fetchDashboardData = (): TDashboardActions => ({type: DashboardActions.FetchDashboardData});
@@ -15,3 +15,5 @@ export const fetchDashboardDataFailure = (): TDashboardActions => ({type: Dashbo
 export const login = (user: TUser): TDashboardActions => ({type: DashboardActions.Login, payload: { user }});
 
 export const logout = (): TDashboardActions => ({type: DashboardActions.Logout});
+
+export const changeDataView = (view: ViewData): TDashboardActions => ({type: DashboardActions.ChangeDataView, payload: { view }});

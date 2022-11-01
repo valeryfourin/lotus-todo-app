@@ -1,8 +1,18 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useSelector } from 'react-redux';
+import { dataViewSelector } from '../store';
+import { List } from './project/list';
+import { Grid } from './project/grid';
+import { Calendar } from './project/calendar';
+import { Stats } from './project/stats';
+import { ViewDataOptions } from './constants';
+
+// const DATA_VIEW = {
+//   [ViewData.grid]: Grid
+// }
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -23,18 +33,11 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
   );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
 }
 
 export default function ViewTabs() {
@@ -44,23 +47,30 @@ export default function ViewTabs() {
     setValue(newValue);
   };
 
+  const dataView = useSelector(dataViewSelector);
+  // const ViewComponent = DATA_VIEW[dataView];
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="Grid"  />
+          <Tab label="List"  />
+          <Tab label="Calendar"  />
+          <Tab label="Stats"  />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Item One
+        <Grid />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <List />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <Calendar />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Stats />
       </TabPanel>
     </Box>
   );

@@ -1,45 +1,42 @@
-import { useEffect } from "react";
-import { Dropdown } from "react-materialize";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
-export const NavDropdown = (): JSX.Element => {
-    useEffect(() => {
-        const dropdowns = document.querySelectorAll('.dropdown-trigger');
-    
-        const options = {
-            inDuration: 300,
-            outDuration: 300,
-            hover: true, // Activate on hover
-            coverTrigger: false, // Displays dropdown below the button
-        };
-        
-        M.Dropdown.init(dropdowns, options);
-    }, []);
-    return (
-        <Dropdown
-            id="Dropdown_8"
-            options={{
-                alignment: 'left',
-                autoTrigger: true,
-                closeOnClick: true,
-                constrainWidth: true,
-                container: null,
-                coverTrigger: true,
-                hover: false,
-                inDuration: 150,
-                onCloseEnd: undefined,
-                onCloseStart: undefined,
-                onOpenEnd: undefined,
-                onOpenStart: undefined,
-                outDuration: 250
-            }}
-            trigger={<div className="dropdown-trigger">Projects</div>}
-            >
-            <a href="#">
-                Figma
-            </a>
-            <a href="#">
-                Travel App
-            </a>
-        </Dropdown>
-    );
+export const NavDropdown = () => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Project
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>Logout</MenuItem>
+      </Menu>
+    </div>
+  );
 }

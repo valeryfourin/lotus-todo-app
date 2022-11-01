@@ -1,5 +1,5 @@
+import { Button } from '@mui/material';
 import { useState } from 'react';
-import { Button } from 'react-materialize';
 import { Header } from '../header';
 import AuthForm from './AuthForm';
 
@@ -24,7 +24,8 @@ export default function Login(): JSX.Element {
             </h3>
 
             <div className="login-screen__input">
-              <Button
+              <Button 
+                variant="contained"
                 onClick={() => {
                   setSignIn(true);
                   setRedirectToRegComponent(true);
@@ -34,6 +35,7 @@ export default function Login(): JSX.Element {
                 GET STARTED
               </Button>
               <Button
+                variant="outlined"
                 onClick={() => {
                   setSignIn(true);
                   setRedirectToRegComponent(false);

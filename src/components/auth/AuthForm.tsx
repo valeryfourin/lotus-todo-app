@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRef, useState, RefObject } from 'react';
-import { Button } from 'react-materialize';
+import { Button, TextField } from '@mui/material';
 import { authUser } from '../../firebase';
 
 import './AuthForm.css';
@@ -61,13 +61,20 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
           <label htmlFor="name">Nickname</label>
         </>) : null} */}
 
-        <input ref={emailReference} placeholder="Email" type="email" id="email" />
-        <label htmlFor="email">Email</label>
-          
-        <input ref={passwordReference} placeholder="Password" type="password" id="password" className="input-field"/>
-        <label htmlFor="password">Password</label>
+        <TextField ref={emailReference} id="outlined-basic" label="Email" type="email" />
+        {/* <input ref={emailReference} placeholder="Email" type="email" id="email" />
+        <label htmlFor="email">Email</label> */}
+         
+         <TextField
+          id="outlined-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+        /> 
+        {/* <input ref={passwordReference} placeholder="Password" type="password" id="password" className="input-field"/>
+        <label htmlFor="password">Password</label> */}
 
-        <Button className="white signin-screen__button" waves="light" onClick={auth}>
+        <Button className="white signin-screen__button" variant="contained" onClick={auth}>
           {isNewUser ? "Sign Up" : "Sign In"}
         </Button>
 

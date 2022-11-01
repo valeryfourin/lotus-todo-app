@@ -1,4 +1,4 @@
-import { TProject, TUser } from "../types";
+import { TProject, TUser, ViewData } from "../types";
 
 export enum DashboardActions {
     FetchDashboardData = 'FETCH_DASHBOARD_DATA',
@@ -33,10 +33,16 @@ export type TLogoutAction = {
     type: DashboardActions.Logout;
 };
 
+export type TChangeDataViewAction = {
+    type: DashboardActions.ChangeDataView;
+    payload: { view: ViewData };
+};
+
 export type TDashboardActions = 
     | TFetchDashboardDataAction 
     | TFetchDashboardDataSuccessAction 
     | TFetchDashboardDataFailureAction
     | TLoginAction
-    | TLogoutAction; 
+    | TLogoutAction
+    | TChangeDataViewAction; 
 

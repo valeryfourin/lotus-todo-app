@@ -1,8 +1,12 @@
-import { Icon } from 'react-materialize';
 import { useDispatch } from 'react-redux';
 import { Header } from '../header';
 import { logout } from '../store';
 import { NavDropdown } from './NavDropdown';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+
 import './Sidebar.css';
 
 export const Sidebar = (): JSX.Element => {
@@ -11,13 +15,13 @@ export const Sidebar = (): JSX.Element => {
         <div className='sidebar'>
             <Header />
             <div className='sidebar__nav'>
-                <div><Icon className="icon">home</Icon>Overview</div>
-                <div><Icon className="icon">equalizer</Icon>Stats</div>
-                <div><Icon className="icon">folder_open</Icon>
+                <div><HomeOutlinedIcon className="icon"/>Overview</div>
+                <div><BarChartOutlinedIcon className="icon"/>Stats</div>
+                <div><FolderOpenOutlinedIcon className="icon"/>
                     <NavDropdown />
                 </div>
                 
-                <div onClick={() => dispatch(logout())}><Icon className="icon">exit_to_app</Icon>Sign out</div>
+                <div className="sidebar__nav--last" onClick={() => dispatch(logout())}><LogoutOutlinedIcon className="icon"/>Sign out</div>
             </div>
         </div>
         );

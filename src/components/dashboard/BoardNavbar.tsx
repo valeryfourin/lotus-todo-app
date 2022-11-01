@@ -1,4 +1,5 @@
-import { Icon } from 'react-materialize';
+import { Divider } from '@mui/material';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../store';
 import './BoardNavbar.css';
@@ -13,12 +14,9 @@ export const BoardNavbar = (): JSX.Element => {
                     My project
                 </div>
                 <div className='user'>
-                    <Icon className='user-icon'>account_circle</Icon>
+                    <AccountCircleOutlinedIcon/>
                     <span>Hi, {user?.email ?? 'user'}!</span>
                 </div>
-            </div>
-            <div className="board-views">
-                <ViewTabs/>
             </div>
         </div>
     );
