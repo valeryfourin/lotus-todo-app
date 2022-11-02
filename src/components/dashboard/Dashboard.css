@@ -2,7 +2,11 @@
     
 }
 
-/* .hoverable {
+.task-card {
+    margin-top: 10px;
+}
+
+.task-card:hover {
     box-shadow:0 20px 20px 0 rgba(0,0,0,0.14),0 10px 50px 0 rgba(0,0,0,0.12),0 30px 10px -20px rgba(0,0,0,0.2);
     transition: box-shadow .25s;
-} */
+}

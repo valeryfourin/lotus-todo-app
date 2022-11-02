@@ -47,9 +47,6 @@ export default function ViewTabs() {
     setValue(newValue);
   };
 
-  const dataView = useSelector(dataViewSelector);
-  // const ViewComponent = DATA_VIEW[dataView];
-
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

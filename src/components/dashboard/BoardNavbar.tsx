@@ -1,9 +1,7 @@
-import { Divider } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../store';
 import './BoardNavbar.css';
-import ViewTabs from './ViewTabs';
 
 export const BoardNavbar = (): JSX.Element => {
     const user = useSelector(userSelector);

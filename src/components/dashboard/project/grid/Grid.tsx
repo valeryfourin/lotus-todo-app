@@ -73,7 +73,7 @@ export const Grid = (): JSX.Element => {
       }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', overflowX: 'scroll' }}>
               {state.columns && state.columns.map(col => (
                 <div className="col s3" key={col.id}>
                     <Column id={ col.id } title={ col.title } todos={ col.content } deleteTodo={ deleteTodo } addTodo={ addTodo }/>

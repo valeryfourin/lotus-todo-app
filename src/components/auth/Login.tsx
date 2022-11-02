@@ -1,5 +1,6 @@
-import { Button } from '@mui/material';
+
 import { useState } from 'react';
+import { StyledButton } from '../styledComponents/StyledButton';
 import { Header } from '../header';
 import AuthForm from './AuthForm';
 
@@ -24,27 +25,26 @@ export default function Login(): JSX.Element {
             </h3>
 
             <div className="login-screen__input">
-              <Button 
+              <StyledButton 
                 variant="contained"
                 onClick={() => {
                   setSignIn(true);
                   setRedirectToRegComponent(true);
                 }}
-                className="login-screen__button btn-large deep-purple accent-1"
-              >
-                GET STARTED
-              </Button>
-              <Button
+                className="login-screen__button"
+                size="large"
+                title="GET STARTED"
+              />
+              <StyledButton
                 variant="outlined"
                 onClick={() => {
                   setSignIn(true);
                   setRedirectToRegComponent(false);
                 }}
-                className="deep-purple lighten-5 login-screen__button login-screen__button--fixed"
-              >
-                Sign in
-              </Button> 
-              
+                className="login-screen__button login-screen__button--fixed"
+                title="Sign in"
+                sx={{ position: 'fixed'}}
+              />
             </div>
           </>
         )}

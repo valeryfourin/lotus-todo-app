@@ -2,6 +2,12 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import { Grid, IconButton } from '@mui/material';
+
+const projects = ['board1', 'travel', 'app'];
 
 export const NavDropdown = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -22,8 +28,9 @@ export const NavDropdown = () => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        Project
+        Projects
       </Button>
+      <IconButton color="secondary" aria-label="add"><AddIcon/></IconButton>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -33,9 +40,26 @@ export const NavDropdown = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {projects && projects.map((name: string) => 
+          (
+            <MenuItem key={name} onClick={handleClose} className="dropdown-item">
+              <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+              >
+                <span>{name}</span>
+                <div>
+                  <IconButton color="secondary" aria-label="add"><EditOutlinedIcon/></IconButton>
+                  <IconButton color="secondary" aria-label="add"><DeleteOutlinedIcon/></IconButton>
+                </div>
+              </Grid>
+              
+              
+            </MenuItem>
+          )
+        )}
+      
       </Menu>
     </div>
   );

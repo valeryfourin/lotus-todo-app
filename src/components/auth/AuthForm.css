@@ -9,20 +9,14 @@
     flex-direction: column;
 }
 
-.signin-screen > form > input {
-    border: none;
-    border-radius: 5px;
-    height: 40px;
-    margin-bottom: 14px;
-    outline-width: 0;
-    padding: 5px 15px;
+.signin-screen__field {
+    margin-bottom: 20px;
 }
 
 .signin-screen > form > input::placeholder {
     color: grey;}
 
 .signin-screen__button {
-    color: black !important;
     border: none;
     border-radius: 5px;
     font-size: 1rem;

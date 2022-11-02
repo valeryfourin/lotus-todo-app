@@ -1,9 +1,9 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRef, useState, RefObject } from 'react';
-import { Button, TextField } from '@mui/material';
 import { authUser } from '../../firebase';
 
 import './AuthForm.css';
+import { StyledButton, StyledTextField } from '../styledComponents';
 
 export default function AuthForm({ redirectToRegComponent }: Record<string, boolean>): JSX.Element {
   const emailReference: RefObject<any> = useRef();
@@ -50,7 +50,7 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
     } else {
       signIn(event);
     }
-  }
+  };
 
   return (
     <div className="signin-screen">
@@ -61,22 +61,23 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
           <label htmlFor="name">Nickname</label>
         </>) : null} */}
 
-        <TextField ref={emailReference} id="outlined-basic" label="Email" type="email" />
-        {/* <input ref={emailReference} placeholder="Email" type="email" id="email" />
-        <label htmlFor="email">Email</label> */}
-         
-         <TextField
+        <StyledTextField inputRef={emailReference} className="signin-screen__field " autoComplete="email" id="outlined-basic" label="Email" type="email"  margin="normal"/>
+        <StyledTextField
+          className="signin-screen__field"
+          inputRef={passwordReference}
           id="outlined-password-input"
           label="Password"
           type="password"
-          autoComplete="current-password"
+          autoComplete="current-password" 
+          margin="normal"
         /> 
-        {/* <input ref={passwordReference} placeholder="Password" type="password" id="password" className="input-field"/>
-        <label htmlFor="password">Password</label> */}
 
-        <Button className="white signin-screen__button" variant="contained" onClick={auth}>
-          {isNewUser ? "Sign Up" : "Sign In"}
-        </Button>
+        <StyledButton 
+          className="white signin-screen__button" 
+          variant="contained" 
+          onClick={auth} 
+          title={isNewUser ? "Sign Up" : "Sign In"}
+        />
 
         <h4>
           {isNewUser ? (

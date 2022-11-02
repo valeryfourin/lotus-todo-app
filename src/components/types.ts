@@ -31,11 +31,27 @@ export type TTask = {
     id: string,
     title: string;
     description: string;
+    createdDate: Date;
     startDate: Date;
     dueDate: Date;
+    completeDate: Date;
     status: string;
+    priority: Priority;
     completed: boolean;
 };
+
+export enum Priority {
+    minor = 'Minor',
+    major = 'Major',
+    critical = 'Critical',
+    none = '',
+};
+
+export const PriorityColor = {
+    [Priority.minor]: 'green',
+    [Priority.major]: 'orange',
+    [Priority.critical]: 'red',
+}
 
 export interface IColumnProps {
     id: number;

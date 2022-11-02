@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 
 export const Task = ({ title }: Record<string, string>) => {
     return (
-        <Card variant="outlined">
+        <Card className="task-card" variant="outlined">
             <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            Word of the Day
+            { title }
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
             adjective

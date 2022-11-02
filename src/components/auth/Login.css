@@ -21,8 +21,7 @@
 .login-screen__body {
     left: 0;
     margin: auto;
-    padding: 20px;
-    /* margin-top: 100px; */
+    margin-top: 10vh;
     position: absolute;
     right: 0;
     text-align: center;
@@ -35,7 +34,7 @@
     font-size: 3.125rem;
     margin-bottom: 20px;
     font-weight: 600;
-    -webkit-text-fill-color: #b388ff;
+    -webkit-text-fill-color: #ce93d8;
     -webkit-text-stroke-width: 1px;
 }
 
@@ -51,13 +50,16 @@
 }
   
 .login-screen__button {
+    height: 50px;
+    width: 170px;
     font-weight: bold;
 }
 
 .login-screen__button--fixed {
-    color: #b388ff;
+    height: auto;
+    width: auto;
     position: fixed;
-    right: 20px;
+    right: 100px;
     top: 20px;
 }
   
