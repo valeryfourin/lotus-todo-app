@@ -11,12 +11,6 @@ const CssTextField = styled(TextField)({
       borderBottomColor: purple[300],
     },
     '& .MuiOutlinedInput-root': {
-    //   '& fieldset': {
-    //     borderColor: 'red',
-    //   },
-    //   '&:hover fieldset': {
-    //     borderColor: 'yellow',
-    //   },
       '&.Mui-focused fieldset': {
         borderColor: purple[300],
       },

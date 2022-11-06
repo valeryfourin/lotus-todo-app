@@ -4,8 +4,8 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 import { dataViewSelector } from '../store';
-import { List } from './project/list';
-import { Grid } from './project/grid';
+import { ListView } from './project/list';
+import { GridView } from './project/grid';
 import { Calendar } from './project/calendar';
 import { Stats } from './project/stats';
 import { ViewDataOptions } from './constants';
@@ -58,10 +58,10 @@ export default function ViewTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Grid />
+        <GridView />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <List />
+        <ListView />
       </TabPanel>
       <TabPanel value={value} index={2}>
         <Calendar />

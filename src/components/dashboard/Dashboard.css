@@ -1,9 +1,10 @@
 .dashboard-screen {
-    
+    width: 60vw;
 }
 
 .task-card {
     margin-top: 10px;
+    min-width: 200px;
 }
 
 .task-card:hover {

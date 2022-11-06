@@ -26,3 +26,11 @@
 .sidebar__nav--last {
     margin-top: 100px;
 }
+
+.dropdown-item__name {
+    align-self: center;
+}
+
+.info-message {
+    margin: 5px 10px;
+}

@@ -1,16 +1,17 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AddIcon from '@mui/icons-material/Add';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { Grid, IconButton } from '@mui/material';
+import { Grid } from '@mui/material';
 
-const projects = ['board1', 'travel', 'app'];
+import { authUser, firestore } from '../../firebase';
+import { collection } from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import PopupButton from './PopupButton';
+import { addBoard, deleteBoard, editBoard } from '../../services/firestore';
 
 export const NavDropdown = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -19,8 +20,11 @@ export const NavDropdown = () => {
     setAnchorEl(null);
   };
 
+  const [boards, loading, error] = useCollection(
+    collection(firestore, `users/${authUser.currentUser?.uid}/boards`)); 
+    
   return (
-    <div>
+    <div className="projects custom-scroll">
       <Button
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -30,7 +34,7 @@ export const NavDropdown = () => {
       >
         Projects
       </Button>
-      <IconButton color="secondary" aria-label="add"><AddIcon/></IconButton>
+      <PopupButton actionType="add" entity="board" color="secondary" handleAction={addBoard} />
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -39,26 +43,26 @@ export const NavDropdown = () => {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        className="custom-scroll"
+        sx={{maxHeight: '300px'}}
       >
-        {projects && projects.map((name: string) => 
+        {boards !== undefined && boards?.docs ? boards.docs.map((doc: any) => 
           (
-            <MenuItem key={name} onClick={handleClose} className="dropdown-item">
+            <MenuItem key={doc.id} className="dropdown-item">
               <Grid
                 container
                 direction="row"
                 justifyContent="space-between"
               >
-                <span>{name}</span>
+                <span className="dropdown-item__name">{doc.data().name}</span>
                 <div>
-                  <IconButton color="secondary" aria-label="add"><EditOutlinedIcon/></IconButton>
-                  <IconButton color="secondary" aria-label="add"><DeleteOutlinedIcon/></IconButton>
+                  <PopupButton actionType="edit" entity="board" entityId={doc.id} handleAction={editBoard} color="secondary" />
+                  <PopupButton actionType="delete" entity="board" entityId={doc.id} handleAction={deleteBoard} color="secondary" />
                 </div>
               </Grid>
-              
-              
             </MenuItem>
           )
-        )}
+        ) : <span className="info-message">No projects yet. Start by creating a new one.</span>}
       
       </Menu>
     </div>

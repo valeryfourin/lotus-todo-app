@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,11 +8,8 @@ export const Task = ({ title }: Record<string, string>) => {
     return (
         <Card className="task-card" variant="outlined">
             <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            { title }
-            </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            adjective
+            { title }
             </Typography>
             <Typography variant="body2">
             well meaning and kindly.

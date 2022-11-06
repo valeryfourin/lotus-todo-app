@@ -1,10 +1,14 @@
-import { Box } from "@mui/material";
+import styled from "@emotion/styled";
+import { Grid } from "@mui/material";
 import { updateProfile, User } from "firebase/auth";
 import { useState } from "react";
 import { authUser } from "../../../../firebase";
-import Column from "../../Column";
+import PopupButton from "../../../sidebar/PopupButton";
+import Column from "./Column";
 
-export const Grid = (): JSX.Element => {
+import "./GridView.css";
+
+export const GridView = (): JSX.Element => {
 
     const [state, setState] = useState({
         dashboard: 'Custom name',
@@ -15,7 +19,11 @@ export const Grid = (): JSX.Element => {
                 content: [
                   { id: 1, content: "read book", date: "1995-12-17T03:24:00" },
                   { id: 2, content: "start unit test course", date: "1995-12-17T03:24:00" },
-                  { id: 3, content: "fix bug", date: "1995-12-17T03:24:00" }
+                  { id: 3, content: "fix bug", date: "1995-12-17T03:24:00" },
+                  { id: 4, content: "fix bug", date: "1995-12-17T03:24:00" },
+                  { id: 5, content: "fix bug", date: "1995-12-17T03:24:00" },
+                  { id: 6, content: "fix bug", date: "1995-12-17T03:24:00" },
+                  { id: 7, content: "fix bug", date: "1995-12-17T03:24:00" }
                 ]
             },
             { 
@@ -37,7 +45,25 @@ export const Grid = (): JSX.Element => {
             },
             {   
                 id: 4, 
-                title: "done",
+                title: "fixed",
+                  content: [
+                    { id: 1, content: "read book", date: "1995-12-17T03:24:00" },
+                    { id: 2, content: "start course", date: "1995-12-17T03:24:00" },
+                    { id: 3, content: "fix bug", date: "1995-12-17T03:24:00" }
+                  ]
+              },
+              {   
+                id: 5, 
+                title: "closed",
+                  content: [
+                    { id: 1, content: "read book", date: "1995-12-17T03:24:00" },
+                    { id: 2, content: "start course", date: "1995-12-17T03:24:00" },
+                    { id: 3, content: "fix bug", date: "1995-12-17T03:24:00" }
+                  ]
+              },
+              {   
+                id: 6, 
+                title: "saved",
                   content: [
                     { id: 1, content: "read book", date: "1995-12-17T03:24:00" },
                     { id: 2, content: "start course", date: "1995-12-17T03:24:00" },
@@ -73,13 +99,14 @@ export const Grid = (): JSX.Element => {
       }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', overflowX: 'scroll' }}>
+        <Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
               {state.columns && state.columns.map(col => (
-                <div className="col s3" key={col.id}>
+                <Grid item className="" key={col.id}>
                     <Column id={ col.id } title={ col.title } todos={ col.content } deleteTodo={ deleteTodo } addTodo={ addTodo }/>
-                </div>
+                </Grid>
                 )
               )}
-        </Box>
+              <PopupButton actionType="add" entity="column" color="secondary" styles={{borderRadius: 'unset'}} />
+        </Grid>
     );
 };

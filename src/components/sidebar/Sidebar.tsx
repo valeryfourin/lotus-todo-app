@@ -12,6 +12,7 @@ import { Button } from '@mui/material';
 
 export const Sidebar = (): JSX.Element => {
     const dispatch = useDispatch();
+
     return (
         <div className='sidebar'>
             <Header />

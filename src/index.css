@@ -6,6 +6,7 @@ body {
     
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
 code {
@@ -25,4 +26,19 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 100px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  border-radius: 100px;
 }
