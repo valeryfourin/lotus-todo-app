@@ -46,11 +46,13 @@ export default function  PopupButton({actionType, entity, handleAction, entityId
   const [open, setOpen] = React.useState(false);
   const nameReference: React.RefObject<any> = React.useRef();
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (event: any) => {
+    event.stopPropagation();
     setOpen(true);
   };
 
-  const handleConfirmClose = () => {
+  const handleConfirmClose = (event: any) => {
+    event.stopPropagation();
       if (actionType === 'add') {
         if (nameReference.current) {
           handleAction(nameReference.current.value);
@@ -65,7 +67,8 @@ export default function  PopupButton({actionType, entity, handleAction, entityId
     setOpen(false);
   };
 
-  const handleCancelClose = () => {
+  const handleCancelClose = (event: any) => {
+    event.stopPropagation();
     setOpen(false);
   }
 

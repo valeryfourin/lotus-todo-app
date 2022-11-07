@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import Login from './components/auth/Login';
+import { Sidebar } from './components/sidebar';
 import { login, logout, userSelector } from './components/store';
 import { authUser } from './firebase';
 import { authRoutes } from './routes';
@@ -33,11 +34,14 @@ export function AppRouter(): JSX.Element {
       {!user ? (
         <Login />
       ) : (
-        <Routes>
-          {authRoutes.map(({ path, Component }) => (
-            <Route key={path} path={path} element={<Component/>} />
-          ))}
-        </Routes>
+          <div className="home-screen">
+            <Sidebar />
+            <Routes>
+              {authRoutes.map(({ path, Component }) => (
+                <Route key={path} path={path} element={<Component/>} />
+              ))}
+            </Routes>
+          </div>
       )}
     </>
   );

@@ -1,10 +1,15 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import { HOME_ROUTE } from "../../utils/constants";
 
 export const Header = (): JSX.Element => {
+    const navigate = useNavigate();
     return (
         <div className="flex-container">
-            <img className="logo" src="./images/lotus logo.png" alt="logo"/>
-            {/* <h1 className="">Easy <b>Retro</b></h1> */}
+            <img 
+                onClick={() => navigate(HOME_ROUTE)} 
+                className="logo" 
+                src="./images/lotuslogo.png" 
+                alt="logo"/>
         </div> 
     );
 }

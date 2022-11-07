@@ -1,9 +1,9 @@
 
 import { Home } from './components/home';
-import { Project } from './components/dashboard/project/Project';
+import { Dashboard } from './components/dashboard';
 import {
   HOME_ROUTE,
-  PROJECTS_ROUTE,
+  PROJECT_ROUTE,
 } from './utils/constants';
 
 export const authRoutes = [
@@ -12,7 +12,7 @@ export const authRoutes = [
     Component: Home,
   },
   {
-    path: PROJECTS_ROUTE,
-    Component: Project,
+    path: PROJECT_ROUTE + '/:id',
+    Component: Dashboard,
   },
 ];

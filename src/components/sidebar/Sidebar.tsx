@@ -9,15 +9,18 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import './Sidebar.css';
 import { Button } from '@mui/material';
+import { HOME_ROUTE } from '../../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 export const Sidebar = (): JSX.Element => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     return (
         <div className='sidebar'>
             <Header />
             <div className='sidebar__nav'>
-                <div>
+                <div onClick={() => navigate(HOME_ROUTE)}>
                     <HomeOutlinedIcon className="icon"/>
                     <Button variant="text">Overview</Button>
                 </div>

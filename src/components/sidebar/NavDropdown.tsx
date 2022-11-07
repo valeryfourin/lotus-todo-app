@@ -3,15 +3,18 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 
 import { authUser, firestore } from '../../firebase';
 import { collection } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import PopupButton from './PopupButton';
 import { addBoard, deleteBoard, editBoard } from '../../services/firestore';
+import { PROJECT_ROUTE } from '../../utils/constants';
 
 export const NavDropdown = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,7 +51,7 @@ export const NavDropdown = () => {
       >
         {boards !== undefined && boards?.docs ? boards.docs.map((doc: any) => 
           (
-            <MenuItem key={doc.id} className="dropdown-item">
+            <MenuItem key={doc.id} className="dropdown-item" onClick={() => navigate(PROJECT_ROUTE + '/' + doc.id)} >
               <Grid
                 container
                 direction="row"

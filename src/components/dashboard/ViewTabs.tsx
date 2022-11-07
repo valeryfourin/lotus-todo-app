@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { SyntheticEvent, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -41,9 +41,9 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function ViewTabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

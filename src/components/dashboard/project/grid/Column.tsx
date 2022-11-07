@@ -1,10 +1,12 @@
 import AddTodo from "../../AddTodo";
 import { IColumnProps } from "../../../types";
-import { Card, Grid, TextField } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Task } from "./Task";
 import PopupButton from "../../../sidebar/PopupButton";
+import { useState } from "react";
 
 const Column = ({ title, todos, deleteTodo, addTodo }: IColumnProps) => {
+    const [buttonsHidden, setButtonsHidden] = useState(true);
     const todoList = todos.length ? (
         todos.map((todo: any) => {
             return (
@@ -19,21 +21,19 @@ const Column = ({ title, todos, deleteTodo, addTodo }: IColumnProps) => {
         <p className="center">You have no todo's left</p>
     )
     return ( 
-        <div>
+        <div onMouseOver={() => setButtonsHidden(false)} onMouseOut={() => setButtonsHidden(true)}>
             <Grid
                 container
                 direction="row"
                 justifyContent="space-between"
             >
-               <span className="column-title">{ title }</span>
-               <div>
-                  <PopupButton actionType="edit" entity="column" color="secondary" />
-                  <PopupButton actionType="delete" entity="column" color="secondary" />
+                <span className="column-title">{ title }</span>
+                <div style={{...(buttonsHidden && {visibility: 'hidden'})}}>
+                    <PopupButton actionType="edit" entity="column" color="secondary" />
+                    <PopupButton actionType="delete" entity="column" color="secondary" />
                 </div>
             </Grid>
                 
-            {/* <AddTodo addTodo={ addTodo }/> */}
-            {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" type='text'/> */}
             <div className="todos">
                 { todoList }
             </div>
