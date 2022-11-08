@@ -1,6 +1,7 @@
 export type TDashboardState = {
-    user: TUser,
+    user: TUser;
     projects: Record<string, TProject>;
+    selectedProject: Record<string, string>;
     view: ViewData;
     isDataLoading: boolean;
 };
@@ -54,9 +55,27 @@ export const PriorityColor = {
 }
 
 export interface IColumnProps {
-    id: number;
+    id: string;
     title: string;
-    todos: any;
-    deleteTodo: any;
-    addTodo: any;
+    todos?: any;
+    deleteTodo?: any;
+    addTodo?: any;
 };
+
+export interface ITabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+  }
+
+export interface IPopupButton {
+    actionType: ActionType;
+    entity: Entity;
+    boardId?: string;
+    columnId?: string;
+    styles?: Record<string, string>;
+    // : (param1:string, param2?:string, param3?:string) => void;
+}
+
+export type ActionType = 'add' | 'edit' | 'delete';
+export type Entity = 'board' | 'column';

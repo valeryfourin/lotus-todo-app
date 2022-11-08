@@ -1,8 +1,6 @@
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { authUser, firestore } from "../firebase";
 
-const boardsPath = `users/${authUser.currentUser?.uid}/boards`;
-
 export const addBoard = async (name: string) => {
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, name), { name: name });
@@ -11,47 +9,47 @@ export const addBoard = async (name: string) => {
     }
 }
 
-export const deleteBoard = async (entityId: string) => {
+export const deleteBoard = async (boardId: string) => {
     try {
-        await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, entityId));
+        await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, boardId));
     } catch (e) {
-        console.error(`Error deleting the document with id ${entityId}: `, e);
+        console.error(`Error deleting the document with id ${boardId}: `, e);
     }
 }
 
-export const editBoard = async (entityId: string, newName: string) => {
+export const editBoard = async (boardId: string, newName: string) => {
     try {
-        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, entityId), 
+        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, boardId), 
         { name: newName }, 
         { merge: true });
     } catch (e) {
-        console.error(`Error updating the document with id ${entityId}: `, e);
+        console.error(`Error updating the document with id ${boardId}: `, e);
     }
 }
 
 export const addColumn = async (boardId: string, name: string) => {
     try {
-        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}`, name), { name: name });
+        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, name), { name: name });
     } catch (e) {
         console.error("Error creating new document: ", e);
     }
 }
 
-export const deleteColumn = async (boardId: string, entityId: string) => {
+export const deleteColumn = async (boardId: string, columnId: string) => {
     try {
-        await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}`, entityId));
+        await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, columnId));
     } catch (e) {
-        console.error(`Error deleting the document with id ${entityId}: `, e);
+        console.error(`Error deleting the document with id ${columnId}: `, e);
     }
 }
 
-export const editColumn = async (boardId: string, entityId: string, newName: string) => {
+export const editColumn = async (boardId: string, columnId: string, newName: string) => {
     try {
-        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}`, entityId), 
+        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, columnId), 
         { name: newName }, 
         { merge: true });
     } catch (e) {
-        console.error(`Error updating the document with id ${entityId}: `, e);
+        console.error(`Error updating the document with id ${columnId}: `, e);
     }
 }
     

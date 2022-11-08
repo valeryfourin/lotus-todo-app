@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Header } from '../header';
 import { logout } from '../store';
-import { NavDropdown } from './NavDropdown';
+import { EntityDropdown } from './EntityDropdown';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
@@ -30,7 +30,7 @@ export const Sidebar = (): JSX.Element => {
                 </div>
                 <div>
                     <FolderOpenOutlinedIcon className="icon"/>
-                    <NavDropdown />
+                    <EntityDropdown />
                 </div>
                 
                 <div className="sidebar__nav--last" >

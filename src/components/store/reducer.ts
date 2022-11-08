@@ -6,6 +6,7 @@ import { DashboardActions, TDashboardActions } from "./actionTypes";
 const initialState: TDashboardState = {
     user: null,
     projects: {},
+    selectedProject: {},
     view: ViewData.grid,
     isDataLoading: true,
 };
@@ -60,6 +61,12 @@ export const dashboardReducer = (
             return {
                 ...state,
                 view: action.payload.view,
+            };
+
+        case DashboardActions.ChangeSelectedProject:
+            return {
+                ...state,
+                selectedProject: action.payload.selectedProject,
             };
 
         default: 

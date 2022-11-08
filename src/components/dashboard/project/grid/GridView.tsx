@@ -1,16 +1,19 @@
-import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
-import { updateProfile, User } from "firebase/auth";
+import { collection } from "firebase/firestore";
 import { useState } from "react";
-import { authUser } from "../../../../firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { useSelector } from "react-redux";
+import { authUser, firestore } from "../../../../firebase";
 import PopupButton from "../../../sidebar/PopupButton";
+import { selectedProjectSelector } from "../../../store";
 import Column from "./Column";
 
 import "./GridView.css";
 
 export const GridView = (): JSX.Element => {
+  const selectedProject = useSelector(selectedProjectSelector);
 
-    const [state, setState] = useState({
+  const [state, setState] = useState({
         dashboard: 'Custom name',
         columns: [
             { 
@@ -88,25 +91,22 @@ export const GridView = (): JSX.Element => {
         setTodos([ ...todos, { id: (todos.length + 1), ...todo } ])
       }
 
-      function updateName() {
-        updateProfile(authUser.currentUser as User, {
-          displayName: 'valery'
-        }).then(() => {
-          console.log(authUser.currentUser);
-        }).catch((error: Error) => {
-          alert(error.message);
-        });
-      }
+      
+      const [columns, loading, error] = useCollection(
+        collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns`)); 
+        console.log(columns);
+        
+      const areColumnsLoaded = columns !== undefined && columns?.docs;
 
     return (
         <Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
-              {state.columns && state.columns.map(col => (
-                <Grid item className="" key={col.id}>
-                    <Column id={ col.id } title={ col.title } todos={ col.content } deleteTodo={ deleteTodo } addTodo={ addTodo }/>
+              {areColumnsLoaded && columns.docs.map(col => (
+                <Grid item key={col.id}>
+                    <Column id={ col.id } title={ col.data().name } />
                 </Grid>
                 )
               )}
-              <PopupButton actionType="add" entity="column" color="secondary" styles={{borderRadius: 'unset'}} />
+              <PopupButton actionType="add" boardId={selectedProject.id} entity="column" styles={{borderRadius: 'unset'}} />
         </Grid>
     );
 };

@@ -9,3 +9,5 @@ export const isDataLoadingSelector = (state: TDashboardState): boolean => state.
 export const userSelector = (state: TDashboardState): TUser => state.user;
 
 export const dataViewSelector = (state: TDashboardState): ViewData => state.view;
+
+export const selectedProjectSelector = (state: TDashboardState): Record<string, string> => state.selectedProject;

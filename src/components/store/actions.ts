@@ -16,4 +16,8 @@ export const login = (user: TUser): TDashboardActions => ({type: DashboardAction
 
 export const logout = (): TDashboardActions => ({type: DashboardActions.Logout});
 
-export const changeDataView = (view: ViewData): TDashboardActions => ({type: DashboardActions.ChangeDataView, payload: { view }});
+export const changeDataView = (view: ViewData): TDashboardActions => (
+    {type: DashboardActions.ChangeDataView, payload: { view }});
+
+export const changeSelectedProject = ({id, name}: Record<string, string>): TDashboardActions => (
+    {type: DashboardActions.ChangeSelectedProject, payload: { selectedProject: { id, name } }});

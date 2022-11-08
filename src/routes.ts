@@ -1,5 +1,5 @@
 
-import { Home } from './components/home';
+import { Home } from './components/dashboard/home';
 import { Dashboard } from './components/dashboard';
 import {
   HOME_ROUTE,

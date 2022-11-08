@@ -7,6 +7,7 @@ export enum DashboardActions {
     Login = 'USER_LOGIN',
     Logout = 'USER_LOGOUT',
     ChangeDataView = 'CHANGE_DATA_VIEW',
+    ChangeSelectedProject = 'CHANGE_SELECTED_PROJECT',
 };
 
 export type TFetchDashboardDataAction = {
@@ -38,11 +39,17 @@ export type TChangeDataViewAction = {
     payload: { view: ViewData };
 };
 
+export type TChangeSelectedProjectAction = {
+    type: DashboardActions.ChangeSelectedProject;
+    payload: { selectedProject: { id: string, name: string }};
+};
+
 export type TDashboardActions = 
     | TFetchDashboardDataAction 
     | TFetchDashboardDataSuccessAction 
     | TFetchDashboardDataFailureAction
     | TLoginAction
     | TLogoutAction
-    | TChangeDataViewAction; 
+    | TChangeDataViewAction
+    | TChangeSelectedProjectAction; 
 

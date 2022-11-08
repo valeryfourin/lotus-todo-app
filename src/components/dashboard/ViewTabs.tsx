@@ -2,25 +2,15 @@ import { SyntheticEvent, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { useSelector } from 'react-redux';
-import { dataViewSelector } from '../store';
 import { ListView } from './project/list';
 import { GridView } from './project/grid';
 import { Calendar } from './project/calendar';
 import { Stats } from './project/stats';
-import { ViewDataOptions } from './constants';
+import { ITabPanelProps } from '../types';
 
-// const DATA_VIEW = {
-//   [ViewData.grid]: Grid
-// }
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
 
-function TabPanel(props: TabPanelProps) {
+function TabPanel(props: ITabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (

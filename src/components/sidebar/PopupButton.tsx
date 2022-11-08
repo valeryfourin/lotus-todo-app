@@ -12,9 +12,8 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 import { IconButton } from '@mui/material';
-
-type ActionType = 'add' | 'edit' | 'delete';
-type Entity = 'board' | 'column';
+import { ActionType, IPopupButton } from '../types';
+import { executeBoardRequest, executeColumnRequest, getPopupTitle } from './utils';
 
 const getIconFromActionType = (action: ActionType) => {
   switch (action) {
@@ -29,20 +28,8 @@ const getIconFromActionType = (action: ActionType) => {
   }
 }
 
-const getPopupTitle = (entity: Entity, action: ActionType) => {
-  switch (action) {
-    case 'add':
-      return `Create new ${entity}`;
-    case 'edit':
-      return `Edit ${entity}`;
-    case 'delete':
-      return `Delete ${entity}`;
-    default: 
-      return '';
-  }
-}
-
-export default function  PopupButton({actionType, entity, handleAction, entityId, styles={}}: any) {
+export default function PopupButton(props: IPopupButton) {
+  const {actionType, entity, styles={}} = props;
   const [open, setOpen] = React.useState(false);
   const nameReference: React.RefObject<any> = React.useRef();
 
@@ -53,17 +40,14 @@ export default function  PopupButton({actionType, entity, handleAction, entityId
 
   const handleConfirmClose = (event: any) => {
     event.stopPropagation();
-      if (actionType === 'add') {
-        if (nameReference.current) {
-          handleAction(nameReference.current.value);
-        }
-      } else if (actionType === 'edit') {
-        if (nameReference.current) {
-          handleAction(entityId, nameReference.current.value);
-        }
-      } else if (actionType === 'delete') {
-        handleAction(entityId);
-      }
+
+    if (entity === 'board') {
+      executeBoardRequest(actionType, props.boardId, nameReference);
+    } else if (entity === 'column') {
+      console.log(actionType,props.boardId, props.columnId, nameReference.current.value)
+      executeColumnRequest(actionType, props.boardId, props.columnId, nameReference);
+    }
+
     setOpen(false);
   };
 
