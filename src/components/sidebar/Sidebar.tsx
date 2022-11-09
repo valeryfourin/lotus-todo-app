@@ -21,20 +21,20 @@ export const Sidebar = (): JSX.Element => {
             <Header />
             <div className='sidebar__nav'>
                 <div onClick={() => navigate(HOME_ROUTE)}>
-                    <HomeOutlinedIcon className="icon"/>
+                    <HomeOutlinedIcon className="icon icon--grey"/>
                     <Button variant="text">Overview</Button>
                 </div>
                 <div>
-                    <BarChartOutlinedIcon className="icon"/>
+                    <BarChartOutlinedIcon className="icon icon--grey"/>
                     <Button variant="text">Stats</Button>
                 </div>
                 <div>
-                    <FolderOpenOutlinedIcon className="icon"/>
+                    <FolderOpenOutlinedIcon className="icon icon--grey"/>
                     <EntityDropdown />
                 </div>
-                
+
                 <div className="sidebar__nav--last" >
-                    <LogoutOutlinedIcon className="icon"/>
+                    <LogoutOutlinedIcon className="icon icon--grey"/>
                     <Button variant="text" onClick={() => dispatch(logout())}>Sign out</Button>
                 </div>
             </div>

@@ -31,21 +31,21 @@ export type TColumn = {
 export type TTask = {
     id: string,
     title: string;
-    description: string;
+    description?: string;
     createdDate: Date;
-    startDate: Date;
-    dueDate: Date;
-    completeDate: Date;
-    status: string;
-    priority: Priority;
-    completed: boolean;
+    startDate?: Date;
+    dueDate?: Date;
+    completeDate?: Date;
+    status?: string;
+    priority?: Priority;
+    completed?: boolean;
 };
 
 export enum Priority {
     minor = 'Minor',
     major = 'Major',
     critical = 'Critical',
-    none = '',
+    none = ' ',
 };
 
 export const PriorityColor = {
@@ -68,13 +68,12 @@ export interface ITabPanelProps {
     value: number;
   }
 
-export interface IPopupButton {
+export interface IPopupIcon {
     actionType: ActionType;
     entity: Entity;
     boardId?: string;
     columnId?: string;
     styles?: Record<string, string>;
-    // : (param1:string, param2?:string, param3?:string) => void;
 }
 
 export type ActionType = 'add' | 'edit' | 'delete';

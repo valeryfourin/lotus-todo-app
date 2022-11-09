@@ -1,5 +1,7 @@
-import { addBoard, addColumn, deleteBoard, deleteColumn, editBoard, editColumn } from "../../services/firestore";
-import { ActionType, Entity } from "../types";
+
+import { addBoard, deleteBoard, editBoard } from '../../services/firestore/boardService';
+import { addColumn, deleteColumn, editColumn } from '../../services/firestore/columnService';
+import { ActionType, Entity } from '../types';
 
 export const getPopupTitle = (entity: Entity, action: ActionType) => {
     switch (action) {
@@ -9,7 +11,7 @@ export const getPopupTitle = (entity: Entity, action: ActionType) => {
         return `Edit ${entity}`;
       case 'delete':
         return `Delete ${entity}`;
-      default: 
+      default:
         return '';
     }
 }

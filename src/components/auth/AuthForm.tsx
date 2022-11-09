@@ -36,7 +36,6 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
         passwordReference.current.value,
       )
       .then((authInfo: any) => {
-        console.log(authInfo);
         return authInfo;
       })
       .catch((error: Error) => {
@@ -68,14 +67,14 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
           id="outlined-password-input"
           label="Password"
           type="password"
-          autoComplete="current-password" 
+          autoComplete="current-password"
           margin="normal"
-        /> 
+        />
 
-        <StyledButton 
-          className="white signin-screen__button" 
-          variant="contained" 
-          onClick={auth} 
+        <StyledButton
+          className="white signin-screen__button"
+          variant="contained"
+          onClick={auth}
           title={isNewUser ? "Sign Up" : "Sign In"}
         />
 
@@ -88,7 +87,7 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
                 onClick={() => setIsNewUser(false)}
               >
                 Sign In.
-              </span> 
+              </span>
             </>
             ) : (
               <>
@@ -98,7 +97,7 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
                   onClick={() => setIsNewUser(true)}
                 >
                   Sign Up now.
-                </span> 
+                </span>
               </>
             )}
         </h4>

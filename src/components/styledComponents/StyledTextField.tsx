@@ -18,11 +18,5 @@ const CssTextField = styled(TextField)({
   });
 
 export const StyledTextField = ({...props}: any) => {
-    
-//   const myRef = useRef<any>(null);
-//     useEffect(() => {
-//         console.log(ref);
-        
-//     });
     return ( <CssTextField {...props}  /> )
 };
