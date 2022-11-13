@@ -1,7 +1,7 @@
 import { Backdrop, CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { collection } from "firebase/firestore";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { authUser, firestore } from "../../../../firebase";
@@ -95,6 +95,11 @@ export const GridView = (): JSX.Element => {
 	const [columns, loading, error] = useCollection(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns`));
 
+	const columnsReversed = useMemo(() => {
+		if (!loading) {
+			return columns?.docs.reverse();
+		}
+	}, columns?.docs);
 	const areColumnsLoaded = columns !== undefined && columns?.docs.length;
 
 	return loading ? (
@@ -105,7 +110,7 @@ export const GridView = (): JSX.Element => {
 		<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
 			{areColumnsLoaded ? (
 				<>
-					{columns.docs.map(col => (
+					{columnsReversed && columnsReversed.map(col => (
 						<Grid item key={col.id}>
 							<Column id={ col.id } title={ col.data().name } />
 						</Grid>

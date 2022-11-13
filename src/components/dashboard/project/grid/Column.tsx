@@ -1,27 +1,40 @@
-import { IColumnProps } from "../../../types";
-import { Box, Grid } from "@mui/material";
+import { IColumnProps, TTask } from "../../../types";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import { Task } from "./Task";
 import PopupIcon from "../../../sidebar/PopupIcon";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectedProjectSelector } from "../../../store";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { collection } from "firebase/firestore";
+import { authUser, firestore } from "../../../../firebase";
 
 const Column = ({ title, id }: IColumnProps) => {
     const selectedProject = useSelector(selectedProjectSelector);
     const [buttonsHidden, setButtonsHidden] = useState(true);
-    // const todoList = todos.length ? (
-    //     todos.map((todo: any) => {
-    //         return (
-    //             <Task
-    //                 key={ todo.id }
-    //                 title={ todo.content }
-    //                 // onClick={ () => deleteTodo(todo.id) }
-    //             />
-    //         )
-    //     })
-    // ) : (
-    //     <p className="center">You have no todo's left</p>
-    // )
+
+	const [tasks, loading, error] = useCollection(
+		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns/${title}/tasks`));
+
+    const tasksList = loading ? (
+		<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+			<CircularProgress />
+		</Box>
+    ) : (
+        tasks?.docs.map((task: any) => {
+            return (
+                <Task
+                    key={ task.id }
+					id={ task.id }
+					columnId={ id }
+                    name={ task.data().name }
+					description={ task.data().description }
+					deadline={ task.data().deadline.toDate() }
+					priority={ task.data().priority }
+                />
+            )
+        })
+    )
     return (
         <Box sx={{minWidth: '150px'}} onMouseOver={() => setButtonsHidden(false)} onMouseOut={() => setButtonsHidden(true)}>
             <Grid
@@ -37,7 +50,7 @@ const Column = ({ title, id }: IColumnProps) => {
             </Grid>
 
             <div className="todos">
-                {/* { todoList } */}
+                { tasksList }
             </div>
         </Box>
     )

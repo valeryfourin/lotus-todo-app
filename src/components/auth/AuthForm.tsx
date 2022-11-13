@@ -1,13 +1,14 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+
 import { useRef, useState, RefObject } from 'react';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { authUser } from '../../firebase';
 
 import './AuthForm.css';
 import { StyledButton, StyledTextField } from '../styledComponents';
 
 export default function AuthForm({ redirectToRegComponent }: Record<string, boolean>): JSX.Element {
-  const emailReference: RefObject<any> = useRef();
-  const passwordReference: RefObject<any> = useRef();
+  const emailReference: RefObject<HTMLInputElement> = useRef(null);
+  const passwordReference: RefObject<HTMLInputElement> = useRef(null);
   // const nameReference: RefObject<any> = useRef();
   const [isNewUser, setIsNewUser] = useState(redirectToRegComponent);
 
@@ -30,17 +31,19 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
 
   const signIn = (event: any) => {
     event.preventDefault();
-    signInWithEmailAndPassword(
-        authUser,
-        emailReference.current.value,
-        passwordReference.current.value,
-      )
-      .then((authInfo: any) => {
-        return authInfo;
-      })
-      .catch((error: Error) => {
-        alert(error.message);
-      });
+    if (emailReference.current && passwordReference.current) {
+		signInWithEmailAndPassword(
+			authUser,
+			emailReference.current.value,
+			passwordReference.current.value,
+		)
+		.then((authInfo: any) => {
+		return authInfo;
+		})
+		.catch((error: Error) => {
+		alert(error.message);
+		});
+	}
   };
 
   const auth = (event: any) => {

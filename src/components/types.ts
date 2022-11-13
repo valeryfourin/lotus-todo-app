@@ -16,25 +16,25 @@ export enum ViewData {
 };
 
 export type TProject = {
-    id: string,
+    id: string;
     name: string;
     columns: Array<TColumn>;
     color: string;
 };
 
 export type TColumn = {
-    id: string,
-    header: string;
+    id: string;
+    name: string;
     tasks: Array<TTask>;
 };
 
 export type TTask = {
-    id: string,
-    title: string;
-    description?: string;
+    id?: string;
+    name: string;
     createdDate: Date;
-    startDate?: Date;
-    dueDate?: Date;
+    description?: string;
+    startDate?: Date | null;
+    deadline?: Date | null;
     completeDate?: Date;
     status?: string;
     priority?: Priority;
@@ -45,13 +45,14 @@ export enum Priority {
     minor = 'Minor',
     major = 'Major',
     critical = 'Critical',
-    none = ' ',
+    notSet = 'Not set',
 };
 
 export const PriorityColor = {
-    [Priority.minor]: 'green',
-    [Priority.major]: 'orange',
-    [Priority.critical]: 'red',
+    [Priority.minor]: '#78c480',
+    [Priority.major]: '#e56724',
+    [Priority.critical]: '#bd70bc',
+    [Priority.notSet]: '#a7c3d3',
 }
 
 export interface IColumnProps {

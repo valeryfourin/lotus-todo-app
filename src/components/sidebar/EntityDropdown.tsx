@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,7 +21,7 @@ export const EntityDropdown = () => {
 	const dispatch = useDispatch();
 	const [boards] = useCollection(collection(firestore, `users/${authUser.currentUser?.uid}/boards`));
 
-	const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => { setAnchorEl(event.currentTarget) };
+	const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => { setAnchorEl(event.currentTarget) };
 	const handleClose = () => { setAnchorEl(null) };
 	const handleItemClick = (doc:any) => {
 		dispatch(changeSelectedProject({id: doc.id, name: doc.data().name}));

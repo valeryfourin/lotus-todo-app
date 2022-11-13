@@ -5,43 +5,47 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TripOriginIcon  from '@mui/icons-material/TripOrigin';
-import { Priority } from '../../../types';
+import { Priority, PriorityColor } from '../../../types';
 
-export default function PrioritySelect() {
-	const [priority, setPriority] = React.useState('');
-
+export default function PrioritySelect({value, setValue}: {value: string, setValue: Function}): JSX.Element {
 	const handleChange = (event: SelectChangeEvent) => {
-		setPriority(event.target.value as string);
+		setValue(event.target.value as string);
 	};
 
 	return (
 		<Box sx={{ minWidth: 120 }}>
 			<FormControl fullWidth>
 				<InputLabel id="demo-simple-select-label">Priority</InputLabel>
-				<Select
+				<Select className="select"
 					labelId="demo-simple-select-label"
 					id="demo-simple-select"
-					value={priority}
+					value={value}
 					margin="dense"
-					label="Age"
+					label="Priority"
 					onChange={handleChange}
 				>
-					<MenuItem value={Priority.none}>
-						<TripOriginIcon sx={{color: '#a7c3d3'}} className="icon"/>
-						Not set
+					{Object.values(Priority).map((priority) => (
+						<MenuItem value={priority}>
+							<TripOriginIcon sx={{color: PriorityColor[priority]}} className="icon"/>
+							{priority}
+						</MenuItem>
+					))}
+					{/* <MenuItem value={Priority.notSet}>
+						<TripOriginIcon sx={{color: PriorityColor[Priority.notSet]}} className="icon"/>
+						{Priority.notSet}
 					</MenuItem>
 					<MenuItem value={Priority.minor}>
-						<TripOriginIcon sx={{color: '#78c480'}}  className="icon"/>
+						<TripOriginIcon sx={{color: PriorityColor[Priority.minor]}}  className="icon"/>
 						{Priority.minor}
 					</MenuItem>
 					<MenuItem value={Priority.major}>
-						<TripOriginIcon sx={{color: '#e56724'}} className="icon"/>
+						<TripOriginIcon sx={{color: PriorityColor[Priority.major]}} className="icon"/>
 						{Priority.major}
 					</MenuItem>
 					<MenuItem value={Priority.critical}>
-						<TripOriginIcon sx={{color: '#bd70bc'}} className="icon"/>
+						<TripOriginIcon sx={{color: PriorityColor[Priority.critical]}} className="icon"/>
 						{Priority.critical}
-					</MenuItem>
+					</MenuItem> */}
 				</Select>
 			</FormControl>
 		</Box>

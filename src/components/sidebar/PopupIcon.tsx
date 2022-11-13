@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { RefObject, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -30,8 +30,8 @@ const getIconFromActionType = (action: ActionType) => {
 
 export default function PopupIcon(props: IPopupIcon) {
 	const {actionType, entity, styles={}} = props;
-	const [open, setOpen] = React.useState(false);
-	const nameReference: React.RefObject<any> = React.useRef();
+	const [open, setOpen] = useState(false);
+	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 
 	const handleClickOpen = (event: any) => {
 		preventProjectSwitch(event);

@@ -3,23 +3,41 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Priority, PriorityColor } from '../../../types';
+import { deleteTask } from '../../../../services/firestore/taskService';
+import { useSelector } from 'react-redux';
+import { selectedProjectSelector } from '../../../store';
 
-export const Task = ({ title }: Record<string, string>) => {
+interface ITaskProps {
+	id: string;
+	name: string;
+	columnId: string;
+	description: string;
+	deadline: Date | null;
+	priority: string;
+};
+
+export const Task = ({ id, name, columnId, description, deadline, priority }: ITaskProps) => {
+    const selectedProject = useSelector(selectedProjectSelector);
+
+	const handleClick = () => {
+		console.log(selectedProject.id, columnId, id);
+
+		deleteTask(selectedProject.id, columnId, id)
+	}
     return (
-        <Card className="task-card" variant="outlined">
+        <Card className="task-card" variant="outlined" onClick={handleClick}>
             <CardContent>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            { title }
-            </Typography>
-            <Typography variant="body2">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-            </Typography>
-        </CardContent>
-        <CardActions>
-            <Button size="small">Learn More</Button>
-        </CardActions>
+            	<Button size="small">{ name }</Button>
+
+				<Typography variant="body2">
+					{description}
+				</Typography>
+			</CardContent>
+			<CardActions>
+				Due: <Button size="small">{deadline?.toDateString()}</Button>
+				<Typography variant="body2" color={PriorityColor[priority as Priority]}>{priority}</Typography>
+			</CardActions>
         </Card>
     );
 };

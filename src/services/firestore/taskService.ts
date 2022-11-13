@@ -1,13 +1,13 @@
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { TTask } from "../../components/types";
 import { authUser, firestore } from "../../firebase";
+import { v4 as uuidv4 } from 'uuid';
 
 export const addTask = async (boardId: string, columnId: string, taskFields: TTask) => {
+	const id = uuidv4();
     try {
         await setDoc(doc(firestore,
-				`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${columnId}`,
-				taskFields.id),
-			taskFields);
+			`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${columnId}/tasks`, id), { ...taskFields, id });
     } catch (e) {
         console.error('Error creating new document: ', e);
     }
