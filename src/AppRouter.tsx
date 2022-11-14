@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ export function AppRouter(): JSX.Element {
 				<CircularProgress />
 			</Box>
 			) : user ? (
-				<div className="home-screen">
+				<Box  sx={{ display: 'flex', flexDirection: "row" }}>
 					<Sidebar />
 					<Routes>
 						{authRoutes.map(({ path, Component }) => (
@@ -49,7 +49,7 @@ export function AppRouter(): JSX.Element {
 
 						<Route path="/project/*" element={<Home />} />
 					</Routes>
-				</div>
+				</Box>
 			) : (
 				<Login />
 			)

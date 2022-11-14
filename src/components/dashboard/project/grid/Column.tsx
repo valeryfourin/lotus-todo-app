@@ -1,6 +1,6 @@
 import { IColumnProps, TTask } from "../../../types";
 import { Box, CircularProgress, Grid } from "@mui/material";
-import { Task } from "./Task";
+import { TaskCard } from "./TaskCard";
 import PopupIcon from "../../../sidebar/PopupIcon";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,13 +23,14 @@ const Column = ({ title, id }: IColumnProps) => {
     ) : (
         tasks?.docs.map((task: any) => {
             return (
-                <Task
+                <TaskCard
                     key={ task.id }
 					id={ task.id }
 					columnId={ id }
+					columnName={ title }
                     name={ task.data().name }
 					description={ task.data().description }
-					deadline={ task.data().deadline.toDate() }
+					deadline={ task.data().deadline?.toDate() }
 					priority={ task.data().priority }
                 />
             )

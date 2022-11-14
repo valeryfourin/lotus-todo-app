@@ -2,11 +2,13 @@ import { SyntheticEvent, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import SwipeableViews from 'react-swipeable-views';
 import { ListView } from './project/list';
 import { GridView } from './project/grid';
 import { Calendar } from './project/calendar';
 import { Stats } from './project/stats';
 import { ITabPanelProps } from '../types';
+import { useTheme } from '@mui/material';
 
 
 
@@ -32,6 +34,7 @@ function TabPanel(props: ITabPanelProps) {
 
 export default function ViewTabs() {
   const [value, setValue] = useState(0);
+  const theme = useTheme();
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -47,18 +50,24 @@ export default function ViewTabs() {
           <Tab label="Stats"  />
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        <GridView />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <ListView />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Calendar />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Stats />
-      </TabPanel>
+	  <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value}
+        // onChangeIndex={handleChangeIndex}
+      >
+		<TabPanel value={value} index={0}>
+			<GridView />
+		</TabPanel>
+		<TabPanel value={value} index={1}>
+			<ListView />
+		</TabPanel>
+		<TabPanel value={value} index={2}>
+			<Calendar />
+		</TabPanel>
+		<TabPanel value={value} index={3}>
+			<Stats />
+		</TabPanel>
+	  </SwipeableViews>
     </Box>
   );
 }

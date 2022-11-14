@@ -46,21 +46,19 @@ export const PopupCreateButton = (): JSX.Element => {
 		} else {
 			alert('Missing required fields.');
 		}
-
-
 	};
 
 	const handleCancelClose = (event: any): void => {
 		preventProjectSwitch(event);
 		setOpen(false);
-	}
+	};
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 	const resetState = (): void => {
 		setStatus('');
 		setPriority(Priority.notSet);
 		setDeadline(null);
-	}
+	};
 
 	return (
     <>
@@ -104,9 +102,13 @@ export const PopupCreateButton = (): JSX.Element => {
 					variant="standard"
 					onKeyDown={preventProjectSwitch}
 				/>
-				<Box marginTop="5px">
+				<Box marginTop="15px" marginBottom="15px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
 				</Box>
+				<Button variant="contained" component="label">
+					Upload files
+					<input hidden accept="image/*" multiple type="file" />
+				</Button>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={handleCancelClose}>Cancel</Button>

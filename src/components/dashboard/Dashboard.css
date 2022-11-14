@@ -1,14 +1,20 @@
 .dashboard-screen {
-    width: 60vw;
+    /* width: 90vw !important; */
 }
 
 .task-card {
     margin-top: 10px;
     min-width: 200px;
+    max-width: 350px;
 }
 
-.task-card:hover {
-    box-shadow:0 20px 20px 0 rgba(0,0,0,0.14),0 10px 50px 0 rgba(0,0,0,0.12),0 30px 10px -20px rgba(0,0,0,0.2);
+.hoverable:hover {
+	box-shadow: 0 20px 20px 0 rgba(0,0,0,0.14),0 10px 50px 0 rgba(0,0,0,0.12),0 30px 10px -20px rgba(0,0,0,0.2);
     transition: box-shadow .25s;
 	cursor: pointer;
+}
+
+.page-title {
+    font-size: 40px;
+    font-weight: 600;
 }

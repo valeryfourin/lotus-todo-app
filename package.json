@@ -26,6 +26,7 @@
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.0",
+    "react-swipeable-views": "^0.14.0",
     "redux": "^4.2.0",
     "redux-firestore": "^1.0.0",
     "redux-saga": "^1.2.1",
@@ -59,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-swipeable-views": "^0.13.1",
     "@types/uuid": "^8.3.4",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",

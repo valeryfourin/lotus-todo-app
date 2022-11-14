@@ -21,10 +21,10 @@ export const Dashboard = (): JSX.Element => {
 
   }, []);
     return (
-        <Container maxWidth="xl" className="dashboard-screen">
-          <BoardNavbar />
-          <Divider />
-          <ViewTabs />
+        <Container  className="dashboard-screen">
+          	<BoardNavbar />
+          	<Divider />
+         	<ViewTabs />
         </Container>
         );
 };

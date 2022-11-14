@@ -30,3 +30,13 @@ export const editTask = async (boardId: string, columnId: string, taskId: string
         console.error(`Error updating the document with id ${taskId}: `, e);
     }
 }
+
+export const switchTaskColumn = async (boardId: string, oldColumnId: string, newColumnId: string, taskId: string, editedFields: TTask) => { // TODO
+    try {
+        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId),
+        editedFields,
+        { merge: true });
+    } catch (e) {
+        console.error(`Error updating the document with id ${taskId}: `, e);
+    }
+}

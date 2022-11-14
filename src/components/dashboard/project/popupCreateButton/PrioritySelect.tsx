@@ -25,7 +25,7 @@ export default function PrioritySelect({value, setValue}: {value: string, setVal
 					onChange={handleChange}
 				>
 					{Object.values(Priority).map((priority) => (
-						<MenuItem value={priority}>
+						<MenuItem key={priority} value={priority}>
 							<TripOriginIcon sx={{color: PriorityColor[priority]}} className="icon"/>
 							{priority}
 						</MenuItem>
