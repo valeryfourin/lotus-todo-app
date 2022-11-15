@@ -1,3 +1,5 @@
+import React from "react";
+
 export type TDashboardState = {
     user: TUser;
     projects: Record<string, TProject>;
@@ -31,9 +33,8 @@ export type TColumn = {
 export type TTask = {
     id?: string;
     name: string;
-    createdDate: Date;
+    createdAt?: Date;
     description?: string;
-    startDate?: Date | null;
     deadline?: Date | null;
     completeDate?: Date;
     status?: string;
@@ -74,7 +75,7 @@ export interface IPopupIcon {
     entity: Entity;
     boardId?: string;
     columnId?: string;
-    styles?: Record<string, string>;
+    styles?: React.CSSProperties;
 }
 
 export type ActionType = 'add' | 'edit' | 'delete';

@@ -3,10 +3,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import SwipeableViews from 'react-swipeable-views';
-import { ListView } from './project/list';
-import { GridView } from './project/grid';
-import { Calendar } from './project/calendar';
-import { Stats } from './project/stats';
+import { ListView } from './list';
+import { GridView } from './grid';
+import { Calendar } from './calendar';
+import { Stats } from './stats';
 import { ITabPanelProps } from '../types';
 import { useTheme } from '@mui/material';
 

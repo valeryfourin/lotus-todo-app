@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import { deleteTask } from '../../../../services/firestore/taskService';
+import { deleteTask } from '../../../services/firestore/taskService';
 
 interface IPopupDeleteTaskIcon {
 	name: string;
@@ -27,7 +27,6 @@ export default function PopupDeleteTaskIcon(props: IPopupDeleteTaskIcon) {
 
 	const handleConfirmClose = (event: any) => {
 		preventProjectSwitch(event);
-		console.log(boardId, columnId, taskId)
 		deleteTask(boardId, columnId, taskId);
 		setOpen(false);
 	};

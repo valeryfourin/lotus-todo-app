@@ -5,11 +5,11 @@ import PrioritySelect from './PrioritySelect';
 import './PopupCreateButton.css';
 import DateSetter from './DateSetter';
 import StatusSelect from './StatusSelect';
-import { addTask } from '../../../../services/firestore/taskService';
+import { addTask } from '../../../services/firestore/taskService';
 import { useSelector } from 'react-redux';
-import { selectedProjectSelector } from '../../../store';
+import { selectedProjectSelector } from '../../store';
 import { Box } from '@mui/system';
-import { Priority } from '../../../types';
+import { Priority } from '../../types';
 
 export const PopupCreateButton = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -36,9 +36,7 @@ export const PopupCreateButton = (): JSX.Element => {
 				priority,
 				status,
 				deadline,
-				createdDate: new Date(),
 			};
-			console.log(task);
 
 			addTask(selectedProject.id, status, task);
 			resetState();

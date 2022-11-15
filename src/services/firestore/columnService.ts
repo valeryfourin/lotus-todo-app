@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const addColumn = async (boardId: string, name: string) => {
 	const id = uuidv4();
     try {
-        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, id), { id, name });
+        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, id), { id, name, createdAt: new Date()  });
     } catch (e) {
         console.error("Error creating new document: ", e);
     }

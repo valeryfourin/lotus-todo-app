@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { selectedProjectSelector, userSelector } from '../store';
-import { PopupCreateButton } from './project/popupCreateButton/PopupCreateButton';
+import { PopupCreateButton } from './popupCreateButton/PopupCreateButton';
 import './BoardNavbar.css';
 import { Avatar } from '@mui/material';
 import { useMemo } from 'react';

@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TripOriginIcon  from '@mui/icons-material/TripOrigin';
-import { Priority, PriorityColor } from '../../../types';
+import { Priority, PriorityColor } from '../../types';
 
 export default function PrioritySelect({value, setValue}: {value: string, setValue: Function}): JSX.Element {
 	const handleChange = (event: SelectChangeEvent) => {

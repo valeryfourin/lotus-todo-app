@@ -1,7 +1,7 @@
-import { Container, Grid, Paper } from "@mui/material";
+import { Box, CircularProgress, Container, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/system";
-import { collection } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authUser, firestore } from "../../../firebase";
@@ -16,30 +16,36 @@ const Item = styled(Paper)(() => ({
 	minWidth: 150,
 	lineHeight: '100px',
 	marginTop: 15,
+	marginRight: 15,
 	padding: '0 5px',
   }));
 
 export const Home = (): JSX.Element => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [boards] = useCollection(collection(firestore, `users/${authUser.currentUser?.uid}/boards`));
+	const [boards, loading] = useCollectionData(query(collection(firestore, `users/${authUser.currentUser?.uid}/boards`), orderBy('createdAt')));
 
 	const handleItemClick = (doc:any) => {
-		dispatch(changeSelectedProject({id: doc.id, name: doc.data().name}));
+		dispatch(changeSelectedProject({id: doc.id, name: doc.name}));
 		navigate(PROJECT_ROUTE + '/' + doc.id);
 	};
 
-	const areBoardsLoaded = boards !== undefined && boards?.docs;
+	const areBoardsLoaded = boards && boards.length;
 
     return (
 		<Container maxWidth="xl" className="home-screen">
 			<span className="page-title">Overview</span>
-			<Grid container marginTop="20px" justifyContent="space-evenly" minWidth="500px" maxWidth="600px">
-				{areBoardsLoaded ? boards.docs.map((doc: any) =>
-						(<Item key={doc.id} className="hoverable" elevation={5} onClick={() => handleItemClick(doc)}>{doc.data().name}</Item>)
+			<Grid container marginTop="20px" justifyContent="flex-start" minWidth="500px" maxWidth="600px">
+				{loading ? (
+					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+						<CircularProgress />
+					</Box>
+				) : areBoardsLoaded ? boards.map((doc: any) =>
+						(<Item key={doc.id} className="hoverable" elevation={5} onClick={() => handleItemClick(doc)}>{doc.name}</Item>)
 					) : (
 						<span className="info-message">No projects yet. Start by creating a new one.</span>
-					)}
+					)
+				}
 			</Grid>
 		</Container>
 	);

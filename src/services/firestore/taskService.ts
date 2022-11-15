@@ -1,4 +1,4 @@
-import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { TTask } from "../../components/types";
 import { authUser, firestore } from "../../firebase";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +7,7 @@ export const addTask = async (boardId: string, columnId: string, taskFields: TTa
 	const id = uuidv4();
     try {
         await setDoc(doc(firestore,
-			`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${columnId}/tasks`, id), { ...taskFields, id });
+			`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${columnId}/tasks`, id), { ...taskFields, id, createdAt: new Date()  });
     } catch (e) {
         console.error('Error creating new document: ', e);
     }
@@ -31,11 +31,27 @@ export const editTask = async (boardId: string, columnId: string, taskId: string
     }
 }
 
-export const switchTaskColumn = async (boardId: string, oldColumnId: string, newColumnId: string, taskId: string, editedFields: TTask) => { // TODO
+export const switchTaskColumn = async (boardId: string, oldColumnId: string, newColumnId: string, taskId: string) => {
     try {
-        await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId),
-        editedFields,
-        { merge: true });
+		const taskRef = doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId);
+		const columnRef = doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, newColumnId);
+
+		const taskSnap = await getDoc(taskRef);
+		const columnSnap = await getDoc(columnRef);
+
+		if (taskSnap.exists() && columnSnap.exists()) {
+			const taskData = taskSnap.data();
+			const columnData = taskSnap.data();
+
+			await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId));
+			await setDoc(doc(firestore,
+				`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${newColumnId}/tasks`, taskData.id), { ...taskData, status: columnData.name});
+
+		} else {
+			console.log('No such document or the column does not exist!');
+		}
+
+
     } catch (e) {
         console.error(`Error updating the document with id ${taskId}: `, e);
     }
