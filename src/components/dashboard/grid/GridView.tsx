@@ -1,7 +1,6 @@
 import { CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { collection, orderBy, query } from "firebase/firestore";
-import { useMemo } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { authUser, firestore } from "../../../firebase";
@@ -11,10 +10,16 @@ import Column from "./Column";
 
 import "./GridView.css";
 
+const addColumnButtonStyles = {
+	right: '0px',
+    height: '90%',
+	borderRadius: 'unset',
+}
+
 export const GridView = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
 
-	const [columns, loading, error] = useCollectionData(query(
+	const [columns, loading] = useCollectionData(query(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns`), orderBy('createdAt')));
 
 	const areColumnsLoaded = columns && columns?.length;
@@ -33,7 +38,16 @@ export const GridView = (): JSX.Element => {
 						</Grid>
 						)
 					)}
-					<PopupIcon actionType="add" boardId={selectedProject.id} entity="column" styles={{borderRadius: 'unset'}} />
+					<PopupIcon
+						actionType="add"
+						boardId={selectedProject.id}
+						entity="column"
+						styles={
+							{
+								...addColumnButtonStyles,
+								position: 'fixed'
+							}}
+					/>
 				</>) : <div>
 					<span>No data yet. Start by creating a column</span>
 					<PopupIcon actionType="add" boardId={selectedProject.id} entity="column" />

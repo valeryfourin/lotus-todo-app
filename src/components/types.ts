@@ -20,8 +20,7 @@ export enum ViewData {
 export type TProject = {
     id: string;
     name: string;
-    columns: Array<TColumn>;
-    color: string;
+    columns?: Array<TColumn>;
 };
 
 export type TColumn = {
@@ -59,9 +58,6 @@ export const PriorityColor = {
 export interface IColumnProps {
     id: string;
     title: string;
-    todos?: any;
-    deleteTodo?: any;
-    addTodo?: any;
 };
 
 export interface ITabPanelProps {

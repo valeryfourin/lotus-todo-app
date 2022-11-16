@@ -1,14 +1,14 @@
+import { RefObject, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TripOriginIcon  from '@mui/icons-material/TripOrigin';
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Tooltip } from '@mui/material';
 import { Priority, PriorityColor } from '../../types';
 import { editTask, switchTaskColumn } from '../../../services/firestore/taskService';
-import { useSelector } from 'react-redux';
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Tooltip } from '@mui/material';
-import { RefObject, useRef, useState } from 'react';
 import DateSetter from '../popupCreateButton/DateSetter';
 import PrioritySelect from '../popupCreateButton/PrioritySelect';
 import StatusSelect from '../popupCreateButton/StatusSelect';
@@ -37,7 +37,6 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 	const descriptionReference: RefObject<HTMLInputElement> = useRef(null);
 
 	const [newColumnId, setNewColumnId] = useState(columnId);
-	const [statusCurrent, setStatusCurrent] = useState(columnName);
 	const [priorityCurrent, setPriorityCurrent] = useState(priority);
 	const [deadlineCurrent, setDeadlineCurrent] = useState<Date | null>(deadline);
 
@@ -53,8 +52,8 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 			const task = {
 				name: nameReference.current.value,
 				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
-				priority: priorityCurrent,
-				status: statusCurrent,
+				priority: priorityCurrent as Priority,
+				status: columnName,
 				deadline: deadlineCurrent,
 			};
 
@@ -63,7 +62,6 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 				switchTaskColumn(selectedProject.id, columnId, newColumnId, id)
 			}
 
-			resetState();
 			handleExitEditingMode();
 			setOpen(false);
 		} else {
@@ -82,12 +80,6 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 	}
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
-	const resetState = (): void => {
-		setStatusCurrent(columnName);
-		setNewColumnId(columnId);
-		setPriorityCurrent(Priority.notSet);
-		setDeadlineCurrent(null);
-	};
 
 	const EditDialog= (<>
 		<DialogTitle>Edit {name}</DialogTitle>

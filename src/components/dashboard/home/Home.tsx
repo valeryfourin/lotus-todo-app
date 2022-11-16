@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { authUser, firestore } from "../../../firebase";
 import { PROJECT_ROUTE } from "../../../utils/constants";
 import { changeSelectedProject } from "../../store";
+import { BoardNavbar } from "../BoardNavbar";
 
 import './Home.css';
 
@@ -34,7 +35,7 @@ export const Home = (): JSX.Element => {
 
     return (
 		<Container maxWidth="xl" className="home-screen">
-			<span className="page-title">Overview</span>
+			<BoardNavbar title="Overview"></BoardNavbar>
 			<Grid container marginTop="20px" justifyContent="flex-start" minWidth="500px" maxWidth="600px">
 				{loading ? (
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>

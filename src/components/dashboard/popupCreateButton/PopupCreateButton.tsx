@@ -1,15 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+
 import { RefObject, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import PrioritySelect from './PrioritySelect';
-import './PopupCreateButton.css';
 import DateSetter from './DateSetter';
 import StatusSelect from './StatusSelect';
 import { addTask } from '../../../services/firestore/taskService';
-import { useSelector } from 'react-redux';
 import { selectedProjectSelector } from '../../store';
-import { Box } from '@mui/system';
 import { Priority } from '../../types';
+
+import './PopupCreateButton.css';
 
 export const PopupCreateButton = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);

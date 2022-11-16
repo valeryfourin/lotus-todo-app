@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container';
-import { Button, Divider, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { BoardNavbar } from "./BoardNavbar";
 import ViewTabs from "./ViewTabs";
 
@@ -12,6 +12,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { doc } from 'firebase/firestore';
 import { authUser, firestore } from '../../firebase';
 import { HOME_ROUTE } from '../../utils/constants';
+import { PopupCreateButton } from './popupCreateButton/PopupCreateButton';
 
 export const Dashboard = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -19,7 +20,7 @@ export const Dashboard = (): JSX.Element => {
     const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const [board, loading] = useDocumentData(
+	const [board] = useDocumentData(
 		doc(firestore, `users/${authUser.currentUser?.uid}/boards`, id ?? ' ')
 	);
 
@@ -32,8 +33,9 @@ export const Dashboard = (): JSX.Element => {
     return (
         <Container className="dashboard-screen">
 			{ selectedProject?.id ? (<>
-					<BoardNavbar />
-					<Divider />
+					<BoardNavbar title={selectedProject.name}>
+						<PopupCreateButton />
+					</BoardNavbar>
 					<ViewTabs />
 				</>) : (<>
 					<Typography>No such project exist</Typography>

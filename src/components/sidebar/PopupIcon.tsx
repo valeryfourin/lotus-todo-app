@@ -1,19 +1,10 @@
 import { RefObject, useState, useRef } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
+import { IconButton, Dialog, TextField, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-
-import { IconButton } from '@mui/material';
 import { ActionType, IPopupIcon } from '../types';
-import { executeBoardRequest, executeColumnRequest, getPopupTitle } from './utils';
+import { executeBoardRequest, executeColumnRequest, getBoardsNames, getColumnsNames, getPopupTitle } from './utils';
 
 const getIconFromActionType = (action: ActionType) => {
   switch (action) {
@@ -31,6 +22,7 @@ const getIconFromActionType = (action: ActionType) => {
 export default function PopupIcon(props: IPopupIcon) {
 	const {actionType, entity, styles={}} = props;
 	const [open, setOpen] = useState(false);
+	const [hasInputError, setHasInputError] = useState(false);
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 
 	const handleClickOpen = (event: any) => {
@@ -57,6 +49,17 @@ export default function PopupIcon(props: IPopupIcon) {
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 
+	const handleInputError = async (event: any) => {
+		let entitiesNames = [];
+		if (entity === 'board') {
+			entitiesNames = await getBoardsNames();
+		} else {
+			entitiesNames = await getColumnsNames(props.boardId);
+		}
+		const isNameDuplicate = (entitiesNames && nameReference.current && entitiesNames.includes(nameReference.current?.value)) ?? false;
+		setHasInputError(isNameDuplicate);
+	};
+
 	return (
     <>
 		<IconButton color="primary" aria-label="add" onClick={handleClickOpen} sx={styles}>
@@ -72,6 +75,8 @@ export default function PopupIcon(props: IPopupIcon) {
 			</DialogContentText>
 			{actionType !== 'delete'
 				? <TextField
+					error={hasInputError}
+					helperText={hasInputError ? `A ${entity} with this name already exists.` : null}
 					inputRef={nameReference}
 					autoFocus
 					margin="dense"
@@ -81,12 +86,13 @@ export default function PopupIcon(props: IPopupIcon) {
 					fullWidth
 					variant="standard"
 					onKeyDown={preventProjectSwitch}
+					onChange={handleInputError}
 				/>
 				: null }
 			</DialogContent>
 			<DialogActions>
 			<Button onClick={handleCancelClose}>Cancel</Button>
-			<Button onClick={handleConfirmClose}>Confirm</Button>
+			<Button onClick={handleConfirmClose} disabled={hasInputError}>Confirm</Button>
 			</DialogActions>
 		</Dialog>
     </>

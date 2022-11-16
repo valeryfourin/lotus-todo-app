@@ -1,5 +1,5 @@
-import { getAuth, signOut } from "firebase/auth";
-import { app, authUser } from "../../firebase";
+import { signOut } from "firebase/auth";
+import { authUser } from "../../firebase";
 import { TDashboardState, ViewData } from "../types";
 import { DashboardActions, TDashboardActions } from "./actionTypes";
 
@@ -50,13 +50,12 @@ export const dashboardReducer = (
                     console.error('Error while signing out ', error);
                 });
             }
-            
+
             return {
-                ...state,
-                user: null,
+                ...initialState,
             };
         }
-        
+
         case DashboardActions.ChangeDataView:
             return {
                 ...state,
@@ -69,7 +68,7 @@ export const dashboardReducer = (
                 selectedProject: action.payload.selectedProject,
             };
 
-        default: 
+        default:
             return state;
     }
 }

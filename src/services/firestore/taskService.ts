@@ -21,7 +21,7 @@ export const deleteTask = async (boardId: string, columnId: string, taskId: stri
     }
 }
 
-export const editTask = async (boardId: string, columnId: string, taskId: string, editedFields: any) => {
+export const editTask = async (boardId: string, columnId: string, taskId: string, editedFields: TTask) => {
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${columnId}/tasks`, taskId),
         editedFields,
@@ -53,6 +53,6 @@ export const switchTaskColumn = async (boardId: string, oldColumnId: string, new
 
 
     } catch (e) {
-        console.error(`Error updating the document with id ${taskId}: `, e);
+        console.error(`Error while moving document with id ${taskId}: `, e);
     }
 }

@@ -1,9 +1,8 @@
-import { CircularProgress, Grid } from '@mui/material';
-import { Box } from '@mui/system';
-import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { CircularProgress, Box } from '@mui/material';
+import { onAuthStateChanged } from 'firebase/auth';
 import Login from './components/auth/Login';
 import { Home } from './components/dashboard/home';
 import { Sidebar } from './components/sidebar';

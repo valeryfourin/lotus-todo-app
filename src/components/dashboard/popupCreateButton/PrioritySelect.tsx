@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,22 +29,6 @@ export default function PrioritySelect({value, setValue}: {value: string, setVal
 							{priority}
 						</MenuItem>
 					))}
-					{/* <MenuItem value={Priority.notSet}>
-						<TripOriginIcon sx={{color: PriorityColor[Priority.notSet]}} className="icon"/>
-						{Priority.notSet}
-					</MenuItem>
-					<MenuItem value={Priority.minor}>
-						<TripOriginIcon sx={{color: PriorityColor[Priority.minor]}}  className="icon"/>
-						{Priority.minor}
-					</MenuItem>
-					<MenuItem value={Priority.major}>
-						<TripOriginIcon sx={{color: PriorityColor[Priority.major]}} className="icon"/>
-						{Priority.major}
-					</MenuItem>
-					<MenuItem value={Priority.critical}>
-						<TripOriginIcon sx={{color: PriorityColor[Priority.critical]}} className="icon"/>
-						{Priority.critical}
-					</MenuItem> */}
 				</Select>
 			</FormControl>
 		</Box>

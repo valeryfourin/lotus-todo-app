@@ -1,28 +1,33 @@
-import { useSelector } from 'react-redux';
-import { selectedProjectSelector, userSelector } from '../store';
-import { PopupCreateButton } from './popupCreateButton/PopupCreateButton';
-import './BoardNavbar.css';
-import { Avatar } from '@mui/material';
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../store';
+import { Avatar, Divider } from '@mui/material';
 
-export const BoardNavbar = (): JSX.Element => {
+import './BoardNavbar.css';
+
+interface IBoardNavbar {
+	title: string
+}
+
+export const BoardNavbar = (props: React.PropsWithChildren<IBoardNavbar>): JSX.Element => {
 	const user = useSelector(userSelector);
-	const selectedProject = useSelector(selectedProjectSelector);
-	const userName = useMemo(() => user?.email ?? 'user', [user]);
-	const userNameFirstLetter = userName.split('')[0][0];
+	const userEmail = useMemo(() => user?.email ?? 'user', [user]);
+	const userEmailFirstLetter = userEmail.split('')[0];
 
-	return (
+	return ( <>
 		<div className="board-navbar">
 			<div className="board-header">
 				<div>
-					<span className="page-title">{selectedProject.name}</span>
-					<PopupCreateButton />
+					<span className="page-title">{props.title}</span>
+					{props.children}
 				</div>
 				<div className="user">
-					<span>Hi, {userName}!</span>
-					<Avatar className="hoverable" sx={{ bgcolor: 'lightblue', marginLeft: '10px' }}>{userNameFirstLetter}</Avatar>
+					<span>Hi, {userEmail}!</span>
+					<Avatar className="hoverable" sx={{ bgcolor: 'lightblue', marginLeft: '10px' }}>{userEmailFirstLetter}</Avatar>
 				</div>
 			</div>
 		</div>
+		<Divider />
+	</>
 	);
 };

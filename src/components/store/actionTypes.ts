@@ -44,12 +44,12 @@ export type TChangeSelectedProjectAction = {
     payload: { selectedProject: { id: string, name: string }};
 };
 
-export type TDashboardActions = 
-    | TFetchDashboardDataAction 
-    | TFetchDashboardDataSuccessAction 
+export type TDashboardActions =
+    | TFetchDashboardDataAction
+    | TFetchDashboardDataSuccessAction
     | TFetchDashboardDataFailureAction
     | TLoginAction
     | TLogoutAction
     | TChangeDataViewAction
-    | TChangeSelectedProjectAction; 
+    | TChangeSelectedProjectAction;
 

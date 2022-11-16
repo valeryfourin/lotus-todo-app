@@ -2,15 +2,13 @@ import { SyntheticEvent, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 import { ListView } from './list';
 import { GridView } from './grid';
 import { Calendar } from './calendar';
 import { Stats } from './stats';
 import { ITabPanelProps } from '../types';
-import { useTheme } from '@mui/material';
-
-
 
 function TabPanel(props: ITabPanelProps) {
   const { children, value, index, ...other } = props;

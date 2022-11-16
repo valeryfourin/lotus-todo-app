@@ -9,7 +9,6 @@ import { StyledButton, StyledTextField } from '../styledComponents';
 export default function AuthForm({ redirectToRegComponent }: Record<string, boolean>): JSX.Element {
   const emailReference: RefObject<HTMLInputElement> = useRef(null);
   const passwordReference: RefObject<HTMLInputElement> = useRef(null);
-  // const nameReference: RefObject<any> = useRef();
   const [isNewUser, setIsNewUser] = useState(redirectToRegComponent);
 
   const register = (event: any): void => {
@@ -58,11 +57,6 @@ export default function AuthForm({ redirectToRegComponent }: Record<string, bool
     <div className="signin-screen">
       <form>
         <h3>{isNewUser ? "Create new account" : "Sign In"}</h3>
-        {/* {isNewUser ? ( <>
-          <input ref={nameReference} placeholder="Name" type="text" id="name" />
-          <label htmlFor="name">Nickname</label>
-        </>) : null} */}
-
         <StyledTextField inputRef={emailReference} className="signin-screen__field " autoComplete="email" id="outlined-basic" label="Email" type="email"  margin="normal"/>
         <StyledTextField
           className="signin-screen__field"
