@@ -1,0 +1,11 @@
+.create-button {
+    margin: 0px 0px 12px 20px;
+}
+
+.form-content > * {
+	margin-top: 20px;
+}
+
+.select > * {
+	display: flex !important;
+}

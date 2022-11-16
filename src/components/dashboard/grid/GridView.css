@@ -1,0 +1,8 @@
+.grid {
+    height: 75vh;
+}
+
+.column-title {
+    padding-top: 12px;
+    font-weight: 700;
+}

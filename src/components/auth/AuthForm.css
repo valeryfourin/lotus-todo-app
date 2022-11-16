@@ -1,0 +1,44 @@
+.signin-screen {
+    margin: auto;
+    max-width: 500px;
+    padding: 50px 70px;
+}
+
+.signin-screen > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signin-screen__field {
+    margin-bottom: 20px;
+}
+
+.signin-screen > form > input::placeholder {
+    color: grey;}
+
+.signin-screen__button {
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.signin-screen > form > h1 {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.signin-screen > form > h4 {
+    font-size: 1rem;
+    text-align: left;
+}
+
+.signin-screen_gray {
+    color: gray;
+}
+
+.signin-screen__link:hover {
+    text-decoration: underline;
+}
