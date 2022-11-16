@@ -28,7 +28,7 @@ export const Dashboard = (): JSX.Element => {
 		if (!selectedProject.id && id && board) {
 		dispatch(changeSelectedProject({id, name: board.name}));
 		}
-	}, [board]);
+	}, [selectedProject.id, id, board, dispatch]);
 
     return (
         <Container className="dashboard-screen">
