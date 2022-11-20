@@ -26,6 +26,13 @@ interface ITaskProps {
 	priority: string;
 };
 
+const truncatedDescriptionStyles = {
+	display: '-webkit-box',
+    '-webkit-line-clamp': '4',
+    '-webkit-box-orient': 'vertical',
+    overflow: 'hidden',
+}
+
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
 
 export const TaskCard = ({ id, name, columnId, columnName, description, deadline, priority }: ITaskProps) => {
@@ -164,7 +171,7 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 			<Card className="task-card hoverable" variant="outlined" onClick={ handleClickOpen }>
 				<CardContent>
 					<Typography variant="h6" component="div">{ name }</Typography>
-					<Typography variant="body2">{ description }</Typography>
+					<Typography variant="body2" sx={truncatedDescriptionStyles}>{ description }</Typography>
 				</CardContent>
 				<CardActions>
 					<Tooltip title={priority}>
