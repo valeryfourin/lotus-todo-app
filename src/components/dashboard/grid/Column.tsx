@@ -10,6 +10,13 @@ import { useSelector } from "react-redux";
 import { selectedProjectSelector } from "../../store";
 import { authUser, firestore } from "../../../firebase";
 
+const columnStyles = {
+	width: '300px',
+	backgroundColor: '#f9f9f9',
+	padding: '10px',
+	borderRadius: '10px',
+};
+
 const Column = ({ title, id }: IColumnProps) => {
     const selectedProject = useSelector(selectedProjectSelector);
     const [buttonsHidden, setButtonsHidden] = useState(true);
@@ -38,7 +45,7 @@ const Column = ({ title, id }: IColumnProps) => {
     );
 
     return (
-        <Box sx={{minWidth: '150px'}} onMouseOver={() => setButtonsHidden(false)} onMouseOut={() => setButtonsHidden(true)}>
+        <Box sx={columnStyles} onMouseOver={() => setButtonsHidden(false)} onMouseOut={() => setButtonsHidden(true)}>
             <Grid
                 container
                 direction="row"
