@@ -11,7 +11,7 @@ import Column from "./Column";
 import "./GridView.css";
 
 const addColumnButtonStyles = {
-	right: '0px',
+	right: '30px',
     height: '90%',
 	borderRadius: 'unset',
 }

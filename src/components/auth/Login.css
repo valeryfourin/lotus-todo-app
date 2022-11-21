@@ -48,7 +48,7 @@
     font-size: 1.2rem;
     font-weight: 400;
 }
-  
+
 .login-screen__button {
     height: 50px;
     width: 170px;
@@ -59,10 +59,10 @@
     height: auto;
     width: auto;
     position: fixed;
-    right: 100px;
+    right: 20px;
     top: 20px;
 }
-  
+
 .login-screen__logo {
     left: 0;
     margin-top: 20px;
@@ -71,7 +71,7 @@
     position: fixed;
     width: 150px;
 }
-  
+
 .login-screen__getStarted {
     font-size: 1rem;
     font-weight: 600;
