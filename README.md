@@ -13,4 +13,5 @@
 ### `npm run build`
 ### `firebase deploy --only hosting`
 
+  
 Новіцька В.І., ДоННУ 2022
