@@ -31,7 +31,7 @@ export const Dashboard = (): JSX.Element => {
 	}, [selectedProject.id, id, board, dispatch]);
 
     return (
-        <Container className="dashboard-screen">
+        <Container className="board-screen">
 			{ selectedProject?.id ? (<>
 					<BoardNavbar title={selectedProject.name}>
 						<PopupCreateButton />

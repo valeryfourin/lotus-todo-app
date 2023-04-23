@@ -62,7 +62,7 @@ export const EntityDropdown = () => {
 							direction="row"
 							justifyContent="space-between"
 							>
-							<span className="dropdown-item__name">{doc.name}</span>
+							<span className="dropdown-item__name" title={doc.name}>{doc.name}</span>
 							<div>
 								<PopupIcon actionType="edit" entity="board" boardId={doc.id} />
 								<PopupIcon actionType="delete" entity="board" boardId={doc.id} />

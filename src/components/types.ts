@@ -17,6 +17,12 @@ export enum ViewData {
     stats = 'Stats',
 };
 
+enum RepetitionsFrequency {
+	monthly = 'Monthly',
+	weekly = 'Weekly',
+	daily = 'Daily',
+};
+
 export type TProject = {
     id: string;
     name: string;
@@ -34,11 +40,17 @@ export type TTask = {
     name: string;
     createdAt?: Date;
     description?: string;
+    startDate?: Date | null;
+    endDate?: Date | null;
     deadline?: Date | null;
     completeDate?: Date;
     status?: string;
     priority?: Priority;
+	estimate?: number;
     completed?: boolean;
+	isRepeated?: boolean;
+	repeatsEvery?: RepetitionsFrequency;
+	isDaySpecific: boolean
 };
 
 export enum Priority {

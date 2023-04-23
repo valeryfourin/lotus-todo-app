@@ -1,4 +1,4 @@
-.dashboard-screen {
+.board-screen {
     width: 75vw !important;
 	margin-top: 50px;
 }
@@ -21,13 +21,13 @@
 }
 
 @media screen and (min-width: 1300px)   {
-	.dashboard-screen {
+	.board-screen {
 		width: 85vw !important;
 	}
 }
 
 @media screen and (min-width: 1570px)   {
-	.dashboard-screen {
+	.board-screen {
 		max-width: 80vw !important;
 	}
 }

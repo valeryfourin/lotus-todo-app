@@ -22,8 +22,11 @@ interface ITaskProps {
 	columnId: string;
 	columnName: string;
 	description: string;
+	startDate: Date | null;
+	endDate: Date | null;
 	deadline: Date | null;
 	priority: string;
+	isDaySpecific: boolean;
 };
 
 const truncatedDescriptionStyles = {
@@ -35,7 +38,8 @@ const truncatedDescriptionStyles = {
 
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
 
-export const TaskCard = ({ id, name, columnId, columnName, description, deadline, priority }: ITaskProps) => {
+export const TaskCard = (props: ITaskProps) => {
+	const { id, name, columnId, columnName, description, startDate, endDate, deadline, priority, isDaySpecific } = props;
     const selectedProject = useSelector(selectedProjectSelector);
 	const [open, setOpen] = useState(false);
 	const [editingMode, setEditingMode] = useState(false);
@@ -46,6 +50,9 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 	const [newColumnId, setNewColumnId] = useState(columnId);
 	const [priorityCurrent, setPriorityCurrent] = useState(priority);
 	const [deadlineCurrent, setDeadlineCurrent] = useState<Date | null>(deadline);
+	const [startDateCurrent, setStartDateCurrent] = useState<Date | null>(startDate);
+	const [endDateCurrent, setEndDateCurrent] = useState<Date | null>(endDate);
+	const [isDaySpecificCurrent, setIsDaySpecificCurrent] = useState<boolean>(isDaySpecific);
 
 	const handleClickOpen = (event: any): void => {
 		preventProjectSwitch(event);
@@ -61,7 +68,10 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 				priority: priorityCurrent as Priority,
 				status: columnName,
+				startDate: startDateCurrent,
+				endDate: endDateCurrent,
 				deadline: deadlineCurrent,
+				isDaySpecific: isDaySpecificCurrent,
 			};
 
 			await editTask(selectedProject.id, columnId, id, task);
@@ -186,9 +196,9 @@ export const TaskCard = ({ id, name, columnId, columnName, description, deadline
 			onClick={preventProjectSwitch}
 			fullWidth={true}
 			maxWidth="sm"
-		>
-			{editingMode ? EditDialog : DetailsDialog}
-		</Dialog>
+			>
+				{editingMode ? EditDialog : DetailsDialog}
+			</Dialog>
 		</>
     );
 };

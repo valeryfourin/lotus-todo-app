@@ -37,8 +37,11 @@ const Column = ({ title, id }: IColumnProps) => {
 				columnName={ title }
 				name={ task.name }
 				description={ task.description }
+				startDate={ task.deadline?.toDate() ?? null }
+				endDate={ task.deadline?.toDate() ?? null }
 				deadline={ task.deadline?.toDate() ?? null }
 				priority={ task.priority }
+				isDaySpecific={ task.isDaySpecific }
 			/>
             )
         )
