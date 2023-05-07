@@ -1,14 +1,11 @@
-
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { collection, DocumentData, orderBy, query } from "firebase/firestore";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { DocumentData } from "firebase/firestore";
+import { Box, Grid } from "@mui/material";
 import { IColumnProps } from "../../types";
 import { TaskCard } from "./TaskCard";
 import PopupIcon from "../../sidebar/PopupIcon";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectedProjectSelector } from "../../store";
-import { authUser, firestore } from "../../../firebase";
 
 const columnStyles = {
 	width: '300px',
@@ -17,35 +14,27 @@ const columnStyles = {
 	borderRadius: '10px',
 };
 
-const Column = ({ title, id }: IColumnProps) => {
+const Column = ({ title, id, tasks }: IColumnProps) => {
     const selectedProject = useSelector(selectedProjectSelector);
     const [buttonsHidden, setButtonsHidden] = useState(true);
 
-	const [tasks, loading] = useCollectionData(query(
-		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns/${id}/tasks`), orderBy('createdAt')));
-
-    const tasksList = loading ? (
-		<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-			<CircularProgress />
-		</Box>
-    ) : (
-        tasks?.map((task: DocumentData) => (
-			<TaskCard
-				key={ task.id }
-				id={ task.id }
-				columnId={ id }
-				columnName={ title }
-				name={ task.name }
-				description={ task.description }
-				startDate={ task.deadline?.toDate() ?? null }
-				endDate={ task.deadline?.toDate() ?? null }
-				deadline={ task.deadline?.toDate() ?? null }
-				priority={ task.priority }
-				isDaySpecific={ task.isDaySpecific }
-			/>
-            )
-        )
-    );
+    const tasksList = tasks?.map((task: DocumentData) => (
+		<TaskCard
+			key={ task.id }
+			id={ task.id }
+			columnId={ id }
+			columnName={ title }
+			name={ task.name }
+			description={ task.description }
+			startDate={ task.deadline?.toDate() ?? null }
+			endDate={ task.deadline?.toDate() ?? null }
+			deadline={ task.deadline?.toDate() ?? null }
+			priority={ task.priority }
+			isDaySpecific={ task.isDaySpecific }
+			completed={ task.completed }
+			completeDate={ task.completeDate?.toDate() ?? null }
+		/>)
+	);
 
     return (
         <Box sx={columnStyles} onMouseOver={() => setButtonsHidden(false)} onMouseOut={() => setButtonsHidden(true)}>

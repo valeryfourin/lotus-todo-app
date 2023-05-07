@@ -12,12 +12,11 @@ import { deleteTask } from '../../../services/firestore/taskService';
 interface IPopupDeleteTaskIcon {
 	name: string;
 	boardId: string;
-	columnId: string;
 	taskId: string;
 }
 
 export default function PopupDeleteTaskIcon(props: IPopupDeleteTaskIcon) {
-	const {name, boardId, columnId, taskId} = props;
+	const {name, boardId, taskId} = props;
 	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = (event: any) => {
@@ -27,7 +26,7 @@ export default function PopupDeleteTaskIcon(props: IPopupDeleteTaskIcon) {
 
 	const handleConfirmClose = (event: any) => {
 		preventProjectSwitch(event);
-		deleteTask(boardId, columnId, taskId);
+		deleteTask(boardId, taskId);
 		setOpen(false);
 	};
 

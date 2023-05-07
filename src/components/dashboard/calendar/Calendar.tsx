@@ -16,7 +16,7 @@ export const Calendar = () => {
 		console.log(columns)
 
 	const [tasks, areTasksLoading] = useCollectionData(query(
-		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns/${columns && columns[1].id}/tasks`), orderBy('createdAt')));
+		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/tasks`), orderBy('createdAt')));
 console.log(tasks)
 
   return <Scheduler events={EVENTS} />;

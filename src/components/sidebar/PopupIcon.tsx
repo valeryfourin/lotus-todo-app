@@ -47,7 +47,9 @@ export default function PopupIcon(props: IPopupIcon) {
 		setOpen(false);
 	}
 
-	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
+	const preventProjectSwitch = (event: any): void => {
+		event.stopPropagation()
+	};
 
 	const handleInputError = async (event: any) => {
 		let entitiesNames = [];

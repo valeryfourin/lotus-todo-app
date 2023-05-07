@@ -1,9 +1,8 @@
 
 import { collection, DocumentData, getDocs } from 'firebase/firestore';
 import { authUser, firestore } from '../../firebase';
-import { addBoard, deleteBoard, editBoard } from '../../services/firestore/boardService';
-import { addColumn, deleteColumn, editColumn } from '../../services/firestore/columnService';
-import { ActionType, Entity } from '../types';
+import { addBoard, deleteBoard, editBoard, addColumn, deleteColumn, editColumn } from '../../services/firestore/boardService';
+import { ActionType, Entity, TTask } from '../types';
 
 export const getPopupTitle = (entity: Entity, action: ActionType) => {
     switch (action) {
@@ -56,4 +55,9 @@ export const getColumnsNames = async (boardId: string | undefined): Promise<Arra
 	const columns = await getDocs(collection(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`));
 	const columnsNames = columns.docs?.map((column: DocumentData) => column.data().name );
 	return columnsNames.length ? columnsNames : [];
+}
+
+export const getAllTasks = async (boardId: string | undefined): Promise<Array<DocumentData>> => {
+	const tasks = await getDocs(collection(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/tasks`));
+	return tasks.docs?.length ? tasks.docs : [];
 }

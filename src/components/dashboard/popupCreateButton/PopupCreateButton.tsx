@@ -19,7 +19,7 @@ export const PopupCreateButton = (): JSX.Element => {
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 	const descriptionReference: RefObject<HTMLInputElement> = useRef(null);
 
-	const [status, setStatus] = useState('');
+	const [columnId, setColumnId] = useState<string>('');
 	const [priority, setPriority] = useState(Priority.notSet);
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [endDate, setEndDate] = useState<Date | null>(null);
@@ -34,19 +34,22 @@ export const PopupCreateButton = (): JSX.Element => {
 	const handleConfirmClose = (event: any): void => {
 		preventProjectSwitch(event);
 
-		if (nameReference.current && status) {
+		if (nameReference.current && columnId) {
+
+
 			const task = {
 				name: nameReference.current.value,
 				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 				priority,
-				status,
+				columnId,
 				startDate,
 				endDate,
 				deadline,
-				isDaySpecific
+				isDaySpecific,
+				completed: false
 			};
 
-			addTask(selectedProject.id, status, task);
+			addTask(selectedProject.id, task);
 			resetState();
 			setOpen(false);
 		} else {
@@ -61,7 +64,7 @@ export const PopupCreateButton = (): JSX.Element => {
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 	const resetState = (): void => {
-		setStatus('');
+		setColumnId('');
 		setPriority(Priority.notSet);
 		setDeadline(null);
 	};
@@ -92,7 +95,7 @@ export const PopupCreateButton = (): JSX.Element => {
 						<PrioritySelect value={priority} setValue={setPriority}/>
 					</Grid>
 					<Grid item xs>
-						<StatusSelect value={status} setValue={setStatus} />
+						<StatusSelect value={columnId} setValue={setColumnId} />
 					</Grid>
 				</Grid>
 

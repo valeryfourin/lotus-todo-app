@@ -1,3 +1,4 @@
+import { DocumentData } from "firebase/firestore";
 import React from "react";
 
 export type TDashboardState = {
@@ -27,12 +28,13 @@ export type TProject = {
     id: string;
     name: string;
     columns?: Array<TColumn>;
+	tasks: Array<TTask>;
 };
 
 export type TColumn = {
     id: string;
     name: string;
-    tasks: Array<TTask>;
+    // tasks: Array<TTask>;
 };
 
 export type TTask = {
@@ -44,7 +46,7 @@ export type TTask = {
     endDate?: Date | null;
     deadline?: Date | null;
     completeDate?: Date;
-    status?: string;
+    columnId?: string;
     priority?: Priority;
 	estimate?: number;
     completed?: boolean;
@@ -70,6 +72,7 @@ export const PriorityColor = {
 export interface IColumnProps {
     id: string;
     title: string;
+	tasks: Array<DocumentData>;
 };
 
 export interface ITabPanelProps {

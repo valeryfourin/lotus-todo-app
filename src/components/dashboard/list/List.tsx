@@ -1,22 +1,34 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import { DocumentData } from "firebase/firestore";
+import { TaskCard } from "../grid/TaskCard";
 
-export const List = (): JSX.Element => {
+interface IList {
+	tasks: Array<DocumentData>
+	columns: Record<string, DocumentData>
+}
+
+export const List = ({ tasks, columns }: IList): JSX.Element => {
+	const tasksList = tasks?.map((task: DocumentData) => (
+		<TaskCard
+			key={ task.id }
+			id={ task.id }
+			columnId={ task.columnId }
+			columnName={ columns[task.columnId][0]?.name }
+			name={ task.name }
+			description={ task.description }
+			startDate={ task.deadline?.toDate() ?? null }
+			endDate={ task.deadline?.toDate() ?? null }
+			deadline={ task.deadline?.toDate() ?? null }
+			priority={ task.priority }
+			isDaySpecific={ task.isDaySpecific }
+			completed={ task.completed }
+			completeDate={ task.completeDate?.toDate() ?? null }
+			isGridView={ false }
+		/>)
+	);
+
     return (
 		<div className="list custom-scroll">
-
-			<Card className="list-item hoverable" variant="outlined" >
-			<CardContent>
-					<Typography variant="h6" component="div">name </Typography>
-					<Typography variant="body2" > description </Typography>
-				</CardContent>
-			</Card>
-
-			<Card className="list-item hoverable" variant="outlined" >
-			<CardContent>
-					<Typography variant="h6" component="div">name </Typography>
-					<Typography variant="body2" > description </Typography>
-				</CardContent>
-			</Card>
+			{ tasksList	}
 		</div>
 	);
 };
