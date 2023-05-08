@@ -35,8 +35,6 @@ export const PopupCreateButton = (): JSX.Element => {
 		preventProjectSwitch(event);
 
 		if (nameReference.current && columnId) {
-
-
 			const task = {
 				name: nameReference.current.value,
 				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
@@ -125,10 +123,6 @@ export const PopupCreateButton = (): JSX.Element => {
 				<Box marginTop="15px" marginBottom="15px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
 				</Box>
-				<Button variant="contained" component="label">
-					Upload files
-					<input hidden accept="image/*" multiple type="file" />
-				</Button>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={handleCancelClose}>Cancel</Button>

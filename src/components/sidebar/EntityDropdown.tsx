@@ -1,13 +1,14 @@
 import { MouseEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, CircularProgress, Grid, Button, Menu, MenuItem } from '@mui/material';
+import { Grid, Button, Menu, MenuItem } from '@mui/material';
 import { collection, query, orderBy, DocumentData } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import PopupIcon from './PopupIcon';
 import { PROJECT_ROUTE } from '../../utils/constants';
 import { changeSelectedProject } from '../store';
 import { authUser, firestore } from '../../firebase';
+import { LoadingIcon } from '../styledComponents';
 
 export const EntityDropdown = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,9 +52,7 @@ export const EntityDropdown = () => {
 				sx={{maxHeight: '300px'}}
 			>
 			{loading ? (
-					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-						<CircularProgress />
-					</Box>
+					<LoadingIcon />
 				) : ( areBoardsLoaded ? boards.map((doc: DocumentData) =>
 					(
 						<MenuItem key={doc.id} className="dropdown-item" onClick={() => handleItemClick(doc)}>

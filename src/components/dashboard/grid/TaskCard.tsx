@@ -6,9 +6,9 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TripOriginIcon  from '@mui/icons-material/TripOrigin';
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Tooltip } from '@mui/material';
+import { Box, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, TextField, Tooltip } from '@mui/material';
 import { Priority, PriorityColor } from '../../types';
-import { editTask, setTaskCompleted } from '../../../services/firestore/taskService';
+import { editTask, setTaskCompleted, setTaskScheduled } from '../../../services/firestore/taskService';
 import DateSetter from '../popupCreateButton/DateSetter';
 import PrioritySelect from '../popupCreateButton/PrioritySelect';
 import StatusSelect from '../popupCreateButton/StatusSelect';
@@ -16,6 +16,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import PopupDeleteTaskIcon from './PopupDeleteTaskIcon';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import { selectedProjectSelector } from '../../store';
+import DateTimeSetter from '../popupCreateButton/DateTimeSetter';
 
 interface ITaskProps {
 	id: string;
@@ -28,6 +29,7 @@ interface ITaskProps {
 	deadline: Date | null;
 	priority: string;
 	isDaySpecific: boolean;
+	isScheduled: boolean;
 	completed: boolean;
 	completeDate?: Date;
 	isGridView?: boolean;
@@ -42,10 +44,11 @@ const truncatedDescriptionStyles = {
 };
 
 const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
 
 export const TaskCard = (props: ITaskProps) => {
-	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, completed, completeDate, isGridView = true } = props;
-    const selectedProject = useSelector(selectedProjectSelector);
+	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate, isGridView = true } = props;
+	const selectedProject = useSelector(selectedProjectSelector);
 	const [open, setOpen] = useState(false);
 	const [editingMode, setEditingMode] = useState(false);
 
@@ -58,7 +61,7 @@ export const TaskCard = (props: ITaskProps) => {
 	const [startDateCurrent, setStartDateCurrent] = useState<Date | null>(startDate);
 	const [endDateCurrent, setEndDateCurrent] = useState<Date | null>(endDate);
 	const [isDaySpecificCurrent, setIsDaySpecificCurrent] = useState<boolean>(isDaySpecific);
-	const [completedCurrent, setCompletedCurrent] = useState<boolean>(completed);
+	const [isScheduledCurrent, setIsScheduledCurrent] = useState<boolean>(isScheduled);
 
 	const handleClickOpen = (event: any): void => {
 		preventProjectSwitch(event);
@@ -67,6 +70,18 @@ export const TaskCard = (props: ITaskProps) => {
 
 	const handleConfirmClose = async (event: any): Promise<void> => {
 		preventProjectSwitch(event);
+
+		if (startDateCurrent && endDateCurrent && startDateCurrent.getTime() >= endDateCurrent.getTime()) {
+			alert('Task cannot end before starting!');
+			return;
+		} else if (isDaySpecificCurrent
+			&& startDateCurrent
+			&& endDateCurrent
+			&& deadlineCurrent
+			&& (deadlineCurrent.getTime() < endDateCurrent.getTime() || deadlineCurrent.getTime() <= startDateCurrent.getTime())) {
+				alert('Task cannot have deadline defore end or start!');
+				return;
+		}
 
 		if (nameReference.current) {
 			const task = {
@@ -100,8 +115,11 @@ export const TaskCard = (props: ITaskProps) => {
 	}
 
 	const toggleTaskDone = () => {
-		setCompletedCurrent(!Boolean(completed));
 		setTaskCompleted(selectedProject.id, id, !completed);
+	}
+
+	const toggleScheduled = (isScheduled: boolean) => {
+		setTaskScheduled(selectedProject.id, id, isScheduled);
 	}
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
@@ -145,7 +163,18 @@ export const TaskCard = (props: ITaskProps) => {
 					variant="standard"
 					onKeyDown={preventProjectSwitch}
 				/>
-				<Box marginTop="5px">
+				<FormControlLabel control={
+					<Checkbox checked={isDaySpecificCurrent} onChange={(event) => setIsDaySpecificCurrent(event.target.checked)} />
+					} label="Event is day specific" />
+				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
+					<Grid item xs>
+						<DateTimeSetter value={startDateCurrent} setValue={setStartDateCurrent} label="Start time" saveDay={isDaySpecificCurrent}/>
+					</Grid>
+					<Grid item xs>
+						<DateTimeSetter value={endDateCurrent} setValue={setEndDateCurrent} label="End time" saveDay={isDaySpecificCurrent}/>
+					</Grid>
+				</Grid>
+				<Box marginTop="15px">
 					<DateSetter value={deadlineCurrent} setValue={setDeadlineCurrent}/>
 				</Box>
 			</DialogContent>
@@ -179,14 +208,33 @@ export const TaskCard = (props: ITaskProps) => {
 					Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
 				</Box>
 				<Box marginTop="10px">
-					Deadline: { deadline ? (<Button size="small">{ deadline.toLocaleDateString("en-US", dateOptions) }</Button>) : 'Not set' }
+					Start: { startDate ? (
+					<Button size="small">
+						{isDaySpecific
+							? startDate.toLocaleDateString("en-US", dateOptions)
+							: startDate.toLocaleTimeString("en-US", timeOptions)}
+					</Button>) : 'Not set' }
 				</Box>
-				{completeDate && (
-					<Box marginTop="10px">
-						Completed: <Button size="small">{ completeDate.toLocaleDateString("en-US", dateOptions) }</Button>
-					</Box>
-				)}
+				<Box marginTop="10px">
+					End: { endDate ? (
+					<Button size="small">
+						{isDaySpecific
+							? endDate.toLocaleDateString("en-US", dateOptions)
+							: endDate.toLocaleTimeString("en-US", timeOptions)}
+					</Button>) : 'Not set' }
+				</Box>
+				<Box marginTop="10px">
+					Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateOptions)}</Button>) : 'Not set' }
+				</Box>
+				<Box marginTop="10px">
+					Completed: { completeDate ? (<Button size="small">{completeDate.toLocaleDateString("en-US", dateOptions)}</Button>) : 'Not yet completed' }
+				</Box>
 
+				{ !completed && (
+					<FormControlLabel control={
+						<Checkbox checked={isScheduledCurrent} onChange={(event) => toggleScheduled(event.target.checked)} />
+						} label="Include in schedule" />
+				)}
 		</DialogContent>
 		<DialogActions>
 			<Button onClick={handleCancelClose}>Cancel</Button>

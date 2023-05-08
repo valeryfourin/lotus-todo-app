@@ -1,3 +1,24 @@
+import { DocumentData } from "firebase/firestore";
+import { Priority, PriorityColor, TCalendarEvent } from "../../types";
+
+export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
+	const scheduledTasks: Array<TCalendarEvent> = tasks.reduce((tasksAcc: Array<TCalendarEvent>, task: DocumentData) => {
+		if (task.isScheduled && !task.completed && task.startDate && task.endDate) {
+			const scheduledTask = {
+				event_id: task.id,
+				title: task.name,
+				start: task.startDate.toDate(),
+				end: task.endDate.toDate(),
+				// editable: true,
+				color: PriorityColor[task.priority as Priority]
+			};
+			tasksAcc.push(scheduledTask);
+		}
+		return tasksAcc;
+	}, []);
+
+	return scheduledTasks;
+};
 
 export const EVENTS = [
 	{
@@ -6,14 +27,12 @@ export const EVENTS = [
 	  start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
 	  end: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
 	  disabled: true,
-	  admin_id: [1, 2, 3, 4]
 	},
 	{
 	  event_id: 2,
 	  title: "Event 2",
 	  start: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
 	  end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-	  admin_id: 2,
 	  color: "#50b500"
 	},
 	{
@@ -21,9 +40,6 @@ export const EVENTS = [
 	  title: "Event 3",
 	  start: new Date(new Date(new Date().setHours(11)).setMinutes(0)),
 	  end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-	  admin_id: 1,
-	  editable: false,
-	  deletable: false
 	},
 	{
 	  event_id: 4,
@@ -38,7 +54,6 @@ export const EVENTS = [
 		  new Date().getDate() - 2
 		)
 	  ),
-	  admin_id: 2,
 	  color: "#900000"
 	},
 	{
@@ -54,7 +69,6 @@ export const EVENTS = [
 		  new Date().getDate() - 2
 		)
 	  ),
-	  admin_id: 2,
 	  editable: true
 	},
 	{
@@ -66,7 +80,6 @@ export const EVENTS = [
 		)
 	  ),
 	  end: new Date(new Date(new Date().setHours(14)).setMinutes(0)),
-	  admin_id: 2
 	},
 	{
 		event_id: 5,
@@ -81,7 +94,5 @@ export const EVENTS = [
 			  new Date().getDate() + 2
 			)
 		  ),
-		admin_id: 2
 	  }
   ];
-

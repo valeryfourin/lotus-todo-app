@@ -26,13 +26,14 @@ const Column = ({ title, id, tasks }: IColumnProps) => {
 			columnName={ title }
 			name={ task.name }
 			description={ task.description }
-			startDate={ task.deadline?.toDate() ?? null }
-			endDate={ task.deadline?.toDate() ?? null }
-			deadline={ task.deadline?.toDate() ?? null }
+			startDate={ task.startDate?.toDate() }
+			endDate={ task.endDate?.toDate() }
+			deadline={ task.deadline?.toDate() }
 			priority={ task.priority }
 			isDaySpecific={ task.isDaySpecific }
+			isScheduled={ task.isScheduled }
 			completed={ task.completed }
-			completeDate={ task.completeDate?.toDate() ?? null }
+			completeDate={ task.completeDate?.toDate() }
 		/>)
 	);
 

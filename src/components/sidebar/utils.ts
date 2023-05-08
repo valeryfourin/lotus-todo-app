@@ -1,8 +1,8 @@
 
 import { collection, DocumentData, getDocs } from 'firebase/firestore';
 import { authUser, firestore } from '../../firebase';
-import { addBoard, deleteBoard, editBoard, addColumn, deleteColumn, editColumn } from '../../services/firestore/boardService';
-import { ActionType, Entity, TTask } from '../types';
+import { addBoard, deleteBoard, editBoardName, addColumn, deleteColumn, editColumnName } from '../../services/firestore/boardService';
+import { ActionType, Entity } from '../types';
 
 export const getPopupTitle = (entity: Entity, action: ActionType) => {
     switch (action) {
@@ -24,7 +24,7 @@ export const executeBoardRequest = (actionType: string, boardId: string = '', na
         }
     } else if (actionType === 'edit') {
         if (nameReference.current) {
-            editBoard(boardId, nameReference.current.value);
+            editBoardName(boardId, nameReference.current.value);
         }
     } else if (actionType === 'delete') {
             deleteBoard(boardId);
@@ -38,7 +38,7 @@ export const executeColumnRequest = (actionType: string, boardId: string = '', c
         }
     } else if (actionType === 'edit') {
         if (nameReference.current) {
-            editColumn(boardId, columnId, nameReference.current.value);
+            editColumnName(boardId, columnId, nameReference.current.value);
         }
     } else if (actionType === 'delete') {
             deleteColumn(boardId, columnId);

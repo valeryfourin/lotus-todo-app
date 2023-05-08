@@ -1,5 +1,4 @@
-import { CircularProgress, Grid } from "@mui/material";
-import { Box } from "@mui/system";
+import { Grid } from "@mui/material";
 import { collection, orderBy, query } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
@@ -10,6 +9,7 @@ import Column from "./Column";
 import { groupBy } from 'lodash';
 
 import "./GridView.css";
+import { LoadingIcon } from "../../styledComponents";
 
 const addColumnButtonStyles = {
 	right: '30px',
@@ -32,33 +32,31 @@ export const GridView = (): JSX.Element => {
 	const tasksByColumn = groupBy(tasks, 'columnId');
 
 	return isDataLoading ? (
-		<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-			<CircularProgress />
-		</Box>
+			<LoadingIcon />
 		) : (
-		<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
-			{isDataLoaded ? (
-				<>
-					{columns.map(col => (
-						<Grid item key={col.id}>
-							<Column id={col.id} title={col.name} tasks={tasksByColumn[col.id]} />
-						</Grid>
-						)
-					)}
-					<PopupIcon
-						actionType="add"
-						boardId={selectedProject.id}
-						entity="column"
-						styles={
-							{
-								...addColumnButtonStyles,
-								position: 'fixed'
-							}}
-					/>
-				</>) : <div>
-					<span>No data yet. Start by creating a column</span>
-					<PopupIcon actionType="add" boardId={selectedProject.id} entity="column" />
-				</div>}
-		</Grid>
+			<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
+				{isDataLoaded ? (
+					<>
+						{columns.map(col => (
+							<Grid item key={col.id}>
+								<Column id={col.id} title={col.name} tasks={tasksByColumn[col.id]} />
+							</Grid>
+							)
+						)}
+						<PopupIcon
+							actionType="add"
+							boardId={selectedProject.id}
+							entity="column"
+							styles={
+								{
+									...addColumnButtonStyles,
+									position: 'fixed'
+								}}
+						/>
+					</>) : <div>
+						<span>No data yet. Start by creating a column</span>
+						<PopupIcon actionType="add" boardId={selectedProject.id} entity="column" />
+					</div>}
+			</Grid>
 	)
 };

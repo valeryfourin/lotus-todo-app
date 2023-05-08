@@ -15,11 +15,12 @@ export const List = ({ tasks, columns }: IList): JSX.Element => {
 			columnName={ columns[task.columnId][0]?.name }
 			name={ task.name }
 			description={ task.description }
-			startDate={ task.deadline?.toDate() ?? null }
-			endDate={ task.deadline?.toDate() ?? null }
+			startDate={ task.startDate?.toDate() ?? null }
+			endDate={ task.endDate?.toDate() ?? null }
 			deadline={ task.deadline?.toDate() ?? null }
 			priority={ task.priority }
 			isDaySpecific={ task.isDaySpecific }
+			isScheduled={ task.isScheduled }
 			completed={ task.completed }
 			completeDate={ task.completeDate?.toDate() ?? null }
 			isGridView={ false }

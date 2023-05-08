@@ -29,30 +29,31 @@ export type TProject = {
     name: string;
     columns?: Array<TColumn>;
 	tasks: Array<TTask>;
+	schedule: Array<TCalendarEvent>;
 };
 
 export type TColumn = {
     id: string;
     name: string;
-    // tasks: Array<TTask>;
 };
 
 export type TTask = {
-    id?: string;
+    id: string;
     name: string;
     createdAt?: Date;
     description?: string;
-    startDate?: Date | null;
-    endDate?: Date | null;
-    deadline?: Date | null;
-    completeDate?: Date;
+    startDate?: Date | null | undefined;
+    endDate?: Date | null | undefined;
+    deadline?: Date | null | undefined;
+    completeDate?: Date | null | undefined;
     columnId?: string;
-    priority?: Priority;
+    priority: Priority;
 	estimate?: number;
     completed?: boolean;
 	isRepeated?: boolean;
 	repeatsEvery?: RepetitionsFrequency;
-	isDaySpecific: boolean
+	isDaySpecific: boolean;
+	isScheduled?: boolean;
 };
 
 export enum Priority {
@@ -67,7 +68,7 @@ export const PriorityColor = {
     [Priority.major]: '#e56724',
     [Priority.critical]: '#bd70bc',
     [Priority.notSet]: '#a7c3d3',
-}
+};
 
 export interface IColumnProps {
     id: string;
@@ -79,7 +80,7 @@ export interface ITabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
-  }
+};
 
 export interface IPopupIcon {
     actionType: ActionType;
@@ -87,7 +88,16 @@ export interface IPopupIcon {
     boardId?: string;
     columnId?: string;
     styles?: React.CSSProperties;
-}
+};
 
 export type ActionType = 'add' | 'edit' | 'delete';
 export type Entity = 'board' | 'column';
+
+export type TCalendarEvent = {
+	event_id: string;
+	title: string;
+	start: Date;
+	end: Date;
+	editable?: boolean;
+	color: string;
+};

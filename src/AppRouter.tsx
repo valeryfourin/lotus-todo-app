@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { CircularProgress, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { onAuthStateChanged } from 'firebase/auth';
 import Login from './components/auth/Login';
 import { Home } from './components/dashboard/home';
@@ -9,6 +9,7 @@ import { Sidebar } from './components/sidebar';
 import { login, logout, userSelector } from './components/store';
 import { authUser } from './firebase';
 import { authRoutes } from './routes';
+import { LoadingIcon } from './components/styledComponents';
 
 export function AppRouter(): JSX.Element {
 	const user = useSelector(userSelector);
@@ -34,9 +35,7 @@ export function AppRouter(): JSX.Element {
 	}, [dispatch]);
 
 	return isAppLoading ? (
-			<Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-				<CircularProgress />
-			</Box>
+				<LoadingIcon />
 			) : user ? (
 				<Box  sx={{ display: 'flex', flexDirection: "row" }}>
 					<Sidebar />

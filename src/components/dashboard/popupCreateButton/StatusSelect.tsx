@@ -8,7 +8,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, DocumentData, orderBy, query } from 'firebase/firestore';
 import { authUser, firestore } from '../../../firebase';
 import { selectedProjectSelector } from '../../store';
-import { CircularProgress } from '@mui/material';
+import { LoadingIcon } from '../../styledComponents';
 
 export default function StatusSelect({value, setValue}: {value: string, setValue: Function}): JSX.Element {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -36,9 +36,7 @@ export default function StatusSelect({value, setValue}: {value: string, setValue
 				>
 					{loading ?
 						(
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<CircularProgress />
-							</Box>
+							<LoadingIcon />
 						) : (
 							areColumnsLoaded ? columns.map((col: DocumentData) => (
 							<MenuItem key={col.id} value={col.id}>
