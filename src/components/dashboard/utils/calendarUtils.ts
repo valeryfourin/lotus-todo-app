@@ -1,6 +1,19 @@
 import { DocumentData } from "firebase/firestore";
 import { Priority, PriorityColor, TCalendarEvent } from "../../types";
 
+export const convertEventsToBeScheduled = (tasks: Array<TCalendarEvent>) => {
+	const convertedTasks: Array<TCalendarEvent> = tasks.map((task: DocumentData) => {
+			return {
+				...task,
+				start: task?.start.toDate(),
+				end: task?.end.toDate(),
+			} as TCalendarEvent;
+		}
+	);
+
+	return convertedTasks;
+};
+
 export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
 	const scheduledTasks: Array<TCalendarEvent> = tasks.reduce((tasksAcc: Array<TCalendarEvent>, task: DocumentData) => {
 		if (task.isScheduled && !task.completed && task.startDate && task.endDate) {
@@ -9,8 +22,8 @@ export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
 				title: task.name,
 				start: task.startDate.toDate(),
 				end: task.endDate.toDate(),
-				// editable: true,
-				color: PriorityColor[task.priority as Priority]
+				color: PriorityColor[task.priority as Priority] || PriorityColor[Priority.notSet],
+				editable: true,
 			};
 			tasksAcc.push(scheduledTask);
 		}
@@ -19,6 +32,66 @@ export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
 
 	return scheduledTasks;
 };
+
+export function getTasksSchedule(tasks: Array<DocumentData>) {
+	const schedule = [];
+	let currentDateTime = new Date();
+	currentDateTime.setHours(8, 0, 0, 0); // Start from 8:00 AM
+
+	tasks.sort((a: DocumentData, b: DocumentData) => a.startDate - b.startDate); // Sort tasks by start date
+
+	for (const task of tasks) {
+	  let taskStartDateTime = task.startDate.toDate();
+	  let taskEndDateTime = task.endDate.toDate();
+
+	  if (!task.isDaySpecific) {
+		// For tasks that are not day-specific, extract hours and minutes from start and end dates
+		taskStartDateTime = new Date(currentDateTime);
+		taskStartDateTime.setHours(task.startDate.toDate().getHours(), task.startDate.toDate().getMinutes());
+
+		taskEndDateTime = new Date(currentDateTime);
+		taskEndDateTime.setHours(task.endDate.toDate().getHours(), task.endDate.toDate().getMinutes());
+	  }
+
+	  if (taskStartDateTime > taskEndDateTime) {
+		// Skip tasks with invalid date ranges
+		continue;
+	  }
+
+	  if (taskStartDateTime < currentDateTime) {
+		// Move the task to the next day if it starts before the current time
+		taskStartDateTime.setDate(taskStartDateTime.getDate() + 1);
+		taskEndDateTime.setDate(taskEndDateTime.getDate() + 1);
+	  }
+
+	//   if (taskStartDateTime > currentDateTime) {
+	// 	// If there's a gap between the current time and the task start time, add a gap event
+	// 	schedule.push({
+	// 	  event_id: `gap-${currentDateTime.getTime()}`,
+	// 	  title: 'Gap',
+	// 	  startDate: currentDateTime,
+	// 	  endDate: taskStartDateTime,
+	// 	});
+	//   }
+
+	  schedule.push({
+		event_id: task.id,
+		title: task.name,
+		start: taskStartDateTime,
+		end: taskEndDateTime,
+		color: PriorityColor[task.priority as Priority] || PriorityColor[Priority.notSet],
+	  });
+
+	  currentDateTime = taskEndDateTime;
+	  if (currentDateTime.getHours() >= 18) {
+		// If the current time exceeds 18:00, move to the next day at 8:00 AM
+		currentDateTime.setDate(currentDateTime.getDate() + 1);
+		currentDateTime.setHours(8, 0, 0, 0);
+	  }
+	}
+
+	return schedule;
+  }
 
 export const EVENTS = [
 	{
