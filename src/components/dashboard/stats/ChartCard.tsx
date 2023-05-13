@@ -34,7 +34,7 @@ export const ChartCard = ({ title, description, className, component, iconName =
 
     return (
 		<Card className={`chart-card ${className}`} variant="outlined">
-			<CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }} >
+			<CardContent sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%' }} >
 				<div className="column-title column-20">
 					<Typography variant="h6" component="div">{ title }</Typography>
 					<Typography variant="h2" component="div">{ description }</Typography>

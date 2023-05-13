@@ -1,15 +1,23 @@
 .charts-wrap {
-	width: 1030px;
-	margin: 0 auto;
+	width: 100%;
+	height: 75vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	box-sizing: border-box;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .charts-row {
 	display: flex;
 	justify-content: space-between;
+	margin: 20px;
 }
 
 .chart-card {
-	margin-top: 20px;
+	margin: 20px;
 	display: flex;
 	align-items: center;
 }
@@ -37,4 +45,5 @@
 .chart-icon {
 	width: 40px;
 	height: 40px;
+	margin-top: 10px;
 }
