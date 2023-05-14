@@ -7,9 +7,13 @@ import {
 	Title,
 	Tooltip,
 	Legend,
+	PointElement,
+	LineElement,
+	Filler,
+	ArcElement,
 } from 'chart.js';
-import "./Stats.css";
-import { BarChart } from "./BarChart";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { BarChartCard } from "./BarChartCard";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { collection, orderBy, query } from "firebase/firestore";
 import { authUser, firestore } from "../../../firebase";
@@ -17,28 +21,26 @@ import { useSelector } from "react-redux";
 import { selectedProjectSelector } from "../../store";
 import { groupBy } from "lodash";
 import { LoadingIcon } from "../../styledComponents";
+import { getNumberOfCompletedTasks, getNumberOfOverdueTasks, getNumberOfUncompletedTasks, getTotalNumberOfTasks } from "./utils";
+import { AreaChartCard } from "./AreaChartCard";
+import { DoughnutChartCard } from "./DoughnutChartCard";
+
+import "./Stats.css";
+import { StackedBarChartCard } from "./StackedBarChartCard";
 
 ChartJS.register(
+	ArcElement,
 	CategoryScale,
 	LinearScale,
 	BarElement,
+	PointElement,
+	LineElement,
 	Title,
 	Tooltip,
-	Legend
+	Filler,
+	Legend,
+	ChartDataLabels
 );
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-	labels,
-	datasets: [
-		{
-		label: 'Dataset 1',
-		data: [10, 50, 34, 65, 56, 23, 12],
-		backgroundColor: 'rgba(255, 99, 132, 0.5)',
-		}
-	],
-};
 
 export const Stats = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -60,17 +62,18 @@ export const Stats = (): JSX.Element => {
 			? (
 				<div className="charts-wrap custom-scroll">
 					<div className="charts-row">
-						<ChartCard title="Completed tasks" description="13" className="chart-card--small" iconName="completed" iconColor="success" />
-						<ChartCard title="Incompleted tasks" description="3" className="chart-card--small" iconName="incompleted" iconColor="secondary"/>
-						<ChartCard title="Overdue tasks" description="6" className="chart-card--small" iconName="overdue" iconColor="warning"/>
-						<ChartCard title="Total tasks" description="22" className="chart-card--small" iconName="total" iconColor="primary"/>
+						<ChartCard title="Completed tasks" value={getNumberOfCompletedTasks(tasks)} iconName="completed" iconColor="success" />
+						<ChartCard title="Uncompleted tasks" value={getNumberOfUncompletedTasks(tasks)} iconName="uncompleted" iconColor="secondary"/>
+						<ChartCard title="Overdue tasks" value={getNumberOfOverdueTasks(tasks)} iconName="overdue" iconColor="warning"/>
+						<ChartCard title="Total tasks" value={getTotalNumberOfTasks(tasks)} iconName="total" iconColor="primary"/>
 					</div>
 					<div className="charts-row">
-						<BarChart data={data}/>
+						<BarChartCard tasks={tasks} columns={columnsById}/>
+						<DoughnutChartCard tasks={tasks}/>
 					</div>
 					<div className="charts-row">
-						<ChartCard title="Upcoming tasks by status"className="chart-card--medium" component={{}}/>
-						<ChartCard title="Tasks completion over time"className="chart-card--medium" component={{}}/>
+						<AreaChartCard tasks={tasks}/>
+						<StackedBarChartCard tasks={tasks} columns={columnsById}/>
 					</div>
 				</div>
 			) : (<div>No tasks created yet.</div>);

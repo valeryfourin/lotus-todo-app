@@ -34,13 +34,13 @@ export const GridView = (): JSX.Element => {
 	return isDataLoading ? (
 			<LoadingIcon />
 		) : (
-			<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px' }}>
+			<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px', marginLeft: '10px' }}>
 				{isDataLoaded ? (
 					<>
 						{columns.map(col => (
-							<Grid item key={col.id}>
+							<div className="grid-item" key={col.id}>
 								<Column id={col.id} title={col.name} tasks={tasksByColumn[col.id]} />
-							</Grid>
+							</div>
 							)
 						)}
 						<PopupIcon

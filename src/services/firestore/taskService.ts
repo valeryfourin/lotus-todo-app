@@ -39,29 +39,3 @@ export const setTaskCompleted = async (boardId: string, taskId: string, complete
 export const setTaskScheduled = async (boardId: string, taskId: string, isScheduled: boolean) => {
     await editTask(boardId, taskId, { isScheduled });
 }
-
-// export const switchTaskColumn = async (boardId: string, oldColumnId: string, newColumnId: string, taskId: string) => {
-//     try {
-// 		const taskRef = doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId);
-// 		const columnRef = doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, newColumnId);
-
-// 		const taskSnap = await getDoc(taskRef);
-// 		const columnSnap = await getDoc(columnRef);
-
-// 		if (taskSnap.exists() && columnSnap.exists()) {
-// 			const taskData = taskSnap.data();
-// 			const columnData = taskSnap.data();
-
-// 			await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${oldColumnId}/tasks`, taskId));
-// 			await setDoc(doc(firestore,
-// 				`users/${authUser.currentUser?.uid}/boards/${boardId}/columns/${newColumnId}/tasks`, taskData.id), { ...taskData, status: columnData.name});
-
-// 		} else {
-// 			console.log('No such document or the column does not exist!');
-// 		}
-
-
-//     } catch (e) {
-//         console.error(`Error while moving document with id ${taskId}: `, e);
-//     }
-// }

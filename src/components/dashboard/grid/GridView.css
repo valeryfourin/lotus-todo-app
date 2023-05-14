@@ -2,6 +2,10 @@
     height: 75vh;
 }
 
+.grid-item {
+	margin-right: 20px;
+}
+
 .column-title {
     padding-top: 12px;
     font-weight: 700;

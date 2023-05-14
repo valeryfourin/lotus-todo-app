@@ -17,6 +17,7 @@ import PopupDeleteTaskIcon from './PopupDeleteTaskIcon';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import { selectedProjectSelector } from '../../store';
 import DateTimeSetter from '../popupCreateButton/DateTimeSetter';
+import { dateTimeOptions, timeOptions } from '../../../utils/constants';
 
 interface ITaskProps {
 	id: string;
@@ -43,8 +44,7 @@ const truncatedDescriptionStyles = {
 	maxWidth: 400,
 };
 
-const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
+
 
 export const TaskCard = (props: ITaskProps) => {
 	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate, isGridView = true } = props;
@@ -211,7 +211,7 @@ export const TaskCard = (props: ITaskProps) => {
 					Start: { startDate ? (
 					<Button size="small">
 						{isDaySpecific
-							? startDate.toLocaleDateString("en-US", dateOptions)
+							? startDate.toLocaleDateString("en-US", dateTimeOptions)
 							: startDate.toLocaleTimeString("en-US", timeOptions)}
 					</Button>) : 'Not set' }
 				</Box>
@@ -219,15 +219,15 @@ export const TaskCard = (props: ITaskProps) => {
 					End: { endDate ? (
 					<Button size="small">
 						{isDaySpecific
-							? endDate.toLocaleDateString("en-US", dateOptions)
+							? endDate.toLocaleDateString("en-US", dateTimeOptions)
 							: endDate.toLocaleTimeString("en-US", timeOptions)}
 					</Button>) : 'Not set' }
 				</Box>
 				<Box marginTop="10px">
-					Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateOptions)}</Button>) : 'Not set' }
+					Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not set' }
 				</Box>
 				<Box marginTop="10px">
-					Completed: { completeDate ? (<Button size="small">{completeDate.toLocaleDateString("en-US", dateOptions)}</Button>) : 'Not yet completed' }
+					Completed: { completeDate ? (<Button size="small">{completeDate.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not yet completed' }
 				</Box>
 
 				{ !completed && (
@@ -251,7 +251,7 @@ export const TaskCard = (props: ITaskProps) => {
 				<Tooltip title={priority}>
 					<TripOriginIcon sx={{ color: PriorityColor[priority as Priority] }} className="icon"/>
 				</Tooltip>
-				{deadline && (<>Due: <Button size="small">{ deadline.toLocaleDateString("en-US", dateOptions) }</Button></>)}
+				{deadline && (<>Due: <Button size="small">{ deadline.toLocaleDateString("en-US", dateTimeOptions) }</Button></>)}
 				{/* {completeDate && (<>Completed: <Button size="small">{ completeDate.toLocaleDateString("en-US", dateOptions) }</Button></>)} */}
 			</CardActions>
 		</Card>
@@ -265,7 +265,7 @@ export const TaskCard = (props: ITaskProps) => {
 					<Typography variant="body2" sx={{...truncatedDescriptionStyles, '-webkit-line-clamp': '2'}}>{ description }</Typography>
 				</div>
 				<div className="column-title column-25">
-					{deadline && (<Button size="small">{ deadline.toLocaleDateString("en-US", dateOptions) }</Button>)}
+					{deadline && (<Button size="small">{ deadline.toLocaleDateString("en-US", dateTimeOptions) }</Button>)}
 				</div>
 				<div className="column-20">
 					<TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
