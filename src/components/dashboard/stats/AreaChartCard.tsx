@@ -3,7 +3,7 @@ import { ChartData } from 'chart.js';
 import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { getNumberOfTasksCompletedOverTimeWithDates } from './utils';
+import { getNumberOfTasksCompletedOverTimeWithDates } from '../utils/statsUtils';
 
 interface IAreaChartCardProps {
 	tasks: Array<DocumentData>

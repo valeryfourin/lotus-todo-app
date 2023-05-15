@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { authUser, firestore } from "../../../firebase";
-import { saveSchedule } from "../../../services/firestore/boardService";
+import { saveSchedule, saveWorkingHours } from "../../../services/firestore/boardService";
 import { selectedProjectSelector } from "../../store";
 import { LoadingIcon } from "../../styledComponents";
 import { getTasksSchedule, getEventsToBeScheduled, convertEventsToBeScheduled } from "../utils/calendarUtils";
 import { TCalendarEvent } from "../../types";
 import TimeRangeSetter from "./TimeRangeSetter";
+import { marginSpacing } from "../../../utils/constants";
+import { DayHours } from "@aldabil/react-scheduler/types";
 
 export const Calendar = () => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -18,10 +20,9 @@ export const Calendar = () => {
 	const { setEvents, events, ...schedule } = useScheduler();
 	console.log(schedule)
 	const [scheduledTasks, setScheduledTasks] = useState<any>([]);
-	const [workingHours, setWorkingHours] = useState<any>(() => [
-		new Date(2022, 3, 17, 8, 30),
-		new Date(2022, 3, 17, 8, 30),
-	]);
+
+	const [workingHoursStart, setWorkingHoursStart] = useState<Date>(new Date('January 1, 1970 8:00:00'));
+	const [workingHoursEnd, setWorkingHoursEnd] = useState<Date>(new Date('January 1, 1970 17:00:00'));
 
 	const [tasks, areTasksLoading] = useCollectionData(query(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/tasks`), orderBy('createdAt')));
@@ -30,12 +31,6 @@ export const Calendar = () => {
 		doc(firestore, `users/${authUser.currentUser?.uid}/boards`, selectedProject.id ?? ' ')
 	);
 
-	// const scheduledTasks = useMemo(() => {
-	// 	if (tasks?.length) {
-	// 		return getEventsToBeScheduled(tasks);
-	// 	}
-	// }, [tasks]);
-
 	useEffect(() => {
 		if (board?.schedule && tasks?.length) {
 			setScheduledTasks(convertEventsToBeScheduled(board.schedule));
@@ -43,6 +38,11 @@ export const Calendar = () => {
 			if (!areTasksLoading && tasks?.length) {
 				setScheduledTasks(getEventsToBeScheduled(tasks));
 			}
+		}
+
+		if (board?.workingHours?.length) {
+			setWorkingHoursStart(board.workingHours[0].toDate());
+			setWorkingHoursEnd(board.workingHours[1].toDate());
 		}
 	}, [board, tasks, isBoardLoading, areTasksLoading]);
 
@@ -60,6 +60,16 @@ export const Calendar = () => {
 		alert('Schedule saved');
 	};
 
+	const handleChangeWorkingHoursStart = (newWorkingHoursStart: Date): void => {
+		saveWorkingHours(selectedProject.id, [newWorkingHoursStart, workingHoursEnd]);
+		setWorkingHoursStart(newWorkingHoursStart);
+	};
+
+	const handleChangeWorkingHoursEnd = (newWorkingHoursEnd: Date): void => {
+		saveWorkingHours(selectedProject.id, [workingHoursStart, newWorkingHoursEnd]);
+		setWorkingHoursEnd(newWorkingHoursEnd);
+	};
+
 	const retrieveSchedule = (): void => {
 		if (board?.schedule) {
 			setScheduledTasks(convertEventsToBeScheduled(board.schedule));
@@ -71,22 +81,44 @@ export const Calendar = () => {
 
 	return areTasksLoading
 		? (<LoadingIcon />)
-		: scheduledTasks?.length ? (<>
-			<Button className="create-button" variant="contained" onClick={handleGenerateSchedule} sx={{margin: '0px 0px 12px 20px'}}>
-				Generate new schedule
-			</Button>
-			<Button className="create-button" variant="outlined" onClick={handleSaveSchedule} sx={{margin: '0px 0px 12px 20px'}}>
-				Save schedule
-			</Button>
-			<Button className="create-button" variant="outlined" onClick={retrieveSchedule} sx={{margin: '0px 0px 12px 20px'}}>
-				Retrieve latest schedule
-			</Button>
-			<TimeRangeSetter
-				label="Choose working hours: "
-				value={[new Date(), new Date()]}
-				setValue={(newValue: any) => setWorkingHours(newValue)}
-			/>
+		: scheduledTasks?.length ? (
+			<div className="calendar-wrap custom-scroll">
+				<Button className="create-button" variant="contained" onClick={handleGenerateSchedule} sx={marginSpacing}>
+					Generate new schedule
+				</Button>
+				<Button className="create-button" variant="outlined" onClick={handleSaveSchedule} sx={marginSpacing}>
+					Save schedule
+				</Button>
+				<Button className="create-button" variant="outlined" onClick={retrieveSchedule} sx={marginSpacing}>
+					Retrieve latest schedule
+				</Button>
+				<TimeRangeSetter
+					workingHoursStart={workingHoursStart}
+					workingHoursEnd={workingHoursEnd}
+					setWorkingHoursStart={handleChangeWorkingHoursStart}
+					setWorkingHoursEnd={handleChangeWorkingHoursEnd}
+				/>
 
-			<Scheduler events={scheduledTasks}/>
-		</>) : (<div>No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule.</div>)
+				<Scheduler
+					events={scheduledTasks}
+					month={{
+						startHour: workingHoursStart.getHours() as DayHours,
+						endHour: workingHoursEnd.getHours() as DayHours,
+						weekDays: [0, 1, 2, 3, 4, 5],
+						weekStartOn: 6,
+					}}
+					week={{
+						startHour: workingHoursStart.getHours() as DayHours,
+						endHour: workingHoursEnd.getHours() as DayHours,
+						weekDays: [0, 1, 2, 3, 4, 5],
+						weekStartOn: 6,
+						step: 60,
+					}}
+					day={{
+						startHour: workingHoursStart.getHours() as DayHours,
+						endHour: workingHoursEnd.getHours() as DayHours,
+						step: 60,
+					}}
+				/>
+		</div>) : (<div>No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule.</div>)
 }

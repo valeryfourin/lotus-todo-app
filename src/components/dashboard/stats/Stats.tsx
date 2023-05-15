@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { selectedProjectSelector } from "../../store";
 import { groupBy } from "lodash";
 import { LoadingIcon } from "../../styledComponents";
-import { getNumberOfCompletedTasks, getNumberOfOverdueTasks, getNumberOfUncompletedTasks, getTotalNumberOfTasks } from "./utils";
+import { getNumberOfCompletedTasks, getNumberOfOverdueTasks, getNumberOfUncompletedTasks, getTotalNumberOfTasks } from "../utils/statsUtils";
 import { AreaChartCard } from "./AreaChartCard";
 import { DoughnutChartCard } from "./DoughnutChartCard";
 

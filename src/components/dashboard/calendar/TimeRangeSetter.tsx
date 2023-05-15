@@ -5,31 +5,40 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 interface IDateTimeSetterProps {
-	value: Date[] | null;
-	setValue: Function;
-	label: string;
+	workingHoursStart: Date;
+	workingHoursEnd: Date;
+	setWorkingHoursStart: Function;
+	setWorkingHoursEnd: Function;
 }
 
-export default function TimeRangeSetter({value, setValue, label}: IDateTimeSetterProps) {
-	const handleChange = (date: any) => {
+const defaultDate = [new Date('January 1, 1970 8:00:00'), new Date('January 1, 1970 17:00:00')];
+
+export default function TimeRangeSetter({workingHoursStart, workingHoursEnd, setWorkingHoursStart, setWorkingHoursEnd}: IDateTimeSetterProps) {
+	const handleStartChange = (date: any) => {
 		if (date) {
-			setValue(new Date(date.$y, date.$M, date.$D, date.$H, date.$m));
+			setWorkingHoursStart(new Date(date.$y, date.$M, date.$D, date.$H, date.$m));
+		}
+	};
+
+	const handleEndChange = (date: any) => {
+		if (date) {
+			setWorkingHoursEnd(new Date(date.$y, date.$M, date.$D, date.$H, date.$m));
 		}
 	};
 
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<TimePicker
-				label={label}
-				value={value}
-				onChange={handleChange}
-				renderInput={(params) => <TextField {...params} />}
+				label="Choose working hours start:"
+				value={workingHoursStart}
+				onChange={handleStartChange}
+				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px'}}/>}
 			/>
 			<TimePicker
-				label={label}
-				value={value}
-				onChange={handleChange}
-				renderInput={(params) => <TextField {...params} />}
+				label="Choose working hours end:"
+				value={workingHoursEnd}
+				onChange={handleEndChange}
+				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px'}}/>}
 			/>
 		</LocalizationProvider>
 	);

@@ -3,7 +3,7 @@ import { ChartData } from 'chart.js';
 import { DocumentData } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { getNumberOfCompletedTasks, getNumberOfUncompletedTasks } from './utils';
+import { getNumberOfCompletedTasks, getNumberOfUncompletedTasks } from '../utils/statsUtils';
 
 interface IDoughnutChartCardProps {
 	tasks: Array<DocumentData>
@@ -60,7 +60,7 @@ export const DoughnutChartCard = ({tasks}: IDoughnutChartCardProps): JSX.Element
 		<Card className="chart-card chart-card--large" variant="outlined">
 			<CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
 				<Typography variant="h6" component="div" sx={{marginBottom: '15px'}}>All tasks by completion status</Typography>
-				<div className="doughnut-chart-card">
+				<div>
 					<Doughnut
 						options={options}
 						data={chartData}

@@ -5,7 +5,7 @@ import { groupBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Priority } from '../../types';
-import { getNumberOfTasksInEachColumnByPriority } from './utils';
+import { getNumberOfTasksInEachColumnByPriority } from '../utils/statsUtils';
 
 interface IBarChartCardProps {
 	tasks: Array<DocumentData>

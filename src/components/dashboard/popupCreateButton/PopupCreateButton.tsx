@@ -12,6 +12,7 @@ import { selectedProjectSelector } from '../../store';
 import { Priority } from '../../types';
 
 import './PopupCreateButton.css';
+import { marginSpacing } from '../../../utils/constants';
 
 export const PopupCreateButton = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -69,7 +70,7 @@ export const PopupCreateButton = (): JSX.Element => {
 
 	return (
     <>
-		<Button className="create-button" variant="outlined" endIcon={<AddIcon />} onClick={handleClickOpen} sx={{margin: '0px 0px 12px 20px'}}>
+		<Button className="create-button" variant="outlined" endIcon={<AddIcon />} onClick={handleClickOpen} sx={marginSpacing}>
 			Create task
 		</Button>
 		<Dialog open={open} onClose={preventProjectSwitch} onClick={preventProjectSwitch} fullWidth={true} maxWidth="sm">

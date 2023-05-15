@@ -30,6 +30,7 @@ export type TProject = {
     columns?: Array<TColumn>;
 	tasks: Array<TTask>;
 	schedule: Array<TCalendarEvent>;
+	workingHours: Array<Date>;
 };
 
 export type TColumn = {

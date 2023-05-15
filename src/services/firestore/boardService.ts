@@ -64,3 +64,7 @@ export const editColumnName = async (boardId: string, columnId: string, newName:
 export const saveSchedule = async (boardId: string, schedule: Array<TCalendarEvent>) => {
 	await editBoard(boardId, { schedule });
 }
+
+export const saveWorkingHours = async (boardId: string, workingHours: Array<Date>) => {
+	await editBoard(boardId, { workingHours });
+}
