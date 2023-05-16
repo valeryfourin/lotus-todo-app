@@ -15,57 +15,56 @@ function TabPanel(props: ITabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
+		role="tabpanel"
+		hidden={value !== index}
+		id={`simple-tabpanel-${index}`}
+		aria-labelledby={`simple-tab-${index}`}
+		{...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+		{value === index && (
+			<Box sx={{ p: 3 }}>
+				{children}
+			</Box>
+		)}
     </div>
   );
 }
 
 export default function ViewTabs() {
-  const [value, setValue] = useState(0);
-  const theme = useTheme();
+	const [value, setValue] = useState(0);
+	const theme = useTheme();
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+	const handleChange = (event: SyntheticEvent, newValue: number) => {
+		setValue(newValue);
+	};
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Grid"  />
-          <Tab label="List"  />
-          <Tab label="Calendar"  />
-          <Tab label="Stats"  />
-        </Tabs>
-      </Box>
-	  <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        // onChangeIndex={handleChangeIndex}
-      >
-		<TabPanel value={value} index={0}>
-			<GridView />
-		</TabPanel>
-		<TabPanel value={value} index={1}>
-			<ListView />
-		</TabPanel>
-		<TabPanel value={value} index={2}>
-			<Calendar />
-		</TabPanel>
-		<TabPanel value={value} index={3}>
-			<Stats />
-		</TabPanel>
-	  </SwipeableViews>
-    </Box>
-  );
+	return (
+		<Box sx={{ width: '100%' }}>
+			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+				<Tabs value={value} onChange={handleChange}>
+					<Tab label="Grid" />
+					<Tab label="List" />
+					<Tab label="Calendar" />
+					<Tab label="Stats" />
+				</Tabs>
+			</Box>
+			<SwipeableViews
+				axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+				index={value}
+			>
+				<TabPanel value={value} index={0}>
+					<GridView />
+				</TabPanel>
+				<TabPanel value={value} index={1}>
+					<ListView />
+				</TabPanel>
+				<TabPanel value={value} index={2}>
+					<Calendar />
+				</TabPanel>
+				<TabPanel value={value} index={3}>
+					<Stats />
+				</TabPanel>
+			</SwipeableViews>
+		</Box>
+  	);
 }

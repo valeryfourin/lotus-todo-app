@@ -1,15 +1,15 @@
-import { Grid } from "@mui/material";
-import { collection, orderBy, query } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { Grid } from "@mui/material";
+import { groupBy } from 'lodash';
+import { collection, orderBy, query } from "firebase/firestore";
 import { authUser, firestore } from "../../../firebase";
 import PopupIcon from "../../sidebar/PopupIcon";
 import { selectedProjectSelector } from "../../store";
 import Column from "./Column";
-import { groupBy } from 'lodash';
+import { LoadingIcon } from "../../styledComponents";
 
 import "./GridView.css";
-import { LoadingIcon } from "../../styledComponents";
 
 const addColumnButtonStyles = {
 	right: '30px',
@@ -34,7 +34,7 @@ export const GridView = (): JSX.Element => {
 	return isDataLoading ? (
 			<LoadingIcon />
 		) : (
-			<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px', marginLeft: '10px' }}>
+			<Grid container className="grid custom-scroll" spacing={3} wrap="nowrap" sx={{ overflowX: 'scroll', marginTop: '0px', paddingLeft: '25px' }}>
 				{isDataLoaded ? (
 					<>
 						{columns.map(col => (

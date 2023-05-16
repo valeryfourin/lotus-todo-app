@@ -1,7 +1,7 @@
 import { DocumentData } from "firebase/firestore";
 import { Box, Grid } from "@mui/material";
 import { IColumnProps } from "../../types";
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "../../task/TaskCard";
 import PopupIcon from "../../sidebar/PopupIcon";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,23 +18,30 @@ const Column = ({ title, id, tasks }: IColumnProps) => {
     const selectedProject = useSelector(selectedProjectSelector);
     const [buttonsHidden, setButtonsHidden] = useState(true);
 
-    const tasksList = tasks?.map((task: DocumentData) => (
-		<TaskCard
-			key={ task.id }
-			id={ task.id }
-			columnId={ id }
-			columnName={ title }
-			name={ task.name }
-			description={ task.description }
-			startDate={ task.startDate?.toDate() }
-			endDate={ task.endDate?.toDate() }
-			deadline={ task.deadline?.toDate() }
-			priority={ task.priority }
-			isDaySpecific={ task.isDaySpecific }
-			isScheduled={ task.isScheduled }
-			completed={ task.completed }
-			completeDate={ task.completeDate?.toDate() }
-		/>)
+    const tasksList = tasks?.map((taskData: DocumentData) => {
+		const task = {
+			id: taskData.id,
+			columnId: id,
+			columnName: title,
+			name: taskData.name,
+			description: taskData.description,
+			startDate: taskData.startDate?.toDate(),
+			endDate: taskData.endDate?.toDate(),
+			deadline: taskData.deadline?.toDate(),
+			priority: taskData.priority,
+			isDaySpecific: taskData.isDaySpecific,
+			isScheduled: taskData.isScheduled,
+			completed: taskData.completed,
+			completeDate: taskData.completeDate?.toDate(),
+		};
+
+		return (
+			<TaskCard
+				key={ task.id }
+				task={ task }
+				isGridView={ true }
+			/>)
+		}
 	);
 
     return (

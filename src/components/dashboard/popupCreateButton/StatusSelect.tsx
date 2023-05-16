@@ -10,7 +10,7 @@ import { authUser, firestore } from '../../../firebase';
 import { selectedProjectSelector } from '../../store';
 import { LoadingIcon } from '../../styledComponents';
 
-export default function StatusSelect({value, setValue}: {value: string, setValue: Function}): JSX.Element {
+export default function StatusSelect({value, setValue}: {value?: string, setValue: Function}): JSX.Element {
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const handleChange = (event: SelectChangeEvent) => {

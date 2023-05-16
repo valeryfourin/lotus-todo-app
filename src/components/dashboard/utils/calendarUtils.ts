@@ -34,6 +34,7 @@ export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
 };
 
 export function getTasksSchedule(tasks: Array<DocumentData>) {
+	console.log(tasks)
 	const schedule = [];
 	let currentDateTime = new Date();
 	currentDateTime.setHours(8, 0, 0, 0); // Start from 8:00 AM

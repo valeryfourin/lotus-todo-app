@@ -1,53 +1,40 @@
 import { ReactNode, RefObject, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import TripOriginIcon  from '@mui/icons-material/TripOrigin';
-import { Box, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Grid, TextField, Tooltip } from '@mui/material';
-import { Priority, PriorityColor } from '../../types';
-import { editTask, setTaskCompleted, setTaskScheduled } from '../../../services/firestore/taskService';
-import DateSetter from '../popupCreateButton/DateSetter';
-import PrioritySelect from '../popupCreateButton/PrioritySelect';
-import StatusSelect from '../popupCreateButton/StatusSelect';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import PopupDeleteTaskIcon from './PopupDeleteTaskIcon';
-import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
-import { selectedProjectSelector } from '../../store';
-import DateTimeSetter from '../popupCreateButton/DateTimeSetter';
-import { dateTimeOptions, timeOptions } from '../../../utils/constants';
+import {
+	Box,
+	Button,
+	Card,
+	CardContent,
+	CardActions,
+	Checkbox,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	FormControlLabel,
+	Grid,
+	TextField,
+	Tooltip,
+	Typography,
+} from '@mui/material';
+import TripOriginIcon from '@mui/icons-material/TripOrigin';
+import { ITaskProps, Priority, PriorityColor } from '../types';
+import { editTask, setTaskCompleted, setTaskScheduled } from '../../services/firestore/taskService';
+import DateSetter from '../dashboard/popupCreateButton/DateSetter';
+import PrioritySelect from '../dashboard/popupCreateButton/PrioritySelect';
+import StatusSelect from '../dashboard/popupCreateButton/StatusSelect';
+import { selectedProjectSelector } from '../store';
+import DateTimeSetter from '../dashboard/popupCreateButton/DateTimeSetter';
+import { dateTimeOptions, truncatedDescriptionStyles } from '../../utils/constants';
+import { DetailsDialog } from './DetailsDialog';
 
-interface ITaskProps {
-	id: string;
-	name: string;
-	columnId: string;
-	columnName?: string;
-	description: string;
-	startDate: Date | null;
-	endDate: Date | null;
-	deadline: Date | null;
-	priority: string;
-	isDaySpecific: boolean;
-	isScheduled: boolean;
-	completed: boolean;
-	completeDate?: Date;
+interface ITaskCardProps {
+	task: ITaskProps;
 	isGridView?: boolean;
 };
 
-const truncatedDescriptionStyles = {
-	display: '-webkit-box',
-    '-webkit-line-clamp': '4',
-    '-webkit-box-orient': 'vertical',
-    overflow: 'hidden',
-	maxWidth: 400,
-};
-
-
-
-export const TaskCard = (props: ITaskProps) => {
-	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate, isGridView = true } = props;
+export const TaskCard = ({ task, isGridView = true }: ITaskCardProps) => {
+	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate } = task;
 	const selectedProject = useSelector(selectedProjectSelector);
 	const [open, setOpen] = useState(false);
 	const [editingMode, setEditingMode] = useState(false);
@@ -186,60 +173,60 @@ export const TaskCard = (props: ITaskProps) => {
 
 	const taskName = (completed ? <span style={{textDecoration: 'line-through'}}>{name}</span> : <span>{name}</span>) as ReactNode;
 
-	const DetailsDialog = (<>
-		<DialogTitle>
-			<Grid container justifyContent="space-between">
-				<span>Details of "{taskName}"</span>
-				<Box sx={{cursor: 'pointer'}}>
-					<EditOutlinedIcon onClick={() => setEditingMode(true)}/>
-					<PopupDeleteTaskIcon name={ name } boardId={ selectedProject.id } taskId={ id } />
-					<DoneOutlineIcon onClick={toggleTaskDone}/>
-				</Box>
-			</Grid>
+	// const DetailsDialog = (<>
+	// 	<DialogTitle>
+	// 		<Grid container justifyContent="space-between">
+	// 			<span>Details of "{taskName}"</span>
+	// 			<Box sx={{cursor: 'pointer'}}>
+	// 				<EditOutlinedIcon onClick={() => setEditingMode(true)}/>
+	// 				<PopupDeleteTaskIcon name={ name } boardId={ selectedProject.id } taskId={ id } />
+	// 				<DoneOutlineIcon onClick={toggleTaskDone}/>
+	// 			</Box>
+	// 		</Grid>
 
-		</DialogTitle>
-		<DialogContent className="form-content">
-				<Typography variant="body2">{ description }</Typography>
+	// 	</DialogTitle>
+	// 	<DialogContent className="form-content">
+	// 			<Typography variant="body2">{ description }</Typography>
 
-				<Box marginTop="50px">
-					Status: <Button variant="outlined">{ columnName }</Button>
-				</Box>
-				<Box marginTop="10px">
-					Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
-				</Box>
-				<Box marginTop="10px">
-					Start: { startDate ? (
-					<Button size="small">
-						{isDaySpecific
-							? startDate.toLocaleDateString("en-US", dateTimeOptions)
-							: startDate.toLocaleTimeString("en-US", timeOptions)}
-					</Button>) : 'Not set' }
-				</Box>
-				<Box marginTop="10px">
-					End: { endDate ? (
-					<Button size="small">
-						{isDaySpecific
-							? endDate.toLocaleDateString("en-US", dateTimeOptions)
-							: endDate.toLocaleTimeString("en-US", timeOptions)}
-					</Button>) : 'Not set' }
-				</Box>
-				<Box marginTop="10px">
-					Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not set' }
-				</Box>
-				<Box marginTop="10px">
-					Completed: { completeDate ? (<Button size="small">{completeDate.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not yet completed' }
-				</Box>
+	// 			<Box marginTop="50px">
+	// 				Status: <Button variant="outlined">{ columnName }</Button>
+	// 			</Box>
+	// 			<Box marginTop="10px">
+	// 				Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
+	// 			</Box>
+	// 			<Box marginTop="10px">
+	// 				Start: { startDate ? (
+	// 				<Button size="small">
+	// 					{isDaySpecific
+	// 						? startDate.toLocaleDateString("en-US", dateTimeOptions)
+	// 						: startDate.toLocaleTimeString("en-US", timeOptions)}
+	// 				</Button>) : 'Not set' }
+	// 			</Box>
+	// 			<Box marginTop="10px">
+	// 				End: { endDate ? (
+	// 				<Button size="small">
+	// 					{isDaySpecific
+	// 						? endDate.toLocaleDateString("en-US", dateTimeOptions)
+	// 						: endDate.toLocaleTimeString("en-US", timeOptions)}
+	// 				</Button>) : 'Not set' }
+	// 			</Box>
+	// 			<Box marginTop="10px">
+	// 				Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not set' }
+	// 			</Box>
+	// 			<Box marginTop="10px">
+	// 				Completed: { completeDate ? (<Button size="small">{completeDate.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not yet completed' }
+	// 			</Box>
 
-				{ !completed && (
-					<FormControlLabel control={
-						<Checkbox checked={isScheduledCurrent} onChange={(event) => toggleScheduled(event.target.checked)} />
-						} label="Include in schedule" />
-				)}
-		</DialogContent>
-		<DialogActions>
-			<Button onClick={handleCancelClose}>Cancel</Button>
-		</DialogActions>
-	</>);
+	// 			{ !completed && (
+	// 				<FormControlLabel control={
+	// 					<Checkbox checked={isScheduledCurrent} onChange={(event) => toggleScheduled(event.target.checked)} />
+	// 					} label="Include in schedule" />
+	// 			)}
+	// 	</DialogContent>
+	// 	<DialogActions>
+	// 		<Button onClick={handleCancelClose}>Cancel</Button>
+	// 	</DialogActions>
+	// </>);
 
 	const GridItem = (
 		<Card className="task-card hoverable" variant="outlined" onClick={ handleClickOpen }>
@@ -287,7 +274,27 @@ export const TaskCard = (props: ITaskProps) => {
 				fullWidth={true}
 				maxWidth="sm"
 			>
-				{editingMode ? EditDialog : DetailsDialog}
+				{editingMode ? EditDialog
+					: (<DetailsDialog
+						// id={id}
+						// name={name}
+						task={task}
+						taskNameFormatted={taskName}
+						// description={description}
+						// columnName={columnName}
+						// priority={priority}
+						// startDate={startDate}
+						// endDate={endDate}
+						// deadline={deadline}
+						// completed={completed}
+						// completeDate={completeDate}
+						// isDaySpecific={isDaySpecific}
+						// isScheduled={isScheduled}
+						setEditingMode={setEditingMode}
+						handleCancelClose={handleCancelClose}
+						toggleTaskDone={toggleTaskDone}
+						toggleScheduled={toggleScheduled}
+					/>)}
 			</Dialog>
 		</>
     );

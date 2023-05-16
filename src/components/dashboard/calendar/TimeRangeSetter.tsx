@@ -32,13 +32,13 @@ export default function TimeRangeSetter({workingHoursStart, workingHoursEnd, set
 				label="Choose working hours start:"
 				value={workingHoursStart}
 				onChange={handleStartChange}
-				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px'}}/>}
+				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px', minWidth: '200px'}}/>}
 			/>
 			<TimePicker
 				label="Choose working hours end:"
 				value={workingHoursEnd}
 				onChange={handleEndChange}
-				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px'}}/>}
+				renderInput={(params) => <TextField {...params} className="time-range-field" sx={{ margin: '0 10px', minWidth: '200px'}}/>}
 			/>
 		</LocalizationProvider>
 	);

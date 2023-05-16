@@ -1,5 +1,5 @@
 import { DocumentData } from "firebase/firestore";
-import React from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 
 export type TDashboardState = {
     user: TUser;
@@ -55,6 +55,38 @@ export type TTask = {
 	repeatsEvery?: RepetitionsFrequency;
 	isDaySpecific: boolean;
 	isScheduled?: boolean;
+};
+
+export interface ITaskProps {
+	id: string;
+	name: string;
+	columnId?: string;
+	columnName?: string;
+	description: string;
+	startDate: Date | null;
+	endDate: Date | null;
+	deadline: Date | null;
+	priority: string;
+	isDaySpecific: boolean;
+	isScheduled: boolean;
+	completed: boolean;
+	completeDate?: Date;
+	isGridView?: boolean;
+};
+
+export interface IDetailsDialogProps {
+	task: ITaskProps;
+	taskNameFormatted?: ReactNode;
+	setEditingMode: Function;
+	toggleTaskDone: MouseEventHandler<SVGSVGElement>;
+	toggleScheduled: Function;
+	handleCancelClose: MouseEventHandler<HTMLButtonElement>;
+};
+
+export interface IEditDialogProps {
+	task: ITaskProps;
+	handleExitEditingMode: MouseEventHandler<HTMLButtonElement>;
+	handleConfirmClose: MouseEventHandler<HTMLButtonElement>;
 };
 
 export enum Priority {

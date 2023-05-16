@@ -1,5 +1,5 @@
 import { DocumentData } from "firebase/firestore";
-import { TaskCard } from "../grid/TaskCard";
+import { TaskCard } from "../../task/TaskCard";
 
 interface IList {
 	tasks: Array<DocumentData>
@@ -7,25 +7,30 @@ interface IList {
 }
 
 export const List = ({ tasks, columns }: IList): JSX.Element => {
-	const tasksList = tasks?.map((task: DocumentData) => (
-		<TaskCard
-			key={ task.id }
-			id={ task.id }
-			columnId={ task.columnId }
-			columnName={ columns[task.columnId][0]?.name }
-			name={ task.name }
-			description={ task.description }
-			startDate={ task.startDate?.toDate() ?? null }
-			endDate={ task.endDate?.toDate() ?? null }
-			deadline={ task.deadline?.toDate() ?? null }
-			priority={ task.priority }
-			isDaySpecific={ task.isDaySpecific }
-			isScheduled={ task.isScheduled }
-			completed={ task.completed }
-			completeDate={ task.completeDate?.toDate() ?? null }
-			isGridView={ false }
-		/>)
-	);
+	const tasksList = tasks?.map((taskData: DocumentData) => {
+		const task = {
+			id: taskData.id,
+			columnId: taskData.columnId,
+			columnName: columns[taskData.columnId][0]?.name,
+			name: taskData.name,
+			description: taskData.description,
+			startDate: taskData.startDate?.toDate() ?? null,
+			endDate: taskData.endDate?.toDate() ?? null,
+			deadline: taskData.deadline?.toDate() ?? null,
+			priority: taskData.priority,
+			isDaySpecific: taskData.isDaySpecific,
+			isScheduled: taskData.isScheduled,
+			completed: taskData.completed,
+			completeDate: taskData.completeDate?.toDate() ?? null,
+		};
+
+		return (
+			<TaskCard
+				key={ task.id }
+				task={ task }
+				isGridView={ false }
+			/>)
+	});
 
     return (
 		<div className="list custom-scroll">
