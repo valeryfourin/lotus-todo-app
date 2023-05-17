@@ -35,6 +35,15 @@ export const PopupCreateButton = (): JSX.Element => {
 	const handleConfirmClose = (event: any): void => {
 		preventProjectSwitch(event);
 
+		if (startDate && endDate && startDate.getTime() >= endDate.getTime()) {
+			alert('Task cannot end before starting!');
+			return;
+		} else if (isDaySpecific && startDate && endDate && deadline
+			&& (deadline.getTime() < endDate.getTime() || deadline.getTime() <= startDate.getTime())) {
+				alert('Task cannot have deadline defore end or start!');
+				return;
+		}
+
 		if (nameReference.current && columnId) {
 			const task = {
 				name: nameReference.current.value,
@@ -121,7 +130,7 @@ export const PopupCreateButton = (): JSX.Element => {
 						<DateTimeSetter value={endDate} setValue={setEndDate} label="End time" saveDay={isDaySpecific}/>
 					</Grid>
 				</Grid>
-				<Box marginTop="15px" marginBottom="15px">
+				<Box marginTop="15px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
 				</Box>
 			</DialogContent>

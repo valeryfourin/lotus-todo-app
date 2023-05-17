@@ -11,10 +11,12 @@ import { LoadingIcon } from "../../styledComponents";
 import { getTasksSchedule, getEventsToBeScheduled, convertEventsToBeScheduled } from "../utils/calendarUtils";
 import { TCalendarEvent } from "../../types";
 import TimeRangeSetter from "./TimeRangeSetter";
-import { smallMarginSpacing } from "../../../utils/constants";
+import { dateTimeOptions, smallMarginSpacing } from "../../../utils/constants";
 import { DayHours, ProcessedEvent, SchedulerHelpers } from "@aldabil/react-scheduler/types";
 
 import "./calendar.css";
+import { EditDialog } from "../../task/EditDialog";
+import { PopupCreateButton } from "../popupCreateButton/PopupCreateButton";
 
 export const Calendar = () => {
 	const selectedProject = useSelector(selectedProjectSelector);
@@ -86,6 +88,10 @@ export const Calendar = () => {
 		}
 	};
 
+	const handleEventClick = (event: ProcessedEvent): void => {
+		console.log(event)
+	}
+
 	return areTasksLoading
 		? (<LoadingIcon />)
 		: scheduledTasks?.length ? (
@@ -134,14 +140,17 @@ export const Calendar = () => {
 						endHour: workingHoursEnd.getHours() as DayHours,
 						step: 60,
 					}}
-					// customEditor={(scheduler) => <CustomEditor scheduler={scheduler} />}
+					customEditor={(scheduler) => <CustomEditor scheduler={scheduler} />}
 					viewerExtraComponent={(fields, event) => {
 						return (
 						<div>
 							<p>{event.description}</p>
+							<p>{event.priority && `Priority: ${event.priority}`}</p>
+							<p>{event.deadline && `Deadline: ${event.deadline.toLocaleDateString("en-US", dateTimeOptions)}`}</p>
 						</div>
 						);
 					}}
+					onEventClick={handleEventClick}
 				/>
 		</div>) : (<div>No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule.</div>)
 }
@@ -203,10 +212,14 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
 			scheduler.loading(false);
 		}
 	};
+
+	const EditEventDialog = () => {};
+
+	const CreateEventDialog = () => {};
+
 	return (
 		<div>
 			<div style={{ padding: "1rem" }}>
-				<p>Load your custom form/fields</p>
 				<TextField
 					label="Title"
 					value={state.title}

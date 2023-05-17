@@ -1,31 +1,26 @@
 import {
 	Box,
 	Button,
-	Card,
-	CardContent,
-	CardActions,
 	Checkbox,
-	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
 	FormControlLabel,
 	Grid,
 	TextField,
-	Tooltip,
-	Typography,
 } from '@mui/material';
 import { RefObject, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { editTask } from '../../services/firestore/taskService';
 import DateSetter from '../dashboard/popupCreateButton/DateSetter';
 import DateTimeSetter from '../dashboard/popupCreateButton/DateTimeSetter';
 import PrioritySelect from '../dashboard/popupCreateButton/PrioritySelect';
 import StatusSelect from '../dashboard/popupCreateButton/StatusSelect';
 import { selectedProjectSelector } from '../store';
-import { IEditDialogProps } from '../types';
+import { IEditDialogProps, Priority } from '../types';
 
-export const EditDialog = ({task, handleExitEditingMode, handleConfirmClose}: IEditDialogProps) => {
-	const { id, name, columnId, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate } = task;
+export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
+	const { id, name, columnId, description, startDate, endDate, deadline, priority, isDaySpecific } = task;
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
@@ -37,7 +32,41 @@ export const EditDialog = ({task, handleExitEditingMode, handleConfirmClose}: IE
 	const [startDateCurrent, setStartDateCurrent] = useState<Date | null>(startDate);
 	const [endDateCurrent, setEndDateCurrent] = useState<Date | null>(endDate);
 	const [isDaySpecificCurrent, setIsDaySpecificCurrent] = useState<boolean>(isDaySpecific);
-	const [isScheduledCurrent, setIsScheduledCurrent] = useState<boolean>(isScheduled);
+
+	const handleConfirmClose = async (event: any): Promise<void> => {
+		preventProjectSwitch(event);
+
+		if (startDateCurrent && endDateCurrent && startDateCurrent.getTime() >= endDateCurrent.getTime()) {
+			alert('Task cannot end before starting!');
+			return;
+		} else if (isDaySpecificCurrent
+			&& startDateCurrent
+			&& endDateCurrent
+			&& deadlineCurrent
+			&& (deadlineCurrent.getTime() < endDateCurrent.getTime() || deadlineCurrent.getTime() <= startDateCurrent.getTime())) {
+				alert('Task cannot have deadline defore end or start!');
+				return;
+		}
+
+		if (nameReference.current) {
+			const task = {
+				name: nameReference.current.value,
+				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
+				priority: priorityCurrent as Priority,
+				columnId: newColumnId,
+				startDate: startDateCurrent,
+				endDate: endDateCurrent,
+				deadline: deadlineCurrent,
+				isDaySpecific: isDaySpecificCurrent,
+			};
+
+			await editTask(selectedProject.id, id, task);
+
+			handleCancelClose(task);
+		} else {
+			alert('Missing required fields.');
+		}
+	};
 
 	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 
@@ -81,7 +110,7 @@ export const EditDialog = ({task, handleExitEditingMode, handleConfirmClose}: IE
 					onKeyDown={preventProjectSwitch}
 				/>
 				<FormControlLabel control={
-					<Checkbox checked={isScheduledCurrent} onChange={(event) => setIsDaySpecificCurrent(event.target.checked)} />
+					<Checkbox checked={isDaySpecificCurrent} onChange={(event) => setIsDaySpecificCurrent(event.target.checked)} />
 					} label="Event is day specific" />
 				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
 					<Grid item xs>
@@ -96,7 +125,7 @@ export const EditDialog = ({task, handleExitEditingMode, handleConfirmClose}: IE
 				</Box>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleExitEditingMode}>Cancel</Button>
+				<Button onClick={() => handleCancelClose()}>Cancel</Button>
 				<Button onClick={handleConfirmClose}>Save</Button>
 			</DialogActions>
 		</>

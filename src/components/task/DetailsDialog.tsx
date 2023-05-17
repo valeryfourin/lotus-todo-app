@@ -17,10 +17,19 @@ import { IDetailsDialogProps, Priority, PriorityColor } from '../types';
 import { useSelector } from 'react-redux';
 import { selectedProjectSelector } from '../store';
 import { dateTimeOptions, timeOptions } from '../../utils/constants';
+import { setTaskCompleted, setTaskScheduled } from '../../services/firestore/taskService';
 
-export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCancelClose, toggleTaskDone, toggleScheduled}: IDetailsDialogProps) => {
+export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCancelClose}: IDetailsDialogProps) => {
 	const { id, name, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate } = task;
 	const selectedProject = useSelector(selectedProjectSelector);
+
+	const toggleTaskDone = () => {
+		setTaskCompleted(selectedProject.id, id, !completed);
+	}
+
+	const toggleScheduled = (isScheduled: boolean) => {
+		setTaskScheduled(selectedProject.id, id, isScheduled);
+	}
 
 	return (<>
 		<DialogTitle>

@@ -1,9 +1,10 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+
 
 interface IDateTimeSetterProps {
 	value: Date | null;
@@ -19,24 +20,24 @@ export default function DateTimeSetter({value, setValue, label, saveDay}: IDateT
 		}
 	};
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-		{ saveDay ? (
-			<DateTimePicker
-				label={label}
-				value={value}
-				onChange={handleChange}
-				renderInput={(params) => <TextField {...params} />}
-			/>
-			) : (
-				<TimePicker
+	return (
+		<LocalizationProvider dateAdapter={AdapterDayjs}>
+			{ saveDay ? (
+				<DateTimePicker
 					label={label}
 					value={value}
 					onChange={handleChange}
 					renderInput={(params) => <TextField {...params} />}
 				/>
-			)
-		}
-    </LocalizationProvider>
-  );
+				) : (
+					<TimePicker
+						label={label}
+						value={value}
+						onChange={handleChange}
+						renderInput={(params) => <TextField {...params} />}
+					/>
+				)
+			}
+		</LocalizationProvider>
+	);
 }

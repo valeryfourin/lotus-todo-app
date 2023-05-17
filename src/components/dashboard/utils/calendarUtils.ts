@@ -7,6 +7,7 @@ export const convertEventsToBeScheduled = (tasks: Array<TCalendarEvent>) => {
 				...task,
 				start: task?.start.toDate(),
 				end: task?.end.toDate(),
+				deadline: task?.deadline?.toDate(),
 			} as TCalendarEvent;
 		}
 	);
@@ -15,6 +16,7 @@ export const convertEventsToBeScheduled = (tasks: Array<TCalendarEvent>) => {
 };
 
 export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
+	console.log(tasks)
 	const scheduledTasks: Array<TCalendarEvent> = tasks.reduce((tasksAcc: Array<TCalendarEvent>, task: DocumentData) => {
 		if (task.isScheduled && !task.completed && task.startDate && task.endDate) {
 			const scheduledTask = {
@@ -24,12 +26,15 @@ export const getEventsToBeScheduled = (tasks: Array<DocumentData>) => {
 				end: task.endDate.toDate(),
 				color: PriorityColor[task.priority as Priority] || PriorityColor[Priority.notSet],
 				editable: true,
+				description: task?.description,
+				priority: task.priority,
+				deadline: task?.deadline?.toDate(),
 			};
 			tasksAcc.push(scheduledTask);
 		}
 		return tasksAcc;
 	}, []);
-
+	console.log(scheduledTasks)
 	return scheduledTasks;
 };
 

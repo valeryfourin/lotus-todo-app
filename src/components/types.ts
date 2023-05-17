@@ -78,15 +78,12 @@ export interface IDetailsDialogProps {
 	task: ITaskProps;
 	taskNameFormatted?: ReactNode;
 	setEditingMode: Function;
-	toggleTaskDone: MouseEventHandler<SVGSVGElement>;
-	toggleScheduled: Function;
 	handleCancelClose: MouseEventHandler<HTMLButtonElement>;
 };
 
 export interface IEditDialogProps {
 	task: ITaskProps;
-	handleExitEditingMode: MouseEventHandler<HTMLButtonElement>;
-	handleConfirmClose: MouseEventHandler<HTMLButtonElement>;
+	handleCancelClose: Function;
 };
 
 export enum Priority {
@@ -133,4 +130,7 @@ export type TCalendarEvent = {
 	end: Date;
 	editable?: boolean;
 	color: string;
+	priority: Priority;
+	description?: string;
+	deadline?: Date;
 };
