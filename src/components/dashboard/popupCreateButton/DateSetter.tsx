@@ -1,7 +1,4 @@
-import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function DateSetter({value, setValue}: {value: Date | null, setValue: Function}) {
@@ -11,14 +8,12 @@ export default function DateSetter({value, setValue}: {value: Date | null, setVa
 		}
 	};
 
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        label="Deadline"
-        value={value}
-        onChange={handleChange}
-        renderInput={(params) => <TextField {...params} />}
-      />
-    </LocalizationProvider>
-  );
+	return (
+		<DatePicker
+			label="Deadline"
+			value={value}
+			onChange={handleChange}
+			renderInput={(params) => <TextField {...params} />}
+		/>
+	);
 }

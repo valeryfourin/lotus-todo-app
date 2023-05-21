@@ -36,9 +36,9 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 			<Grid container justifyContent="space-between">
 				<span>Details of "{taskNameFormatted}"</span>
 				<Box sx={{cursor: 'pointer'}}>
+					<DoneOutlineIcon onClick={toggleTaskDone}/>
 					<EditOutlinedIcon onClick={() => setEditingMode(true)}/>
 					<PopupDeleteTaskIcon name={ name } boardId={ selectedProject.id } taskId={ id } />
-					<DoneOutlineIcon onClick={toggleTaskDone}/>
 				</Box>
 			</Grid>
 
@@ -47,7 +47,7 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 				<Typography variant="body2">{ description }</Typography>
 
 				<Box marginTop="50px">
-					Status: <Button variant="outlined">{ columnName }</Button>
+					Column: <Button variant="outlined">{ columnName }</Button>
 				</Box>
 				<Box marginTop="10px">
 					Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }

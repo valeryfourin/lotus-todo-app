@@ -48,3 +48,8 @@ code {
 	text-align: center;
 	margin-top: 30px;
 }
+
+.error-helper-text {
+	color: #d32f2f;
+    margin-bottom: 8px;
+}

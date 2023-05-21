@@ -68,7 +68,7 @@ export const BarChartCard = ({tasks, columns}: IBarChartCardProps): JSX.Element 
 	return (
 		<Card className="chart-card chart-card--large" variant="outlined">
 			<CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-				<Typography variant="h6" component="div" sx={{marginBottom: '15px'}}>Uncompleted tasks by status</Typography>
+				<Typography variant="h6" component="div" sx={{marginBottom: '15px'}}>Uncompleted tasks by column</Typography>
 				<Bar options={chartOptions as any} data={chartData} />
 			</CardContent>
 		</Card>

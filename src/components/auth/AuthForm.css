@@ -9,21 +9,8 @@
     flex-direction: column;
 }
 
-.signin-screen__field {
-    margin-bottom: 20px;
-}
-
 .signin-screen > form > input::placeholder {
     color: grey;}
-
-.signin-screen__button {
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    margin-top: 50px;
-}
 
 .signin-screen > form > h1 {
     margin-bottom: 25px;
@@ -35,7 +22,7 @@
     text-align: left;
 }
 
-.signin-screen_gray {
+.signin-screen__gray {
     color: gray;
 }
 

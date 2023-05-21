@@ -10,7 +10,7 @@ import { authUser, firestore } from '../../../firebase';
 import { selectedProjectSelector } from '../../store';
 import { LoadingIcon } from '../../styledComponents';
 
-export default function StatusSelect({value, setValue}: {value?: string, setValue: Function}): JSX.Element {
+export default function ColumnSelect({value, setValue}: {value?: string, setValue: Function}): JSX.Element {
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const handleChange = (event: SelectChangeEvent) => {
@@ -25,13 +25,13 @@ export default function StatusSelect({value, setValue}: {value?: string, setValu
 	return (
 		<Box sx={{ minWidth: 120 }}>
 			<FormControl required fullWidth>
-				<InputLabel id="demo-simple-select-label">Status</InputLabel>
+				<InputLabel id="demo-simple-select-label">Column</InputLabel>
 				<Select
 					labelId="demo-simple-select-label"
 					id="demo-simple-select"
 					value={value}
 					margin="dense"
-					label="Status"
+					label="Column"
 					onChange={handleChange}
 				>
 					{loading ?

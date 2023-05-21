@@ -1,10 +1,11 @@
-import { RefObject, useState, useRef } from 'react';
+import { RefObject, useState, useRef, SyntheticEvent } from 'react';
 import { IconButton, Dialog, TextField, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { ActionType, IPopupIcon } from '../types';
 import { executeBoardRequest, executeColumnRequest, getBoardsNames, getColumnsNames, getPopupTitle } from './utils';
+import { preventProjectSwitch } from '../../utils/helpers';
 
 const getIconFromActionType = (action: ActionType) => {
   switch (action) {
@@ -25,12 +26,12 @@ export default function PopupIcon(props: IPopupIcon) {
 	const [hasInputError, setHasInputError] = useState(false);
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 
-	const handleClickOpen = (event: any) => {
+	const handleClickOpen = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
 		setOpen(true);
 	};
 
-	const handleConfirmClose = (event: any) => {
+	const handleConfirmClose = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
 
 		if (entity === 'board') {
@@ -42,16 +43,12 @@ export default function PopupIcon(props: IPopupIcon) {
 		setOpen(false);
 	};
 
-	const handleCancelClose = (event: any) => {
+	const handleCancelClose = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
 		setOpen(false);
 	}
 
-	const preventProjectSwitch = (event: any): void => {
-		event.stopPropagation()
-	};
-
-	const handleInputError = async (event: any) => {
+	const handleInputError = async (event: SyntheticEvent) => {
 		let entitiesNames = [];
 		if (entity === 'board') {
 			entitiesNames = await getBoardsNames();

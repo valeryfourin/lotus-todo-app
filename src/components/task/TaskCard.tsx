@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, SyntheticEvent, useState } from 'react';
 import {
 	Button,
 	Card,
@@ -13,6 +13,7 @@ import { ITaskProps, Priority, PriorityColor } from '../types';
 import { dateTimeOptions, truncatedDescriptionStyles } from '../../utils/constants';
 import { DetailsDialog } from './DetailsDialog';
 import { EditDialog } from './EditDialog';
+import { preventProjectSwitch } from '../../utils/helpers';
 
 interface ITaskCardProps {
 	task: ITaskProps;
@@ -24,12 +25,12 @@ export const TaskCard = ({ task, isGridView = true }: ITaskCardProps) => {
 	const [open, setOpen] = useState(false);
 	const [editingMode, setEditingMode] = useState(false);
 
-	const handleClickOpen = (event: any): void => {
+	const handleClickOpen = (event: SyntheticEvent): void => {
 		preventProjectSwitch(event);
 		setOpen(true);
 	};
 
-	const handleCancelClose = (event: any): void => {
+	const handleCancelClose = (event: SyntheticEvent): void => {
 		preventProjectSwitch(event);
 		handleExitEditingMode();
 		setOpen(false);
@@ -38,8 +39,6 @@ export const TaskCard = ({ task, isGridView = true }: ITaskCardProps) => {
 	const handleExitEditingMode = () => {
 		setEditingMode(false);
 	}
-
-	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 
 	const taskName = (completed ? <span style={{textDecoration: 'line-through'}}>{name}</span> : <span>{name}</span>) as ReactNode;
 

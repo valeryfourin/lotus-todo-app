@@ -1,5 +1,6 @@
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
-import { Button, DialogActions, TextField } from "@mui/material";
+import { DayHours, ProcessedEvent } from "@aldabil/react-scheduler/types";
+import { Button } from "@mui/material";
 import { collection, doc, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
@@ -10,18 +11,16 @@ import { selectedProjectSelector } from "../../store";
 import { LoadingIcon } from "../../styledComponents";
 import { getTasksSchedule, getEventsToBeScheduled, convertEventsToBeScheduled } from "../utils/calendarUtils";
 import { TCalendarEvent } from "../../types";
-import TimeRangeSetter from "./TimeRangeSetter";
+import { TimeRangeSetter } from "./TimeRangeSetter";
 import { dateTimeOptions, smallMarginSpacing } from "../../../utils/constants";
-import { DayHours, ProcessedEvent, SchedulerHelpers } from "@aldabil/react-scheduler/types";
+import { CalendarEventEditor } from "./CalendarEventEditor";
 
 import "./calendar.css";
-import { EditDialog } from "../../task/EditDialog";
-import { PopupCreateButton } from "../popupCreateButton/PopupCreateButton";
 
 export const Calendar = () => {
 	const selectedProject = useSelector(selectedProjectSelector);
 
-	const { setEvents, events } = useScheduler();
+	const { events, setEvents, view, setView } = useScheduler();
 
 	const [scheduledTasks, setScheduledTasks] = useState<any>([]);
 
@@ -47,6 +46,7 @@ export const Calendar = () => {
 		if (board?.workingHours?.length) {
 			setWorkingHoursStart(board.workingHours[0].toDate());
 			setWorkingHoursEnd(board.workingHours[1].toDate());
+			applyWorkingHours();
 		}
 	}, [board, tasks, isBoardLoading, areTasksLoading]);
 
@@ -74,10 +74,9 @@ export const Calendar = () => {
 		setWorkingHoursEnd(newWorkingHoursEnd);
 	};
 
-	const click = () => {
-		setWorkingHoursStart(workingHoursStart);
-		setWorkingHoursEnd(workingHoursEnd);
-	}
+	const applyWorkingHours = () => {
+		setView(view); // workaround to re-render calendar
+	};
 
 	const retrieveSchedule = (): void => {
 		if (board?.schedule) {
@@ -90,8 +89,8 @@ export const Calendar = () => {
 
 	const handleEventClick = (event: ProcessedEvent): void => {
 		console.log(event)
-	}
-
+	};
+	const generateTaskKey = (task: any) => `${task.id}-${task.startDate}-${task.endDate}`;
 	return areTasksLoading
 		? (<LoadingIcon />)
 		: scheduledTasks?.length ? (
@@ -115,13 +114,14 @@ export const Calendar = () => {
 						setWorkingHoursStart={handleChangeWorkingHoursStart}
 						setWorkingHoursEnd={handleChangeWorkingHoursEnd}
 					/>
-					<Button className="calendar-button" variant="contained" onClick={click} sx={{margin: '10px 0 0 10px'}}>
+					<Button className="calendar-button" variant="contained" onClick={applyWorkingHours} sx={{margin: '10px 0 0 10px'}}>
 						Apply
 					</Button>
 				</div>
 
 				<Scheduler
 					events={scheduledTasks}
+					hourFormat="24"
 					month={{
 						startHour: workingHoursStart.getHours() as DayHours,
 						endHour: workingHoursEnd.getHours() as DayHours,
@@ -140,7 +140,7 @@ export const Calendar = () => {
 						endHour: workingHoursEnd.getHours() as DayHours,
 						step: 60,
 					}}
-					customEditor={(scheduler) => <CustomEditor scheduler={scheduler} />}
+					customEditor={(scheduler) => <CalendarEventEditor scheduler={scheduler} />}
 					viewerExtraComponent={(fields, event) => {
 						return (
 						<div>
@@ -154,91 +154,3 @@ export const Calendar = () => {
 				/>
 		</div>) : (<div>No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule.</div>)
 }
-
-interface CustomEditorProps {
-	scheduler: SchedulerHelpers;
-}
-
-const CustomEditor = ({ scheduler }: CustomEditorProps) => {
-	const event = scheduler.edited;
-
-	// Make your own form/state
-	const [state, setState] = useState({
-		title: event?.title || "",
-		description: event?.description || ""
-	});
-	const [error, setError] = useState("");
-
-	const handleChange = (value: string, name: string) => {
-		setState((prev) => {
-			return {
-				...prev,
-				[name]: value
-			};
-		});
-	};
-	const handleSubmit = async () => {
-		// Your own validation
-		if (state.title.length < 3) {
-			return setError("Min 3 letters");
-		}
-
-		try {
-			scheduler.loading(true);
-
-			/**Simulate remote data saving */
-			const added_updated_event = (await new Promise((res) => {
-			/**
-			 * Make sure the event have 4 mandatory fields
-			 * event_id: string|number
-			 * title: string
-			 * start: Date|string
-			 * end: Date|string
-			 */
-				setTimeout(() => {
-					res({
-					event_id: event?.event_id || Math.random(),
-					title: state.title,
-					start: scheduler.state.start.value,
-					end: scheduler.state.end.value,
-					description: state.description
-					});
-				}, 3000);
-			})) as ProcessedEvent;
-
-			scheduler.onConfirm(added_updated_event, event ? "edit" : "create");
-			scheduler.close();
-		} finally {
-			scheduler.loading(false);
-		}
-	};
-
-	const EditEventDialog = () => {};
-
-	const CreateEventDialog = () => {};
-
-	return (
-		<div>
-			<div style={{ padding: "1rem" }}>
-				<TextField
-					label="Title"
-					value={state.title}
-					onChange={(e) => handleChange(e.target.value, "title")}
-					error={!!error}
-					helperText={error}
-					fullWidth
-				/>
-				<TextField
-					label="Description"
-					value={state.description}
-					onChange={(e) => handleChange(e.target.value, "description")}
-					fullWidth
-				/>
-			</div>
-			<DialogActions>
-				<Button onClick={scheduler.close}>Cancel</Button>
-				<Button onClick={handleSubmit}>Confirm</Button>
-			</DialogActions>
-		</div>
-	);
-};
