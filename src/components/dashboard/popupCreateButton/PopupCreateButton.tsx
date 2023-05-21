@@ -27,6 +27,7 @@ export const PopupCreateButton = (): JSX.Element => {
 	const [open, setOpen] = useState(false);
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 	const descriptionReference: RefObject<HTMLInputElement> = useRef(null);
+	const estimateReference: RefObject<HTMLInputElement> = useRef(null);
 
 	const [columnId, setColumnId] = useState<string>('');
 	const [priority, setPriority] = useState(Priority.notSet);
@@ -67,6 +68,7 @@ export const PopupCreateButton = (): JSX.Element => {
 			name: nameReference.current.value,
 			description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 			priority,
+			estimate: estimateReference.current !== null ? parseInt(estimateReference.current.value) : 0,
 			columnId,
 			startDate,
 			endDate,
@@ -120,6 +122,15 @@ export const PopupCreateButton = (): JSX.Element => {
 					helperText={error.missingName && titleMissingMessage}
 					required
 				/>
+
+				<Grid item xs>
+					<TextField
+						inputRef={estimateReference}
+						label="Estimate in hours"
+						type="number"
+						variant="standard"
+					/>
+				</Grid>
 
 				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
 					<Grid item xs>

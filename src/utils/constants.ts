@@ -13,8 +13,8 @@ export const smallMarginSpacing = { margin: '0px 0px 12px 10px' };
 
 export const truncatedDescriptionStyles = {
 	display: '-webkit-box',
-    '-webkit-line-clamp': '4',
-    '-webkit-box-orient': 'vertical',
+    WebkitLineClamp: '4',
+    WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
 	maxWidth: 400,
 };

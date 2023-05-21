@@ -67,6 +67,7 @@ export interface ITaskProps {
 	endDate: Date | null;
 	deadline: Date | null;
 	priority: string;
+	estimate: number;
 	isDaySpecific: boolean;
 	isScheduled: boolean;
 	completed: boolean;

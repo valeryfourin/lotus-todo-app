@@ -20,7 +20,7 @@ import { dateTimeOptions, timeOptions } from '../../utils/constants';
 import { setTaskCompleted, setTaskScheduled } from '../../services/firestore/taskService';
 
 export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCancelClose}: IDetailsDialogProps) => {
-	const { id, name, columnName = '', description, startDate, endDate, deadline, priority, isDaySpecific, isScheduled, completed, completeDate } = task;
+	const { id, name, columnName = '', description, startDate, endDate, deadline, priority, estimate, isDaySpecific, isScheduled, completed, completeDate } = task;
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const toggleTaskDone = () => {
@@ -52,6 +52,11 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 				<Box marginTop="10px">
 					Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
 				</Box>
+				{ estimate && (
+					<Box marginTop="10px">
+						Estimate: { `${estimate} ${estimate === 1 ? 'hour' : 'hours'}` }
+					</Box>
+				)}
 				<Box marginTop="10px">
 					Start: { startDate ? (
 					<Button size="small">

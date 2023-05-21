@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
 import { DayHours, ProcessedEvent } from "@aldabil/react-scheduler/types";
-import { Button } from "@mui/material";
+import { Accordion, AccordionDetails, Button } from "@mui/material";
 import { collection, doc, orderBy, query } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
-import { useSelector } from "react-redux";
 import { authUser, firestore } from "../../../firebase";
 import { saveSchedule, saveWorkingHours } from "../../../services/firestore/boardService";
 import { selectedProjectSelector } from "../../store";
@@ -14,7 +14,7 @@ import { TCalendarEvent } from "../../types";
 import { TimeRangeSetter } from "./TimeRangeSetter";
 import { dateTimeOptions, smallMarginSpacing } from "../../../utils/constants";
 import { CalendarEventEditor } from "./CalendarEventEditor";
-
+import { AccordionSummary } from "./AccordionSummary";
 import "./calendar.css";
 
 export const Calendar = () => {
@@ -24,8 +24,8 @@ export const Calendar = () => {
 
 	const [scheduledTasks, setScheduledTasks] = useState<any>([]);
 
-	const [workingHoursStart, setWorkingHoursStart] = useState<Date>(new Date('January 1, 1970 8:00:00'));
-	const [workingHoursEnd, setWorkingHoursEnd] = useState<Date>(new Date('January 1, 1970 17:00:00'));
+	const [workingHoursStart, setWorkingHoursStart] = useState<Date>(new Date(new Date().setHours(8, 0, 0, 0)));
+	const [workingHoursEnd, setWorkingHoursEnd] = useState<Date>(new Date(new Date().setHours(17, 0, 0, 0)));
 
 	const [tasks, areTasksLoading] = useCollectionData(query(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/tasks`), orderBy('createdAt')));
@@ -44,17 +44,20 @@ export const Calendar = () => {
 		}
 
 		if (board?.workingHours?.length) {
+			if (board.workingHours[0].toDate().getTime() >= board.workingHours[1].toDate().getTime()) {
+				return;
+			}
+
 			setWorkingHoursStart(board.workingHours[0].toDate());
 			setWorkingHoursEnd(board.workingHours[1].toDate());
-			applyWorkingHours();
 		}
 	}, [board, tasks, isBoardLoading, areTasksLoading]);
 
 	const handleGenerateSchedule = (): void => {
 		if (tasks?.length) {
-			console.log(getTasksSchedule(tasks));
-			setEvents(getTasksSchedule(tasks));
-			setScheduledTasks(getTasksSchedule(tasks));
+			console.log(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
+			setEvents(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
+			setScheduledTasks(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
 		}
 	};
 
@@ -90,34 +93,37 @@ export const Calendar = () => {
 	const handleEventClick = (event: ProcessedEvent): void => {
 		console.log(event)
 	};
-	const generateTaskKey = (task: any) => `${task.id}-${task.startDate}-${task.endDate}`;
+
 	return areTasksLoading
 		? (<LoadingIcon />)
 		: scheduledTasks?.length ? (
 			<div className="calendar-wrap custom-scroll">
-				<div className="calendar-controls">
-					<Button className="calendar-button" variant="contained" onClick={handleGenerateSchedule} sx={smallMarginSpacing}>
-						Generate new schedule
-					</Button>
-					<Button className="calendar-button" variant="outlined" onClick={handleSaveSchedule} sx={smallMarginSpacing}>
-						Save schedule
-					</Button>
-					<Button className="calendar-button" variant="outlined" onClick={retrieveSchedule} sx={smallMarginSpacing}>
-						Retrieve latest schedule
-					</Button>
-				</div>
+				<Accordion sx={{boxShadow: 'none'}}>
+					<AccordionSummary className="calendar-controls" sx={{justifyContent: 'unset'}}>
+						<Button className="calendar-button" variant="contained" onClick={handleGenerateSchedule} sx={{marginRight: '10px'}}>
+							Generate new schedule
+						</Button>
+						<Button className="calendar-button" variant="outlined" onClick={handleSaveSchedule} sx={{marginRight: '10px'}}>
+							Save schedule
+						</Button>
+						<Button className="calendar-button" variant="outlined" onClick={retrieveSchedule} sx={{marginRight: '10px'}}>
+							Retrieve latest schedule
+						</Button>
+					</AccordionSummary>
 
-				<div>
-					<TimeRangeSetter
-						workingHoursStart={workingHoursStart}
-						workingHoursEnd={workingHoursEnd}
-						setWorkingHoursStart={handleChangeWorkingHoursStart}
-						setWorkingHoursEnd={handleChangeWorkingHoursEnd}
-					/>
-					<Button className="calendar-button" variant="contained" onClick={applyWorkingHours} sx={{margin: '10px 0 0 10px'}}>
-						Apply
-					</Button>
-				</div>
+					<AccordionDetails>
+						<TimeRangeSetter
+							workingHoursStart={workingHoursStart}
+							workingHoursEnd={workingHoursEnd}
+							setWorkingHoursStart={handleChangeWorkingHoursStart}
+							setWorkingHoursEnd={handleChangeWorkingHoursEnd}
+						/>
+						<Button className="calendar-button" variant="contained" onClick={applyWorkingHours} sx={{margin: '10px 0 0 10px'}}>
+							Apply
+						</Button>
+					</AccordionDetails>
+				</Accordion>
+
 
 				<Scheduler
 					events={scheduledTasks}

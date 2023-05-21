@@ -29,6 +29,7 @@ const Column = ({ title, id, tasks }: IColumnProps) => {
 			endDate: taskData.endDate?.toDate(),
 			deadline: taskData.deadline?.toDate(),
 			priority: taskData.priority,
+			estimate: taskData.estimate,
 			isDaySpecific: taskData.isDaySpecific,
 			isScheduled: taskData.isScheduled,
 			completed: taskData.completed,

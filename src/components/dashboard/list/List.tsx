@@ -18,6 +18,7 @@ export const List = ({ tasks, columns }: IList): JSX.Element => {
 			endDate: taskData.endDate?.toDate() ?? null,
 			deadline: taskData.deadline?.toDate() ?? null,
 			priority: taskData.priority,
+			estimate: taskData.estimate,
 			isDaySpecific: taskData.isDaySpecific,
 			isScheduled: taskData.isScheduled,
 			completed: taskData.completed,

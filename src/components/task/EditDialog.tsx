@@ -28,11 +28,12 @@ const defaultErrorState = {
 };
 
 export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
-	const { id, name, columnId, description, startDate = null, endDate = null, deadline = null, priority, isDaySpecific } = task;
+	const { id, name, columnId, description, startDate = null, endDate = null, deadline = null, priority, estimate, isDaySpecific } = task;
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 	const descriptionReference: RefObject<HTMLInputElement> = useRef(null);
+	const estimateReference: RefObject<HTMLInputElement> = useRef(null);
 
 	const [newColumnId, setNewColumnId] = useState(columnId);
 	const [priorityCurrent, setPriorityCurrent] = useState(priority);
@@ -67,6 +68,7 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 			name: nameReference.current.value,
 			description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 			priority: priorityCurrent as Priority,
+			estimate: estimateReference.current !== null ? parseInt(estimateReference.current.value) : 0,
 			columnId: newColumnId,
 			startDate: startDateCurrent,
 			endDate: endDateCurrent,
@@ -101,6 +103,16 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 					helperText={error.missingName && titleMissingMessage}
 					required
 				/>
+
+				<Grid item xs>
+					<TextField
+						inputRef={estimateReference}
+						label="Estimate in hours"
+						defaultValue={estimate}
+						type="number"
+						variant="standard"
+					/>
+				</Grid>
 
 				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
 					<Grid item xs>

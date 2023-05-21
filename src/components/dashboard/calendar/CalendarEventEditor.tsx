@@ -133,7 +133,7 @@ const CreateEventDialogContent = (props: CreateEventDialogContentProps) => {
 		<TextField
 			label="Title"
 			value={state.title}
-			onChange={(event) => handleChange(event, 'title')}
+			onChange={(event: SyntheticEvent) => handleChange(event, 'title')}
 			margin="dense"
 			error={error}
 			helperText={error && titleMissingMessage}
@@ -143,7 +143,7 @@ const CreateEventDialogContent = (props: CreateEventDialogContentProps) => {
 		<TextField
 			label="Description"
 			value={state.description}
-			onChange={(event) => handleChange(event, 'description')}
+			onChange={(event: SyntheticEvent) => handleChange(event, 'description')}
 			margin="dense"
 			fullWidth
 		/>
