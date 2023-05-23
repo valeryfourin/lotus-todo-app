@@ -1,8 +1,7 @@
 
 import { collection, DocumentData, getDocs } from 'firebase/firestore';
 import { authUser, firestore } from '../../firebase';
-import { addBoard, deleteBoard, editBoard } from '../../services/firestore/boardService';
-import { addColumn, deleteColumn, editColumn } from '../../services/firestore/columnService';
+import { addBoard, deleteBoard, editBoardName, addColumn, deleteColumn, editColumnName } from '../../services/firestore/boardService';
 import { ActionType, Entity } from '../types';
 
 export const getPopupTitle = (entity: Entity, action: ActionType) => {
@@ -25,7 +24,7 @@ export const executeBoardRequest = (actionType: string, boardId: string = '', na
         }
     } else if (actionType === 'edit') {
         if (nameReference.current) {
-            editBoard(boardId, nameReference.current.value);
+            editBoardName(boardId, nameReference.current.value);
         }
     } else if (actionType === 'delete') {
             deleteBoard(boardId);
@@ -39,7 +38,7 @@ export const executeColumnRequest = (actionType: string, boardId: string = '', c
         }
     } else if (actionType === 'edit') {
         if (nameReference.current) {
-            editColumn(boardId, columnId, nameReference.current.value);
+            editColumnName(boardId, columnId, nameReference.current.value);
         }
     } else if (actionType === 'delete') {
             deleteColumn(boardId, columnId);
@@ -56,4 +55,9 @@ export const getColumnsNames = async (boardId: string | undefined): Promise<Arra
 	const columns = await getDocs(collection(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`));
 	const columnsNames = columns.docs?.map((column: DocumentData) => column.data().name );
 	return columnsNames.length ? columnsNames : [];
+}
+
+export const getAllTasks = async (boardId: string | undefined): Promise<Array<DocumentData>> => {
+	const tasks = await getDocs(collection(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/tasks`));
+	return tasks.docs?.length ? tasks.docs : [];
 }

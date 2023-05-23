@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, Grid, Paper } from "@mui/material";
+import { Container, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/system";
 import { collection, orderBy, query } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { authUser, firestore } from "../../../firebase";
 import { PROJECT_ROUTE } from "../../../utils/constants";
 import { changeSelectedProject } from "../../store";
+import { LoadingIcon } from "../../styledComponents";
 import { BoardNavbar } from "../BoardNavbar";
 
 import './Home.css';
@@ -38,9 +39,7 @@ export const Home = (): JSX.Element => {
 			<BoardNavbar title="Overview"></BoardNavbar>
 			<Grid container marginTop="20px" justifyContent="flex-start" minWidth="500px" maxWidth="600px">
 				{loading ? (
-					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-						<CircularProgress />
-					</Box>
+					<LoadingIcon />
 				) : areBoardsLoaded ? boards.map((doc: any) =>
 						(<Item key={doc.id} className="hoverable" elevation={5} onClick={() => handleItemClick(doc)}>{doc.name}</Item>)
 					) : (

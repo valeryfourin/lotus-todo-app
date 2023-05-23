@@ -8,9 +8,9 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, DocumentData, orderBy, query } from 'firebase/firestore';
 import { authUser, firestore } from '../../../firebase';
 import { selectedProjectSelector } from '../../store';
-import { CircularProgress } from '@mui/material';
+import { LoadingIcon } from '../../styledComponents';
 
-export default function StatusSelect({value, setValue}: {value: string, setValue: Function}): JSX.Element {
+export default function ColumnSelect({value, setValue}: {value?: string, setValue: Function}): JSX.Element {
 	const selectedProject = useSelector(selectedProjectSelector);
 
 	const handleChange = (event: SelectChangeEvent) => {
@@ -25,20 +25,18 @@ export default function StatusSelect({value, setValue}: {value: string, setValue
 	return (
 		<Box sx={{ minWidth: 120 }}>
 			<FormControl required fullWidth>
-				<InputLabel id="demo-simple-select-label">Status</InputLabel>
+				<InputLabel id="demo-simple-select-label">Column</InputLabel>
 				<Select
 					labelId="demo-simple-select-label"
 					id="demo-simple-select"
 					value={value}
 					margin="dense"
-					label="Status"
+					label="Column"
 					onChange={handleChange}
 				>
 					{loading ?
 						(
-							<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-								<CircularProgress />
-							</Box>
+							<LoadingIcon />
 						) : (
 							areColumnsLoaded ? columns.map((col: DocumentData) => (
 							<MenuItem key={col.id} value={col.id}>

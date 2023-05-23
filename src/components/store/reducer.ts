@@ -45,7 +45,7 @@ export const dashboardReducer = (
             if (state.user) {
                 signOut(authUser)
                 .then(() => {
-                    console.log('signed out successfully');
+                    console.log('Signed out successfully');
                 }).catch((error: Error) => {
                     console.error('Error while signing out ', error);
                 });

@@ -1,67 +1,115 @@
 
-import { RefObject, useRef, useState } from 'react';
+import { RefObject, SyntheticEvent, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import { Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import PrioritySelect from './PrioritySelect';
 import DateSetter from './DateSetter';
-import StatusSelect from './StatusSelect';
+import DateTimeSetter from './DateTimeSetter';
+import ColumnSelect from './ColumnSelect';
 import { addTask } from '../../../services/firestore/taskService';
 import { selectedProjectSelector } from '../../store';
 import { Priority } from '../../types';
+import { columnMissingMessage, incorrectDateMessage, incorrectDeadlineMessage, marginSpacing, titleMissingMessage } from '../../../utils/constants';
+import { preventProjectSwitch } from '../../../utils/helpers';
 
 import './PopupCreateButton.css';
+
+const defaultErrorState = {
+	missingName: false,
+	missingColumnId: false,
+	incorrectDate: false,
+	incorrectDeadline: false,
+};
 
 export const PopupCreateButton = (): JSX.Element => {
 	const selectedProject = useSelector(selectedProjectSelector);
 	const [open, setOpen] = useState(false);
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
 	const descriptionReference: RefObject<HTMLInputElement> = useRef(null);
+	const estimateReference: RefObject<HTMLInputElement> = useRef(null);
 
-	const [status, setStatus] = useState('');
+	const [columnId, setColumnId] = useState<string>('');
 	const [priority, setPriority] = useState(Priority.notSet);
+	const [startDate, setStartDate] = useState<Date | null>(null);
+	const [endDate, setEndDate] = useState<Date | null>(null);
 	const [deadline, setDeadline] = useState<Date | null>(null);
+	const [isDaySpecific, setIsDaySpecific] = useState<boolean>(false);
 
-	const handleClickOpen = (event: any): void => {
+	const [error, setError] = useState(defaultErrorState);
+
+	const handleClickOpen = (event: SyntheticEvent): void => {
 		preventProjectSwitch(event);
 		setOpen(true);
 	};
 
-	const handleConfirmClose = (event: any): void => {
+	const handleConfirmClose = (event: SyntheticEvent): void => {
 		preventProjectSwitch(event);
+		setError(defaultErrorState);
 
-		if (nameReference.current && status) {
-			const task = {
-				name: nameReference.current.value,
-				description: descriptionReference.current !== null ? descriptionReference.current.value : '',
-				priority,
-				status,
-				deadline,
-			};
-
-			addTask(selectedProject.id, status, task);
-			resetState();
-			setOpen(false);
-		} else {
-			alert('Missing required fields.');
+		if (startDate && endDate && startDate.getTime() >= endDate.getTime()) {
+			return setError({...error, incorrectDate: true});
 		}
-	};
 
-	const handleCancelClose = (event: any): void => {
-		preventProjectSwitch(event);
+		if (isDaySpecific && startDate && endDate && deadline
+			&& (deadline.getTime() < endDate.getTime() || deadline.getTime() <= startDate.getTime())) {
+				return setError({...error, incorrectDeadline: true});
+		}
+
+		if (!nameReference.current?.value) {
+			return setError({...error, missingName: true});
+		}
+
+		if (!columnId) {
+			return setError({...error, missingColumnId: true});
+		}
+
+		const task = {
+			name: nameReference.current.value,
+			description: descriptionReference.current !== null ? descriptionReference.current.value : '',
+			priority,
+			estimate: estimateReference.current !== null ? Math.abs(parseFloat(estimateReference.current.value)) : 0,
+			columnId,
+			startDate,
+			endDate,
+			deadline,
+			isDaySpecific,
+			completed: false
+		};
+
+		addTask(selectedProject.id, task);
+		resetState();
 		setOpen(false);
 	};
 
-	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
+	const handleCancelClose = (event: SyntheticEvent): void => {
+		preventProjectSwitch(event);
+		resetState();
+		setOpen(false);
+	};
+
 	const resetState = (): void => {
-		setStatus('');
+		setColumnId('');
 		setPriority(Priority.notSet);
+		setDeadline(null);
+		setError(defaultErrorState);
+	};
+
+	const textFieldKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+		preventProjectSwitch(event);
+		setError({...error, missingName: false});
+	};
+
+	const handleClearDates = (): void => {
+		setStartDate(null);
+		setEndDate(null);
 		setDeadline(null);
 	};
 
 	return (
     <>
-		<Button className="create-button" variant="outlined" endIcon={<AddIcon />} onClick={handleClickOpen} sx={{margin: '0px 0px 12px 20px'}}>
+		<Button className="create-button" variant="outlined" endIcon={<AddIcon />} onClick={handleClickOpen} sx={marginSpacing}>
 			Create task
 		</Button>
 		<Dialog open={open} onClose={preventProjectSwitch} onClick={preventProjectSwitch} fullWidth={true} maxWidth="sm">
@@ -76,16 +124,29 @@ export const PopupCreateButton = (): JSX.Element => {
 					type="text"
 					fullWidth
 					variant="standard"
-					onKeyDown={preventProjectSwitch}
+					onKeyDown={textFieldKeyDownHandler}
+					error={error.missingName}
+					helperText={error.missingName && titleMissingMessage}
 					required
 				/>
+
+				<Grid item xs>
+					<TextField
+						inputRef={estimateReference}
+						sx={{width: '150px'}}
+						label="Estimate in hours"
+						type="number"
+						variant="standard"
+						InputProps={{ inputProps: { min: 0, max: 100, pattern: '[0-9]*' }, inputMode: 'numeric' }}
+					/>
+				</Grid>
 
 				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
 					<Grid item xs>
 						<PrioritySelect value={priority} setValue={setPriority}/>
 					</Grid>
 					<Grid item xs>
-						<StatusSelect value={status} setValue={setStatus} />
+						<ColumnSelect value={columnId} setValue={setColumnId} />
 					</Grid>
 				</Grid>
 
@@ -101,13 +162,30 @@ export const PopupCreateButton = (): JSX.Element => {
 					variant="standard"
 					onKeyDown={preventProjectSwitch}
 				/>
-				<Box marginTop="15px" marginBottom="15px">
+				<FormControlLabel control={
+					<Checkbox checked={isDaySpecific} onChange={(event) => setIsDaySpecific(event.target.checked)} />
+					} label="Event is day specific" />
+				<Grid container spacing={2} rowSpacing={2} marginTop="5px">
+					<Grid item xs>
+						<DateTimeSetter value={startDate} setValue={setStartDate} label="Start time" saveDay={isDaySpecific}/>
+					</Grid>
+					<Grid item xs>
+						<DateTimeSetter value={endDate} setValue={setEndDate} label="End time" saveDay={isDaySpecific}/>
+					</Grid>
+				</Grid>
+				<Box marginTop="15px" marginBottom="10px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
+
+					{ (startDate || endDate || deadline) &&
+						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={handleClearDates} sx={marginSpacing}>
+							Clear all dates fields
+						</Button>)
+					}
 				</Box>
-				<Button variant="contained" component="label">
-					Upload files
-					<input hidden accept="image/*" multiple type="file" />
-				</Button>
+
+				{ error.incorrectDate ? (<div className="error-helper-text">{incorrectDateMessage}</div>) : null }
+				{ error.incorrectDeadline ? (<div className="error-helper-text">{incorrectDeadlineMessage}</div>) : null }
+				{ error.missingColumnId ? (<div className="error-helper-text">{columnMissingMessage}</div>) : null }
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={handleCancelClose}>Cancel</Button>

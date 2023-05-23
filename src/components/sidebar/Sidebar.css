@@ -29,6 +29,9 @@
 
 .dropdown-item__name {
     align-self: center;
+	text-overflow: ellipsis;
+  	overflow: hidden;
+ 	width: 150px;
 }
 
 .info-message {

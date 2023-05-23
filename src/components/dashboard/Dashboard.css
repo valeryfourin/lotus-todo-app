@@ -1,4 +1,4 @@
-.dashboard-screen {
+.board-screen {
     width: 75vw !important;
 	margin-top: 50px;
 }
@@ -10,7 +10,7 @@
 }
 
 .hoverable:hover {
-	box-shadow: 0 20px 20px 0 rgba(0,0,0,0.14),0 10px 50px 0 rgba(0,0,0,0.12),0 30px 10px -20px rgba(0,0,0,0.2);
+	box-shadow: 0 20px 20px 0 rgba(0,0,0,0.14),0 10px 30px 0 rgba(0,0,0,0.12),0 30px 10px -20px rgba(0,0,0,0.2);
     transition: box-shadow .25s;
 	cursor: pointer;
 }
@@ -21,13 +21,13 @@
 }
 
 @media screen and (min-width: 1300px)   {
-	.dashboard-screen {
+	.board-screen {
 		width: 85vw !important;
 	}
 }
 
 @media screen and (min-width: 1570px)   {
-	.dashboard-screen {
+	.board-screen {
 		max-width: 80vw !important;
 	}
 }

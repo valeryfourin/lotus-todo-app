@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,35 +8,33 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { deleteTask } from '../../../services/firestore/taskService';
+import { preventProjectSwitch } from '../../../utils/helpers';
 
 interface IPopupDeleteTaskIcon {
 	name: string;
 	boardId: string;
-	columnId: string;
 	taskId: string;
 }
 
 export default function PopupDeleteTaskIcon(props: IPopupDeleteTaskIcon) {
-	const {name, boardId, columnId, taskId} = props;
+	const {name, boardId, taskId} = props;
 	const [open, setOpen] = useState(false);
 
-	const handleClickOpen = (event: any) => {
+	const handleClickOpen = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
 		setOpen(true);
 	};
 
-	const handleConfirmClose = (event: any) => {
+	const handleConfirmClose = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
-		deleteTask(boardId, columnId, taskId);
+		deleteTask(boardId, taskId);
 		setOpen(false);
 	};
 
-	const handleCancelClose = (event: any) => {
+	const handleCancelClose = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
 		setOpen(false);
 	}
-
-	const preventProjectSwitch = (event: any): void => {event.stopPropagation()};
 
 	return (
     <>

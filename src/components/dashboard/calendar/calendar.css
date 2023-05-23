@@ -1,0 +1,25 @@
+.calendar-wrap {
+	width: 100%;
+	height: 75vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+
+.calendar-controls {
+	margin-bottom: 10px;
+}
+
+.calendar-button {
+	margin: 0 10px 0 0;
+}
+
+.time-range-field {
+	margin: 0 10px;
+	min-width: 200px;
+}
+
+.empty-calendar-message {
+	margin: 0 25px 10px 25px;
+}
