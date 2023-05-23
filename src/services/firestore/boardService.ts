@@ -3,6 +3,8 @@ import { authUser, firestore } from "../../firebase";
 import { v4 as uuidv4 } from 'uuid';
 import { TCalendarEvent, TProject } from "../../components/types";
 
+// Important note: do not save fields with undefined value, use null instead
+
 export const addBoard = async (name: string) => {
 	const id = uuidv4();
     try {

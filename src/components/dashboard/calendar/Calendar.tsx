@@ -1,20 +1,25 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Scheduler, useScheduler } from "@aldabil/react-scheduler";
-import { DayHours, ProcessedEvent } from "@aldabil/react-scheduler/types";
+import { DayHours } from "@aldabil/react-scheduler/types";
 import { Accordion, AccordionDetails, Button } from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 import { collection, doc, orderBy, query } from "firebase/firestore";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 import { authUser, firestore } from "../../../firebase";
 import { saveSchedule, saveWorkingHours } from "../../../services/firestore/boardService";
 import { selectedProjectSelector } from "../../store";
 import { LoadingIcon } from "../../styledComponents";
-import { getTasksSchedule, getEventsToBeScheduled, convertEventsToBeScheduled } from "../utils/calendarUtils";
-import { TCalendarEvent } from "../../types";
+import { generateSchedule, getEventsWithStartAndEndDateToBeScheduled, convertEventsToBeScheduled } from "../utils/calendarUtils";
+import { TCalendarEvent, TNotification } from "../../types";
 import { TimeRangeSetter } from "./TimeRangeSetter";
-import { dateTimeOptions, smallMarginSpacing } from "../../../utils/constants";
+import { confirmClearScheduleMessage, confirmRetrieveScheduleMessage, confirmSaveScheduleMessage, dateTimeOptions, defaultNotificationDuration, defaultNotificationState } from "../../../utils/constants";
 import { CalendarEventEditor } from "./CalendarEventEditor";
 import { AccordionSummary } from "./AccordionSummary";
+import { preventProjectSwitch } from "../../../utils/helpers";
+import ConfirmDialog from "./ConfirmDialog";
+import Notification from "../../common/Notification";
+
 import "./calendar.css";
 
 export const Calendar = () => {
@@ -27,6 +32,8 @@ export const Calendar = () => {
 	const [workingHoursStart, setWorkingHoursStart] = useState<Date>(new Date(new Date().setHours(8, 0, 0, 0)));
 	const [workingHoursEnd, setWorkingHoursEnd] = useState<Date>(new Date(new Date().setHours(17, 0, 0, 0)));
 
+	const [notification, setNotification] = useState<TNotification>(defaultNotificationState);
+
 	const [tasks, areTasksLoading] = useCollectionData(query(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/tasks`), orderBy('createdAt')));
 
@@ -36,10 +43,10 @@ export const Calendar = () => {
 
 	useEffect(() => {
 		if (board?.schedule && tasks?.length) {
-			setScheduledTasks(convertEventsToBeScheduled(board.schedule));
+			setSchedule(convertEventsToBeScheduled(board.schedule));
 		} else if (!isBoardLoading) {
 			if (!areTasksLoading && tasks?.length) {
-				setScheduledTasks(getEventsToBeScheduled(tasks));
+				setSchedule(getEventsWithStartAndEndDateToBeScheduled(tasks));
 			}
 		}
 
@@ -51,20 +58,20 @@ export const Calendar = () => {
 			setWorkingHoursStart(board.workingHours[0].toDate());
 			setWorkingHoursEnd(board.workingHours[1].toDate());
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [board, tasks, isBoardLoading, areTasksLoading]);
 
-	const handleGenerateSchedule = (): void => {
+	const handleGenerateSchedule = (event: SyntheticEvent): void => {
+		preventProjectSwitch(event);
 		if (tasks?.length) {
-			console.log(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
-			setEvents(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
-			setScheduledTasks(getTasksSchedule(tasks, workingHoursStart, workingHoursEnd));
+			const newSchedule = generateSchedule(tasks, workingHoursStart, workingHoursEnd);
+			setSchedule(newSchedule);
 		}
 	};
 
 	const handleSaveSchedule = (): void => {
-		console.log(events);
 		saveSchedule(selectedProject.id, events as TCalendarEvent[]);
-		alert('Schedule saved');
+		displayNotification('Schedule saved', 'success');
 	};
 
 	const handleChangeWorkingHoursStart = (newWorkingHoursStart: Date): void => {
@@ -77,38 +84,52 @@ export const Calendar = () => {
 		setWorkingHoursEnd(newWorkingHoursEnd);
 	};
 
-	const applyWorkingHours = () => {
+	const setSchedule = (newSchedule: TCalendarEvent[]): void => {
+		setEvents(newSchedule);
+		setScheduledTasks(newSchedule);
+	};
+
+	const applyChanges = () => {
 		setView(view); // workaround to re-render calendar
 	};
 
 	const retrieveSchedule = (): void => {
 		if (board?.schedule) {
-			setScheduledTasks(convertEventsToBeScheduled(board.schedule));
-			alert('Previous saved schedule retrieved');
+			setSchedule(convertEventsToBeScheduled(board.schedule));
+			displayNotification('Previous saved schedule retrieved', 'success');
 		} else {
-			alert('No previously saved schedule found');
+			displayNotification('No previously saved schedule found', 'info');
 		}
 	};
 
-	const handleEventClick = (event: ProcessedEvent): void => {
-		console.log(event)
+	const handleClearSchedule = (): void => {
+		setSchedule([]);
+		displayNotification('Schedule cleared', 'info');
+	};
+
+	const displayNotification = (message: string, severity: string): void => {
+		setNotification({show: true, message, severity});
+		setTimeout(() => {
+			setNotification(defaultNotificationState);
+		}, defaultNotificationDuration);
 	};
 
 	return areTasksLoading
 		? (<LoadingIcon />)
-		: scheduledTasks?.length ? (
+		: (<>
+			{notification.show && <Notification show={notification.show} message={notification.message} severity={notification.severity} />}
+			{ !scheduledTasks?.length && (
+				<div className="empty-calendar-message">No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule and try <b>'Generate new schedule'</b> again.</div>
+			)}
 			<div className="calendar-wrap custom-scroll">
 				<Accordion sx={{boxShadow: 'none'}}>
 					<AccordionSummary className="calendar-controls" sx={{justifyContent: 'unset'}}>
 						<Button className="calendar-button" variant="contained" onClick={handleGenerateSchedule} sx={{marginRight: '10px'}}>
 							Generate new schedule
 						</Button>
-						<Button className="calendar-button" variant="outlined" onClick={handleSaveSchedule} sx={{marginRight: '10px'}}>
-							Save schedule
-						</Button>
-						<Button className="calendar-button" variant="outlined" onClick={retrieveSchedule} sx={{marginRight: '10px'}}>
-							Retrieve latest schedule
-						</Button>
+						<ConfirmDialog title="Save schedule" message={confirmSaveScheduleMessage} onConfirm={handleSaveSchedule} />
+						<ConfirmDialog title="Retrieve latest schedule" message={confirmRetrieveScheduleMessage} onConfirm={retrieveSchedule} />
+						<ConfirmDialog title="Clear schedule" message={confirmClearScheduleMessage} onConfirm={handleClearSchedule} icon={<ClearIcon />}/>
 					</AccordionSummary>
 
 					<AccordionDetails>
@@ -118,7 +139,7 @@ export const Calendar = () => {
 							setWorkingHoursStart={handleChangeWorkingHoursStart}
 							setWorkingHoursEnd={handleChangeWorkingHoursEnd}
 						/>
-						<Button className="calendar-button" variant="contained" onClick={applyWorkingHours} sx={{margin: '10px 0 0 10px'}}>
+						<Button className="calendar-button" variant="contained" onClick={applyChanges} sx={{margin: '10px 0 0 10px'}}>
 							Apply
 						</Button>
 					</AccordionDetails>
@@ -131,14 +152,14 @@ export const Calendar = () => {
 					month={{
 						startHour: workingHoursStart.getHours() as DayHours,
 						endHour: workingHoursEnd.getHours() as DayHours,
-						weekDays: [0, 1, 2, 3, 4, 5],
-						weekStartOn: 6,
+						weekDays: [0, 1, 2, 3, 4, 5, 6],
+						weekStartOn: 1,
 					}}
 					week={{
 						startHour: workingHoursStart.getHours() as DayHours,
 						endHour: workingHoursEnd.getHours() as DayHours,
-						weekDays: [0, 1, 2, 3, 4, 5],
-						weekStartOn: 6,
+						weekDays: [0, 1, 2, 3, 4, 5, 6],
+						weekStartOn: 1,
 						step: 60,
 					}}
 					day={{
@@ -156,7 +177,7 @@ export const Calendar = () => {
 						</div>
 						);
 					}}
-					onEventClick={handleEventClick}
 				/>
-		</div>) : (<div>No tasks to schedule. Make sure you checked 'Include in schedule' field in tasks you want to schedule.</div>)
+			</div>
+		</>)
 }

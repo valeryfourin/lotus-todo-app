@@ -3,6 +3,7 @@ import { RefObject, SyntheticEvent, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Box, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
 import PrioritySelect from './PrioritySelect';
 import DateSetter from './DateSetter';
 import DateTimeSetter from './DateTimeSetter';
@@ -10,10 +11,10 @@ import ColumnSelect from './ColumnSelect';
 import { addTask } from '../../../services/firestore/taskService';
 import { selectedProjectSelector } from '../../store';
 import { Priority } from '../../types';
-
-import './PopupCreateButton.css';
 import { columnMissingMessage, incorrectDateMessage, incorrectDeadlineMessage, marginSpacing, titleMissingMessage } from '../../../utils/constants';
 import { preventProjectSwitch } from '../../../utils/helpers';
+
+import './PopupCreateButton.css';
 
 const defaultErrorState = {
 	missingName: false,
@@ -68,7 +69,7 @@ export const PopupCreateButton = (): JSX.Element => {
 			name: nameReference.current.value,
 			description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 			priority,
-			estimate: estimateReference.current !== null ? parseInt(estimateReference.current.value) : 0,
+			estimate: estimateReference.current !== null ? Math.abs(parseFloat(estimateReference.current.value)) : 0,
 			columnId,
 			startDate,
 			endDate,
@@ -100,6 +101,12 @@ export const PopupCreateButton = (): JSX.Element => {
 		setError({...error, missingName: false});
 	};
 
+	const handleClearDates = (): void => {
+		setStartDate(null);
+		setEndDate(null);
+		setDeadline(null);
+	};
+
 	return (
     <>
 		<Button className="create-button" variant="outlined" endIcon={<AddIcon />} onClick={handleClickOpen} sx={marginSpacing}>
@@ -126,9 +133,11 @@ export const PopupCreateButton = (): JSX.Element => {
 				<Grid item xs>
 					<TextField
 						inputRef={estimateReference}
+						sx={{width: '150px'}}
 						label="Estimate in hours"
 						type="number"
 						variant="standard"
+						InputProps={{ inputProps: { min: 0, max: 100, pattern: '[0-9]*' }, inputMode: 'numeric' }}
 					/>
 				</Grid>
 
@@ -164,8 +173,14 @@ export const PopupCreateButton = (): JSX.Element => {
 						<DateTimeSetter value={endDate} setValue={setEndDate} label="End time" saveDay={isDaySpecific}/>
 					</Grid>
 				</Grid>
-				<Box marginTop="15px">
+				<Box marginTop="15px" marginBottom="10px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
+
+					{ (startDate || endDate || deadline) &&
+						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={handleClearDates} sx={marginSpacing}>
+							Clear all dates fields
+						</Button>)
+					}
 				</Box>
 
 				{ error.incorrectDate ? (<div className="error-helper-text">{incorrectDateMessage}</div>) : null }

@@ -132,6 +132,13 @@ export type TCalendarEvent = {
 	editable?: boolean;
 	color: string;
 	priority: Priority;
+	estimate: number;
 	description?: string;
 	deadline?: Date;
+};
+
+export type TNotification = {
+	show?: boolean;
+	severity: string;
+	message: string;
 };

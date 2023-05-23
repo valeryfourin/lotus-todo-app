@@ -1,3 +1,5 @@
+import { RefObject, SyntheticEvent, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
 	Box,
 	Button,
@@ -9,10 +11,9 @@ import {
 	Grid,
 	TextField,
 } from '@mui/material';
-import { RefObject, SyntheticEvent, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import ClearIcon from '@mui/icons-material/Clear';
 import { editTask } from '../../services/firestore/taskService';
-import { incorrectDateMessage, incorrectDeadlineMessage, titleMissingMessage } from '../../utils/constants';
+import { incorrectDateMessage, incorrectDeadlineMessage, marginSpacing, titleMissingMessage } from '../../utils/constants';
 import { preventProjectSwitch } from '../../utils/helpers';
 import DateSetter from '../dashboard/popupCreateButton/DateSetter';
 import DateTimeSetter from '../dashboard/popupCreateButton/DateTimeSetter';
@@ -68,7 +69,7 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 			name: nameReference.current.value,
 			description: descriptionReference.current !== null ? descriptionReference.current.value : '',
 			priority: priorityCurrent as Priority,
-			estimate: estimateReference.current !== null ? parseInt(estimateReference.current.value) : 0,
+			estimate: estimateReference.current !== null ? Math.abs(parseFloat(estimateReference.current.value)) : 0,
 			columnId: newColumnId,
 			startDate: startDateCurrent,
 			endDate: endDateCurrent,
@@ -83,6 +84,12 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 	const textFieldKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>): void => {
 		preventProjectSwitch(event);
 		setError({...error, missingName: false});
+	};
+
+	const handleClearDates = (): void => {
+		setStartDateCurrent(null);
+		setEndDateCurrent(null);
+		setDeadlineCurrent(null);
 	};
 
 	return (<>
@@ -107,10 +114,12 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 				<Grid item xs>
 					<TextField
 						inputRef={estimateReference}
+						sx={{width: '150px'}}
 						label="Estimate in hours"
 						defaultValue={estimate}
 						type="number"
 						variant="standard"
+						InputProps={{ inputProps: { min: 0, max: 100, pattern: '[0-9]*' }, inputMode: 'numeric' }}
 					/>
 				</Grid>
 
@@ -147,8 +156,14 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 						<DateTimeSetter value={endDateCurrent} setValue={setEndDateCurrent} label="End time" saveDay={isDaySpecificCurrent}/>
 					</Grid>
 				</Grid>
-				<Box marginTop="15px">
+				<Box marginTop="15px" marginBottom="10px">
 					<DateSetter value={deadlineCurrent} setValue={setDeadlineCurrent}/>
+
+					{ (startDateCurrent || endDateCurrent || deadlineCurrent) &&
+						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={handleClearDates} sx={marginSpacing}>
+							Clear all dates fields
+						</Button>)
+					}
 				</Box>
 
 				{ error.incorrectDate ? (<div className="error-helper-text">{incorrectDateMessage}</div>) : null }

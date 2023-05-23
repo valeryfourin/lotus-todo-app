@@ -32,7 +32,7 @@ export const editTask = async (boardId: string, taskId: string, editedFields: Pa
 }
 
 export const setTaskCompleted = async (boardId: string, taskId: string, completed: boolean) => {
-	const completeDate =  { completeDate: (completed ? new Date() : null) };
+	const completeDate =  { completeDate: (completed ? new Date() : null), isScheduled: false };
 	await editTask(boardId, taskId, { completed, ...completeDate });
 }
 

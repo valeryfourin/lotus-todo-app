@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from '@mui/material';
 import { collection, DocumentData, orderBy, query } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { groupBy } from 'lodash';
@@ -19,14 +18,11 @@ export const ListView = (): JSX.Element => {
 	const [keywords, setKeywords] = useState<Array<string>>([]);
 	const [filteredTasks, setFilteredTasks] = useState<DocumentData[]>([]);
 
-	const handleChangeChipsInput = (newKeywords: Array<string>) => {
-		setKeywords(newKeywords);
-	};
-
 	useEffect(() => {
 		if (keywords.length) {
 			filterTasks();
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [keywords]);
 
 	const filterTasks = () => {

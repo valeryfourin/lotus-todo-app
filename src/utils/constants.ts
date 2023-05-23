@@ -24,3 +24,10 @@ export const fieldsMissingMessage = 'Please fill in all the fields.';
 export const columnMissingMessage = 'Select column for this task.';
 export const incorrectDateMessage = 'Task cannot end before starting.';
 export const incorrectDeadlineMessage = 'Task cannot have deadline defore end or start date.';
+
+export const confirmClearScheduleMessage = 'Are you sure you want to clear the schedule? It`s irreversible.';
+export const confirmSaveScheduleMessage = 'Are you sure you want to save the schedule?';
+export const confirmRetrieveScheduleMessage = 'Are you sure you want to retrieve last saved schedule? It will overwrite current schedule.';
+
+export const defaultNotificationDuration = 5000;
+export const defaultNotificationState = { show: false, message: '', severity: 'info' };

@@ -52,12 +52,12 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 				<Box marginTop="10px">
 					Priority: <TripOriginIcon sx={{ color: PriorityColor[priority as Priority], verticalAlign: 'middle' }} /> { priority }
 				</Box>
-				{ estimate && (
+				{ estimate ? (
 					<Box marginTop="10px">
 						Estimate: { `${estimate} ${estimate === 1 ? 'hour' : 'hours'}` }
 					</Box>
-				)}
-				<Box marginTop="10px">
+				) : null}
+				<Box marginTop="8px">
 					Start: { startDate ? (
 					<Button size="small">
 						{isDaySpecific
@@ -65,7 +65,7 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 							: startDate.toLocaleTimeString("en-US", timeOptions)}
 					</Button>) : 'Not set' }
 				</Box>
-				<Box marginTop="10px">
+				<Box marginTop="8px">
 					End: { endDate ? (
 					<Button size="small">
 						{isDaySpecific
@@ -73,7 +73,7 @@ export const DetailsDialog = ({task, taskNameFormatted, setEditingMode, handleCa
 							: endDate.toLocaleTimeString("en-US", timeOptions)}
 					</Button>) : 'Not set' }
 				</Box>
-				<Box marginTop="10px">
+				<Box marginTop="8px">
 					Deadline: { deadline ? (<Button size="small">{deadline.toLocaleDateString("en-US", dateTimeOptions)}</Button>) : 'Not set' }
 				</Box>
 				<Box marginTop="10px">
