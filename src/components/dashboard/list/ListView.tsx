@@ -28,25 +28,22 @@ export const ListView = (): JSX.Element => {
 	const filterTasks = () => {
 		if (isDataLoaded) {
 			const filtered = tasks.filter((task: DocumentData) => {
-				let isMatch = false;
-				keywords.forEach((keyword: string) => {
-					if (task.name.toLowerCase().includes(keyword.toLowerCase())
-						|| task.description.toLowerCase().includes(keyword.toLowerCase())
-						|| task.priority.toLowerCase().includes(keyword.toLowerCase())) {
-						isMatch = true;
-					} else {
-						columns.forEach((column: DocumentData) => {
-							if (column.name.toLowerCase().includes(keyword.toLowerCase()) && column.id === task.columnId) {
-								isMatch = true;
-							}
-						});
-					}
+				return keywords.every((keyword) => {
+					return (
+						task.name.toLowerCase().includes(keyword.toLowerCase()) ||
+						task.description.toLowerCase().includes(keyword.toLowerCase()) ||
+						task.priority.toLowerCase().includes(keyword.toLowerCase()) ||
+						columns.some(
+						(column) =>
+							column.name.toLowerCase().includes(keyword.toLowerCase()) &&
+							column.id === task.columnId
+						)
+					);
 				});
-				return isMatch;
 			});
-			setFilteredTasks(filtered);
+		  setFilteredTasks(filtered);
 		}
-	};
+	  };
 
 	const [columns, columnsLoading] = useCollectionData(query(
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/columns`), orderBy('createdAt')));
