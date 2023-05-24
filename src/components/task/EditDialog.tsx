@@ -156,7 +156,7 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 						<DateTimeSetter value={endDateCurrent} setValue={setEndDateCurrent} label="End time" saveDay={isDaySpecificCurrent}/>
 					</Grid>
 				</Grid>
-				<Box marginTop="15px" marginBottom="10px">
+				<Box marginTop="15px">
 					<DateSetter value={deadlineCurrent} setValue={setDeadlineCurrent}/>
 
 					{ (startDateCurrent || endDateCurrent || deadlineCurrent) &&

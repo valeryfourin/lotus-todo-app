@@ -173,7 +173,7 @@ export const PopupCreateButton = (): JSX.Element => {
 						<DateTimeSetter value={endDate} setValue={setEndDate} label="End time" saveDay={isDaySpecific}/>
 					</Grid>
 				</Grid>
-				<Box marginTop="15px" marginBottom="10px">
+				<Box marginTop="15px">
 					<DateSetter value={deadline} setValue={setDeadline}/>
 
 					{ (startDate || endDate || deadline) &&
