@@ -27,7 +27,7 @@ export const GridView = (): JSX.Element => {
 		collection(firestore, `users/${authUser.currentUser?.uid}/boards/${selectedProject.id}/tasks`), orderBy('createdAt')));
 
 	const isDataLoading = columnsLoading && tasksLoading;
-	const isDataLoaded = columns && columns?.length && tasks && tasks?.length;
+	const isDataLoaded = columns && columns?.length;
 
 	const tasksByColumn = groupBy(tasks, 'columnId');
 

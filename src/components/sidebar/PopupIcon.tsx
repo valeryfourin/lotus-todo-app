@@ -6,6 +6,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { ActionType, IPopupIcon } from '../types';
 import { executeBoardRequest, executeColumnRequest, getBoardsNames, getColumnsNames, getPopupTitle } from './utils';
 import { preventProjectSwitch } from '../../utils/helpers';
+import { titleMissingMessage } from '../../utils/constants';
 
 const getIconFromActionType = (action: ActionType) => {
   switch (action) {
@@ -20,11 +21,17 @@ const getIconFromActionType = (action: ActionType) => {
   }
 }
 
+const defaultErrorState = {
+	missingName: false,
+	duplicateName: false,
+};
+
 export default function PopupIcon(props: IPopupIcon) {
 	const {actionType, entity, styles={}} = props;
 	const [open, setOpen] = useState(false);
-	const [hasInputError, setHasInputError] = useState(false);
 	const nameReference: RefObject<HTMLInputElement> = useRef(null);
+
+	const [inputError, setInputError] = useState(defaultErrorState);
 
 	const handleClickOpen = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
@@ -33,6 +40,11 @@ export default function PopupIcon(props: IPopupIcon) {
 
 	const handleConfirmClose = (event: SyntheticEvent) => {
 		preventProjectSwitch(event);
+		setInputError(defaultErrorState);
+
+		if (!nameReference.current?.value) {
+			return setInputError({...inputError, missingName: true});
+		}
 
 		if (entity === 'board') {
 			executeBoardRequest(actionType, props.boardId, nameReference);
@@ -48,7 +60,7 @@ export default function PopupIcon(props: IPopupIcon) {
 		setOpen(false);
 	}
 
-	const handleInputError = async (event: SyntheticEvent) => {
+	const handleInputError = async () => {
 		let entitiesNames = [];
 		if (entity === 'board') {
 			entitiesNames = await getBoardsNames();
@@ -56,7 +68,25 @@ export default function PopupIcon(props: IPopupIcon) {
 			entitiesNames = await getColumnsNames(props.boardId);
 		}
 		const isNameDuplicate = (entitiesNames && nameReference.current && entitiesNames.includes(nameReference.current?.value)) ?? false;
-		setHasInputError(isNameDuplicate);
+
+		setInputError({...inputError, duplicateName: isNameDuplicate});
+	};
+
+	const hasInputError = inputError.missingName || inputError.duplicateName;
+
+	const showInputError = (): string => {
+		if (inputError.missingName) {
+			return titleMissingMessage;
+		} else if (inputError.duplicateName) {
+			return `A ${entity} with this name already exists.`;
+		} else {
+			return '';
+		}
+	};
+
+	const handleOnKeyDown = (event: SyntheticEvent) => {
+		preventProjectSwitch(event);
+		setInputError(defaultErrorState);
 	};
 
 	return (
@@ -75,7 +105,7 @@ export default function PopupIcon(props: IPopupIcon) {
 			{actionType !== 'delete'
 				? <TextField
 					error={hasInputError}
-					helperText={hasInputError ? `A ${entity} with this name already exists.` : null}
+					helperText={showInputError()}
 					inputRef={nameReference}
 					autoFocus
 					margin="dense"
@@ -84,8 +114,9 @@ export default function PopupIcon(props: IPopupIcon) {
 					type="text"
 					fullWidth
 					variant="standard"
-					onKeyDown={preventProjectSwitch}
+					onKeyDown={handleOnKeyDown}
 					onChange={handleInputError}
+					required
 				/>
 				: null }
 			</DialogContent>
