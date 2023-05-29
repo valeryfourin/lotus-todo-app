@@ -5,7 +5,7 @@ import { TCalendarEvent, TProject } from "../../components/types";
 
 // Important note: do not save fields with undefined value, use null instead
 
-export const addBoard = async (name: string) => {
+export const addBoard = async (name: string): Promise<void> => {
 	const id = uuidv4();
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, id), { id, name, createdAt: new Date() });
@@ -14,7 +14,7 @@ export const addBoard = async (name: string) => {
     }
 }
 
-export const deleteBoard = async (boardId: string) => {
+export const deleteBoard = async (boardId: string): Promise<void> => {
     try {
         await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, boardId));
     } catch (e) {
@@ -22,7 +22,7 @@ export const deleteBoard = async (boardId: string) => {
     }
 }
 
-export const editBoard = async (boardId: string, editedFields: Partial<TProject>) => {
+export const editBoard = async (boardId: string, editedFields: Partial<TProject>): Promise<void> => {
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards`, boardId),
         editedFields,
@@ -32,11 +32,11 @@ export const editBoard = async (boardId: string, editedFields: Partial<TProject>
     }
 }
 
-export const editBoardName = async (boardId: string, newName: string) => {
+export const editBoardName = async (boardId: string, newName: string): Promise<void> => {
     await editBoard(boardId, { name: newName });
 }
 
-export const addColumn = async (boardId: string, name: string) => {
+export const addColumn = async (boardId: string, name: string): Promise<void> => {
 	const id = uuidv4();
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, id), { id, name, createdAt: new Date() });
@@ -45,7 +45,7 @@ export const addColumn = async (boardId: string, name: string) => {
     }
 }
 
-export const deleteColumn = async (boardId: string, columnId: string) => {
+export const deleteColumn = async (boardId: string, columnId: string): Promise<void> => {
     try {
         await deleteDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, columnId));
     } catch (e) {
@@ -53,7 +53,7 @@ export const deleteColumn = async (boardId: string, columnId: string) => {
     }
 }
 
-export const editColumnName = async (boardId: string, columnId: string, newName: string) => {
+export const editColumnName = async (boardId: string, columnId: string, newName: string): Promise<void> => {
     try {
         await setDoc(doc(firestore, `users/${authUser.currentUser?.uid}/boards/${boardId}/columns`, columnId),
         { name: newName },
@@ -63,10 +63,10 @@ export const editColumnName = async (boardId: string, columnId: string, newName:
     }
 }
 
-export const saveSchedule = async (boardId: string, schedule: Array<TCalendarEvent>) => {
+export const saveSchedule = async (boardId: string, schedule: Array<TCalendarEvent>): Promise<void> => {
 	await editBoard(boardId, { schedule });
 }
 
-export const saveWorkingHours = async (boardId: string, workingHours: Array<Date>) => {
+export const saveWorkingHours = async (boardId: string, workingHours: Array<Date>): Promise<void> => {
 	await editBoard(boardId, { workingHours });
 }

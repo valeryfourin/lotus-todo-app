@@ -42,7 +42,7 @@ export default function PopupIcon(props: IPopupIcon) {
 		preventProjectSwitch(event);
 		setInputError(defaultErrorState);
 
-		if (!nameReference.current?.value) {
+		if (!nameReference.current?.value && actionType !== 'delete') {
 			return setInputError({...inputError, missingName: true});
 		}
 

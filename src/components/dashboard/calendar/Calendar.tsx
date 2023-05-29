@@ -104,7 +104,7 @@ export const Calendar = () => {
 
 	const handleClearSchedule = (): void => {
 		setSchedule([]);
-		displayNotification('Schedule cleared', 'info');
+		displayNotification('Schedule cleared. Click "Retrieve latest schedule" to revert.', 'info');
 	};
 
 	const displayNotification = (message: string, severity: string): void => {
