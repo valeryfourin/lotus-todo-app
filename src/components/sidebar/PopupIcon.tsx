@@ -9,16 +9,16 @@ import { preventProjectSwitch } from '../../utils/helpers';
 import { titleMissingMessage } from '../../utils/constants';
 
 const getIconFromActionType = (action: ActionType) => {
-  switch (action) {
-    case 'add':
-      return <AddIcon />;
-    case 'edit':
-      return <EditOutlinedIcon />;
-    case 'delete':
-      return <DeleteOutlinedIcon />;
-    default:
-      return null;
-  }
+	switch (action) {
+		case 'add':
+			return <AddIcon />;
+		case 'edit':
+			return <EditOutlinedIcon />;
+		case 'delete':
+			return <DeleteOutlinedIcon />;
+		default:
+			return null;
+	}
 }
 
 const defaultErrorState = {
@@ -89,8 +89,7 @@ export default function PopupIcon(props: IPopupIcon) {
 		setInputError(defaultErrorState);
 	};
 
-	return (
-    <>
+	return (<>
 		<IconButton color="primary" aria-label="add" onClick={handleClickOpen} sx={styles}>
 			{getIconFromActionType(actionType)}
 		</IconButton>
@@ -125,6 +124,5 @@ export default function PopupIcon(props: IPopupIcon) {
 			<Button onClick={handleConfirmClose} disabled={hasInputError}>Confirm</Button>
 			</DialogActions>
 		</Dialog>
-    </>
-  );
+    </>);
 }

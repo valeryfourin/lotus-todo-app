@@ -92,7 +92,8 @@ export const PopupCreateButton = (): JSX.Element => {
 	const resetState = (): void => {
 		setColumnId('');
 		setPriority(Priority.notSet);
-		setDeadline(null);
+		сlearDates();
+		setIsDaySpecific(false);
 		setError(defaultErrorState);
 	};
 
@@ -101,7 +102,7 @@ export const PopupCreateButton = (): JSX.Element => {
 		setError({...error, missingName: false});
 	};
 
-	const handleClearDates = (): void => {
+	const сlearDates = (): void => {
 		setStartDate(null);
 		setEndDate(null);
 		setDeadline(null);
@@ -177,7 +178,7 @@ export const PopupCreateButton = (): JSX.Element => {
 					<DateSetter value={deadline} setValue={setDeadline}/>
 
 					{ (startDate || endDate || deadline) &&
-						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={handleClearDates} sx={marginSpacing}>
+						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={сlearDates} sx={marginSpacing}>
 							Clear all dates fields
 						</Button>)
 					}

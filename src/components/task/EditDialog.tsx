@@ -86,7 +86,7 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 		setError({...error, missingName: false});
 	};
 
-	const handleClearDates = (): void => {
+	const сlearDates = (): void => {
 		setStartDateCurrent(null);
 		setEndDateCurrent(null);
 		setDeadlineCurrent(null);
@@ -160,7 +160,7 @@ export const EditDialog = ({task, handleCancelClose}: IEditDialogProps) => {
 					<DateSetter value={deadlineCurrent} setValue={setDeadlineCurrent}/>
 
 					{ (startDateCurrent || endDateCurrent || deadlineCurrent) &&
-						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={handleClearDates} sx={marginSpacing}>
+						(<Button className="create-button" variant="outlined" endIcon={<ClearIcon />} onClick={сlearDates} sx={marginSpacing}>
 							Clear all dates fields
 						</Button>)
 					}
