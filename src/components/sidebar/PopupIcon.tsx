@@ -72,7 +72,7 @@ export default function PopupIcon(props: IPopupIcon) {
 		setInputError({...inputError, duplicateName: isNameDuplicate});
 	};
 
-	const hasInputError = inputError.missingName || inputError.duplicateName;
+	const hasInputError = (inputError.missingName || inputError.duplicateName) && actionType !== 'delete';
 
 	const showInputError = (): string => {
 		if (inputError.missingName) {
